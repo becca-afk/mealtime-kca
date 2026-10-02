@@ -1,0 +1,439 @@
+{
+  "menu": [
+    {
+      "id": 1,
+      "name": "Beef Stew + Ugali",
+      "emoji": "🍛",
+      "price": 120,
+      "calories": 650,
+      "protein": 32,
+      "rating": 4.6,
+      "orders": 34,
+      "category": "main",
+      "tags": [
+        "halal",
+        "spicy"
+      ],
+      "allergens": "None",
+      "desc": "Slow-cooked beef stew with hot tender ugali. Hearty and rich.",
+      "badge": "hot",
+      "available": true,
+      "soldCount": 34
+    },
+    {
+      "id": 2,
+      "name": "Pilau + Kachumbari",
+      "emoji": "🍚",
+      "price": 150,
+      "calories": 580,
+      "protein": 22,
+      "rating": 4.4,
+      "orders": 28,
+      "category": "main",
+      "tags": [
+        "halal"
+      ],
+      "allergens": "None",
+      "desc": "Fragrant coastal spiced pilau with fresh tomato-onion salad.",
+      "badge": null,
+      "available": true,
+      "soldCount": 28
+    },
+    {
+      "id": 3,
+      "name": "Mandazi (3 pcs)",
+      "emoji": "🥐",
+      "price": 30,
+      "calories": 320,
+      "protein": 6,
+      "rating": 4.1,
+      "orders": 55,
+      "category": "snack",
+      "tags": [
+        "veg"
+      ],
+      "allergens": "Gluten",
+      "desc": "Golden fluffy fried mandazi. Fresh from morning batch.",
+      "badge": null,
+      "available": true,
+      "soldCount": 55
+    },
+    {
+      "id": 4,
+      "name": "Githeri Special",
+      "emoji": "🫘",
+      "price": 80,
+      "calories": 460,
+      "protein": 24,
+      "rating": 3.8,
+      "orders": 18,
+      "category": "main",
+      "tags": [
+        "veg",
+        "halal"
+      ],
+      "allergens": "None",
+      "desc": "Boiled maize and kidney beans fried with tomatoes and dhania.",
+      "badge": "veg",
+      "available": true,
+      "soldCount": 18
+    },
+    {
+      "id": 5,
+      "name": "Chicken Burger",
+      "emoji": "🍔",
+      "price": 200,
+      "calories": 620,
+      "protein": 35,
+      "rating": 4.7,
+      "orders": 41,
+      "category": "snack",
+      "tags": [
+        "halal"
+      ],
+      "allergens": "Gluten",
+      "desc": "Crispy chicken fillet with shredded lettuce and creamy sauce in sesame bun.",
+      "badge": "hot",
+      "available": true,
+      "soldCount": 41
+    },
+    {
+      "id": 6,
+      "name": "Chapati + Beans",
+      "emoji": "🫓",
+      "price": 60,
+      "calories": 480,
+      "protein": 18,
+      "rating": 4.3,
+      "orders": 22,
+      "category": "main",
+      "tags": [
+        "veg"
+      ],
+      "allergens": "Gluten",
+      "desc": "Two soft layered chapatis with seasoned yellow bean curry.",
+      "badge": null,
+      "available": true,
+      "soldCount": 22
+    },
+    {
+      "id": 7,
+      "name": "Maziwa Mala (500ml)",
+      "emoji": "🥛",
+      "price": 40,
+      "calories": 280,
+      "protein": 16,
+      "rating": 4,
+      "orders": 30,
+      "category": "drink",
+      "tags": [
+        "veg"
+      ],
+      "allergens": "Dairy",
+      "desc": "Chilled fermented cultured milk. Probiotic and refreshing.",
+      "badge": null,
+      "available": true,
+      "soldCount": 30
+    },
+    {
+      "id": 8,
+      "name": "Soda (500ml)",
+      "emoji": "🥤",
+      "price": 50,
+      "calories": 210,
+      "protein": 0,
+      "rating": 3.9,
+      "orders": 45,
+      "category": "drink",
+      "tags": [],
+      "allergens": "None",
+      "desc": "Ice-cold soda: Coca-Cola, Fanta, or Sprite.",
+      "badge": null,
+      "available": true,
+      "soldCount": 45
+    },
+    {
+      "id": 9,
+      "name": "Beef Samosa (2 pcs)",
+      "emoji": "🥟",
+      "price": 40,
+      "calories": 260,
+      "protein": 12,
+      "rating": 4.3,
+      "orders": 38,
+      "category": "snack",
+      "tags": [
+        "halal"
+      ],
+      "allergens": "Gluten",
+      "desc": "Crunchy golden pastry triangles stuffed with spiced minced beef.",
+      "badge": "new",
+      "available": true,
+      "soldCount": 38
+    },
+    {
+      "id": 10,
+      "name": "Sukuma Wiki + Rice",
+      "emoji": "🍃",
+      "price": 90,
+      "calories": 410,
+      "protein": 11,
+      "rating": 4,
+      "orders": 20,
+      "category": "main",
+      "tags": [
+        "veg",
+        "halal"
+      ],
+      "allergens": "None",
+      "desc": "Fresh collard greens sauteed with onions, served with steamed white rice.",
+      "badge": "veg",
+      "available": true,
+      "soldCount": 20
+    },
+    {
+      "id": 11,
+      "name": "Fresh Mango Juice",
+      "emoji": "🧃",
+      "price": 60,
+      "calories": 180,
+      "protein": 2,
+      "rating": 4.5,
+      "orders": 25,
+      "category": "drink",
+      "tags": [
+        "veg"
+      ],
+      "allergens": "None",
+      "desc": "100% freshly pressed ripe mango juice without added preservatives.",
+      "badge": "new",
+      "available": true,
+      "soldCount": 25
+    },
+    {
+      "id": 12,
+      "name": "Fried Chicken + Chips",
+      "emoji": "🍗",
+      "price": 220,
+      "calories": 780,
+      "protein": 42,
+      "rating": 4.8,
+      "orders": 50,
+      "category": "main",
+      "tags": [
+        "halal"
+      ],
+      "allergens": "Gluten",
+      "desc": "Deep fried crispy chicken leg served with golden potato chips.",
+      "badge": "hot",
+      "available": true,
+      "soldCount": 50
+    },
+    {
+      "id": 13,
+      "name": "Masala Spiced Chai",
+      "emoji": "☕",
+      "price": 30,
+      "calories": 120,
+      "protein": 4,
+      "rating": 4.4,
+      "orders": 60,
+      "category": "drink",
+      "tags": [
+        "veg"
+      ],
+      "allergens": "Dairy",
+      "desc": "Steaming hot brewed Kenyan tea infused with ginger and cardamom.",
+      "badge": null,
+      "available": true,
+      "soldCount": 60
+    },
+    {
+      "id": 14,
+      "name": "Tilapia Fish + Ugali",
+      "emoji": "🐟",
+      "price": 140,
+      "calories": 590,
+      "protein": 38,
+      "rating": 4.1,
+      "orders": 15,
+      "category": "main",
+      "tags": [
+        "halal"
+      ],
+      "allergens": "Fish",
+      "desc": "Pan-fried whole lake tilapia served with ugali and sukuma.",
+      "badge": null,
+      "available": true,
+      "soldCount": 15
+    },
+    {
+      "id": 15,
+      "name": "Fresh Banana Bunch",
+      "emoji": "🍌",
+      "price": 20,
+      "calories": 110,
+      "protein": 1,
+      "rating": 4.2,
+      "orders": 35,
+      "category": "snack",
+      "tags": [
+        "veg",
+        "halal"
+      ],
+      "allergens": "None",
+      "desc": "Sweet ripe Cavendish bananas. Quick healthy brain fuel.",
+      "badge": null,
+      "available": true,
+      "soldCount": 35
+    },
+    {
+      "id": 16,
+      "name": "Ndengu Special + Rice",
+      "emoji": "🍲",
+      "price": 80,
+      "calories": 450,
+      "protein": 21,
+      "rating": 4.3,
+      "orders": 29,
+      "category": "main",
+      "tags": [
+        "veg",
+        "halal"
+      ],
+      "allergens": "None",
+      "desc": "Green grams simmered in coconut tomato gravy over fluffy rice.",
+      "badge": "veg",
+      "available": true,
+      "soldCount": 29
+    },
+    {
+      "id": 17,
+      "name": "Yoghurt Cup (Strawberry)",
+      "emoji": "🍦",
+      "price": 50,
+      "calories": 190,
+      "protein": 8,
+      "rating": 4.2,
+      "orders": 22,
+      "category": "drink",
+      "tags": [
+        "veg"
+      ],
+      "allergens": "Dairy",
+      "desc": "Smooth probiotic whole-milk strawberry yoghurt.",
+      "badge": null,
+      "available": true,
+      "soldCount": 22
+    },
+    {
+      "id": 18,
+      "name": "Egg Sandwich Toast",
+      "emoji": "🍳",
+      "price": 50,
+      "calories": 310,
+      "protein": 14,
+      "rating": 4,
+      "orders": 18,
+      "category": "snack",
+      "tags": [
+        "veg"
+      ],
+      "allergens": "Gluten,Egg",
+      "desc": "Double toasted buttered bread with seasoned fried eggs.",
+      "badge": null,
+      "available": true,
+      "soldCount": 18
+    }
+  ],
+  "orders": [
+    {
+      "id": "KCA-2024-0046",
+      "ticketNo": "#KCA-046",
+      "regNo": "2502692",
+      "studentName": "Student 2502692",
+      "items": [
+        {
+          "id": 5,
+          "name": "Chicken Burger",
+          "qty": 1,
+          "price": 200
+        }
+      ],
+      "total": 205,
+      "payMethod": "mpesa",
+      "mpesaRef": "QJ92K810LA",
+      "status": "picked_up",
+      "createdAt": "2026-09-29T04:18:06.568Z",
+      "pickupCode": "QR-KCA-046-OK",
+      "notes": "No mayonnaise please"
+    },
+    {
+      "id": "KCA-2024-0047",
+      "ticketNo": "#KCA-047",
+      "regNo": "2502692",
+      "studentName": "Student 2502692",
+      "items": [
+        {
+          "id": 1,
+          "name": "Beef Stew + Ugali",
+          "qty": 1,
+          "price": 120
+        }
+      ],
+      "total": 125,
+      "payMethod": "kca_wallet",
+      "mpesaRef": "WAL-KCA-9921",
+      "status": "ready",
+      "createdAt": "2026-09-29T06:08:06.570Z",
+      "pickupCode": "QR-KCA-047-PREP",
+      "notes": "Extra soup if available",
+      "updatedAt": "2026-09-29T06:38:10.480Z"
+    }
+  ],
+  "students": {
+    "2502692": {
+      "regNo": "2502692",
+      "email": "2502692@students.kcau.ac.ke",
+      "name": "James Mwangi",
+      "department": "School of Technology (BIT)",
+      "walletBalance": 850,
+      "transactions": [
+        {
+          "id": "TX-101",
+          "type": "topup",
+          "amount": 1000,
+          "date": "Yesterday, 10:00 AM",
+          "ref": "QH72KL918X"
+        },
+        {
+          "id": "TX-102",
+          "type": "debit",
+          "amount": 150,
+          "date": "Yesterday, 1:15 PM",
+          "ref": "ORDER #KCA-044"
+        }
+      ]
+    }
+  },
+  "feedbacks": [
+    {
+      "id": 1,
+      "itemId": 1,
+      "regNo": "2502692",
+      "rating": 5,
+      "emoji": 5,
+      "comment": "Ugali was hot and soft, stew had plenty of meat!",
+      "date": "Today"
+    },
+    {
+      "id": 2,
+      "itemId": 5,
+      "regNo": "2502692",
+      "rating": 5,
+      "emoji": 5,
+      "comment": "Best burger on campus by far.",
+      "date": "Today"
+    }
+  ]
+}

@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>MealTime — KCA University Campus Dining</title>
+  <meta name="description" content="MealTime is the official KCA University campus dining app. Pre-order meals, skip the queue, pay via M-Pesa or Student Wallet, and rate your food in real time." />
+  
+  <!-- Mobile & PWA Optimization for iOS & Android -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="MealTime KCA" />
+  <meta name="theme-color" content="#6B1A2A" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="manifest.json" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== LOGIN SCREEN ===== -->
+  <div id="login-screen" class="hidden">
+    <div class="login-bg"></div>
+    <div class="login-content">
+      <div class="login-logo-wrap">
+        <img src="assets/logo.jpg" alt="MealTime" class="login-logo" />
+        <div class="login-logo-ring"></div>
+      </div>
+      <h1 class="login-title">MealTime</h1>
+      <p class="login-uni">KCA University · Official Campus Dining</p>
+      <p class="login-tagline">Order ahead. Skip the queue.<br>Smart dining for comrades.</p>
+
+      <div class="login-card">
+        <!-- ROLE SELECTOR TABS: Clean Separation for Security -->
+        <div class="login-role-tabs">
+          <button type="button" class="login-role-tab active" id="tab-login-student">
+            <span>🎓 Student / Lecturer</span>
+          </button>
+          <button type="button" class="login-role-tab" id="tab-login-staff">
+            <span>👨‍🍳 Cafeteria Staff</span>
+          </button>
+        </div>
+
+        <div class="login-card-header">
+          <span class="login-shield" id="login-shield-icon">🔐</span>
+          <div>
+            <strong id="login-card-role-title">Student &amp; Lecturer Access</strong>
+            <span id="login-card-role-sub">Sign in with your official university credentials</span>
+          </div>
+        </div>
+
+        <!-- Quick 1-Click Demo Fill for Fast Testing & Defense Presentations -->
+        <div class="demo-chip-wrap">
+          <button type="button" class="demo-chip-btn" id="demo-student-btn">
+            <span id="demo-btn-label">⚡ Use My Email: <strong>2502692@students.kcau.ac.ke</strong></span>
+          </button>
+        </div>
+
+        <div class="login-field">
+          <label for="login-email" id="login-email-label">Student Email or Registration Number</label>
+          <div class="login-input-wrap" id="email-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+              <polyline points="22,6 12,12 2,6" />
+            </svg>
+            <input type="text" id="login-email" placeholder="2502692@students.kcau.ac.ke" autocomplete="username" />
+          </div>
+          <span class="field-hint" id="email-hint">Format: <strong>2502692@students.kcau.ac.ke</strong> or registration number <strong>2502692</strong></span>
+        </div>
+
+        <div class="login-field">
+          <label for="login-password" id="login-pass-label">Password / Portal PIN</label>
+          <div class="login-input-wrap" id="pass-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg>
+            <input type="password" id="login-password" placeholder="Enter password (default: 1234)" value="1234" autocomplete="current-password" />
+            <button class="toggle-pass" id="toggle-pass" aria-label="Toggle password visibility" type="button">
+              <svg id="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Security Warning Box for Staff Portal -->
+        <div class="staff-security-alert hidden" id="staff-security-alert">
+          <span>🔒 Restricted Terminal: Unauthorized student access is prohibited and logged by KCA IT Services.</span>
+        </div>
+
+        <div class="login-error hidden" id="login-error">
+          <span>⚠</span> <span id="login-error-text">Invalid credentials</span>
+        </div>
+
+        <button class="login-btn" id="login-btn" type="button">
+          <span id="login-btn-text">Sign In to MealTime</span>
+          <span class="spinner-sm hidden" id="login-spinner"></span>
+        </button>
+
+        <div class="login-divider" id="google-divider"><span>or continue with</span></div>
+
+        <button class="google-btn" id="google-btn" type="button">
+          <svg viewBox="0 0 24 24" width="18" height="18">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+          </svg>
+          KCA Google Workspace
+        </button>
+
+        <p class="login-note">
+          New Student? <a href="#" id="register-link">Auto-activates on first sign-in →</a>
+        </p>
+      </div>
+
+      <p class="login-footer">Protected by KCA University Information Technology Directorate</p>
+    </div>
+  </div>
+
+  <!-- ===== SPLASH SCREEN ===== -->
+  <div id="splash-screen">
+    <div class="splash-inner">
+      <div class="kca-logo-animated">
+        <span class="kca-letter" data-letter="K">K</span>
+        <span class="kca-letter" data-letter="C">C</span>
+        <span class="kca-letter" data-letter="A">A</span>
+      </div>
+      <h1 class="splash-welcome">Welcome to MealTime</h1>
+      <p class="splash-tagline" id="splash-tagline">Connecting to KCA Cafeteria Live Backend…</p>
+      <div class="splash-loader">
+        <div class="loader-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== APP WRAPPER ===== -->
+  <div id="app" class="hidden">
+
+    <!-- ===== HEADER ===== -->
+    <header class="app-header">
+      <div class="header-left">
+        <img src="assets/logo.jpg" alt="MealTime" class="header-logo" />
+        <div>
+          <span class="header-brand">MealTime</span>
+          <span class="header-campus" id="header-campus-label">KCA University · Ruaraka Main Campus</span>
+        </div>
+      </div>
+
+      <!-- Right Header Actions -->
+      <div class="header-right">
+        <!-- Interactive Notification Bell Button with Badge Counter -->
+        <button class="icon-btn" id="notif-btn" aria-label="Notifications" title="Notifications & Queue Center">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 01-3.46 0" />
+          </svg>
+          <span class="notif-badge" id="notif-badge">3</span>
+        </button>
+
+        <button class="wallet-badge-btn" id="header-wallet-btn" title="KCA MealCard Balance" data-page="profile">
+          <span class="wallet-badge-icon">💳</span>
+          <span class="wallet-badge-val" id="header-wallet-bal">KSh 850</span>
+        </button>
+        <button class="avatar-btn" id="profile-btn" aria-label="Profile" data-page="profile">
+          <span id="user-avatar-text">25</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ===== LIVE QUEUE & TRAFFIC BANNER ===== -->
+    <div class="status-banner" id="status-banner" title="Click to open Notifications &amp; Queue Advisory">
+      <div class="status-dot pulse"></div>
+      <span id="status-text">Cafeteria Open · Queue: <strong>~4 min wait</strong> · 2 active orders</span>
+      <span class="crowd-pill" id="crowd-pill">Moderate Rush 🟡</span>
+      <button class="status-refresh" id="refresh-status" title="Refresh live cafeteria queue">↻</button>
+    </div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="app-main">
+
+      <!-- ================= 1. STUDENT HOME PAGE ================= -->
+      <section id="page-home" class="page active">
+
+        <!-- Personalized Hero Banner -->
+        <div class="hero-card">
+          <div class="hero-kca-badge">KCA University · Comrade Dining</div>
+          <div class="hero-text">
+            <p class="hero-greeting" id="hero-greeting">Good day, Student 2502692 👋</p>
+            <h2 class="hero-headline">Pre-order, skip queues &amp; <span class="gradient-text">eat fresh</span>.</h2>
+          </div>
+          <div class="hero-stat-pills">
+            <div class="stat-pill green">
+              <span class="pill-icon">⚡</span>
+              <div>
+                <span class="pill-num" id="hero-stat-wait">4 min</span>
+                <span class="pill-label">Est. Queue</span>
+              </div>
+            </div>
+            <div class="stat-pill gold">
+              <span class="pill-icon">🍽️</span>
+              <div>
+                <span class="pill-num">18</span>
+                <span class="pill-label">Meals Ready</span>
+              </div>
+            </div>
+            <div class="stat-pill maroon">
+              <span class="pill-icon">⭐</span>
+              <div>
+                <span class="pill-num">4.4</span>
+                <span class="pill-label">Rating</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FEATURE: COMRADE BUDGET BUILDER (Smart Meal Optimizer) -->
+        <div class="budget-card" id="budget-optimizer-card">
+          <div class="budget-header">
+            <div class="budget-title-wrap">
+              <span class="budget-icon">💰</span>
+              <div>
+                <h3>Comrade Budget Optimizer</h3>
+                <p>Have an exact pocket budget? Let our algorithm build the best meal combo!</p>
+              </div>
+            </div>
+            <div class="budget-amount-box">
+              <span class="budget-cur">KSh</span>
+              <span class="budget-val" id="budget-slider-val">120</span>
+            </div>
+          </div>
+
+          <div class="budget-slider-wrap">
+            <input type="range" id="budget-range" min="30" max="300" step="10" value="120" />
+            <div class="budget-ticks">
+              <span>KSh 30 (Tea)</span>
+              <span>KSh 100 (Beans+Chapati)</span>
+              <span>KSh 180 (Full Lunch)</span>
+              <span>KSh 300 (Feast)</span>
+            </div>
+          </div>
+
+          <!-- Quick Preset Chips -->
+          <div class="budget-presets">
+            <button class="budget-chip" data-budget="70">🪙 KSh 70 Quick Bite</button>
+            <button class="budget-chip active" data-budget="120">🍛 KSh 120 Best Meal</button>
+            <button class="budget-chip" data-budget="160">🍗 KSh 160 Protein Pack</button>
+            <button class="budget-chip" data-budget="220">👑 KSh 220 Feast</button>
+          </div>
+
+          <!-- Calculated Combo Result Box -->
+          <div class="combo-result-box" id="combo-result-box">
+            <div class="combo-items-preview" id="combo-items-preview">
+              <!-- Dynamically populated -->
+            </div>
+            <div class="combo-footer">
+              <div class="combo-meta">
+                <span class="combo-total-price" id="combo-total-price">Total: KSh 120</span>
+                <span class="combo-nutrition" id="combo-nutrition">🔥 650 kcal · 💪 32g Protein</span>
+              </div>
+              <button class="combo-add-btn" id="combo-add-btn">
+                <span>Add Combo to Tray</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Peak Alert Banner -->
+        <div class="peak-alert" id="peak-alert">
+          <div class="peak-icon">📈</div>
+          <div class="peak-text">
+            <strong>Cafeteria Traffic Advisory</strong>
+            <span>12:15 PM – 1:30 PM is usually crowded with long lines. Pre-order now for express pickup!</span>
+          </div>
+          <button class="peak-dismiss" id="dismiss-peak">✕</button>
+        </div>
+
+        <!-- Order Again Carousel -->
+        <div class="section-header">
+          <h3>Order Again</h3>
+          <button class="see-all-btn" data-page="menu">Full menu →</button>
+        </div>
+        <div class="reorder-strip" id="reorder-strip"></div>
+
+        <!-- Today's Top Picks -->
+        <div class="section-header">
+          <h3>Today's Top Student Picks ⭐</h3>
+          <span class="section-badge">Nutrient Verified</span>
+        </div>
+        <div class="menu-grid" id="top-picks-grid"></div>
+
+        <!-- Active Order Card -->
+        <div class="active-order-card hidden" id="active-order-card">
+          <div class="ao-header">
+            <span class="ao-title" id="ao-status-title">🍛 Order in Preparation</span>
+            <span class="ao-badge" id="ao-badge">In Kitchen</span>
+          </div>
+          <div class="ao-progress">
+            <div class="ao-step done" id="step-placed"><span>✓</span> Placed</div>
+            <div class="ao-line" id="line-1"></div>
+            <div class="ao-step active" id="step-preparing"><span class="spinner-sm"></span> Cooking</div>
+            <div class="ao-line" id="line-2"></div>
+            <div class="ao-step" id="step-ready"><span>○</span> Ready</div>
+          </div>
+          <div class="ao-footer">
+            <div>
+              <span id="ao-item-name" class="ao-main-item">Beef Stew + Ugali</span>
+              <span class="ao-ticket" id="ao-ticket-no">Ticket #KCA-047</span>
+            </div>
+            <span id="ao-eta">Est. ready in <strong>6 min</strong></span>
+          </div>
+          <button class="qr-btn" id="show-qr-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><rect x="7" y="7" width="3" height="3"/><rect x="14" y="7" width="3" height="3"/><rect x="7" y="14" width="3" height="3"/><path d="M14 14h3v3h-3z"/></svg>
+            <span>Show Pickup QR Pass</span>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- ================= 2. MENU PAGE ================= -->
+      <section id="page-menu" class="page">
+        <div class="page-hero maroon-hero">
+          <div class="hero-pattern"></div>
+          <h2>KCA Cafeteria Menu</h2>
+          <p>Real-time pricing, nutritional badges &amp; stock availability</p>
+        </div>
+
+        <div class="search-bar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" />
+          </svg>
+          <input type="text" id="menu-search" placeholder="Search meals, ugali, chapati, juice, calories…" />
+        </div>
+
+        <div class="filter-strip" id="filter-strip">
+          <button class="filter-btn active" data-filter="all">All Items</button>
+          <button class="filter-btn" data-filter="main">🍛 Main Meals</button>
+          <button class="filter-btn" data-filter="snack">🥟 Snacks</button>
+          <button class="filter-btn" data-filter="drink">🧃 Drinks</button>
+          <button class="filter-btn" data-filter="veg">🌱 Vegetarian</button>
+          <button class="filter-btn" data-filter="halal">☪ Halal Certified</button>
+        </div>
+
+        <div class="sort-row">
+          <span class="sort-label">Sort by:</span>
+          <select id="menu-sort" class="sort-select">
+            <option value="rating">Highest Rated ⭐</option>
+            <option value="price-asc">Price: Low → High 💰</option>
+            <option value="price-desc">Price: High → Low</option>
+            <option value="protein-desc">Highest Protein (g) 💪</option>
+            <option value="popular">Most Ordered 🔥</option>
+          </select>
+          <span id="menu-count" class="menu-count">18 items available</span>
+        </div>
+
+        <div class="menu-grid" id="full-menu-grid"></div>
+      </section>
+
+      <!-- ================= 3. MY ORDERS PAGE ================= -->
+      <section id="page-orders" class="page">
+        <div class="page-hero gold-hero">
+          <div class="hero-pattern"></div>
+          <h2>My Order Tickets</h2>
+          <p>Track current orders &amp; review past dining receipts</p>
+        </div>
+
+        <div class="orders-tabs">
+          <button class="order-tab active" data-tab="active">Active Orders (<span id="active-tab-count">1</span>)</button>
+          <button class="order-tab" data-tab="past">Order History</button>
+        </div>
+
+        <div id="active-orders-list" class="orders-list"></div>
+        <div id="past-orders-list" class="orders-list hidden"></div>
+      </section>
+
+      <!-- ================= 4. KITCHEN DISPLAY SYSTEM (KDS) - STAFF ONLY ================= -->
+      <section id="page-kds" class="page">
+        <div class="kds-hero">
+          <div class="kds-hero-info">
+            <div class="kds-badge">👨‍🍳 Kitchen Staff Terminal · Restricted Access</div>
+            <h2>Kitchen Display System (KDS)</h2>
+            <p id="kds-staff-status-sub">Order ticket dispatch for authorized KCA cafeteria cooks</p>
+          </div>
+          <div class="kds-stats-strip">
+            <div class="kds-stat">
+              <span class="kds-stat-num" id="kds-count-new">1</span>
+              <span class="kds-stat-label">New Placed</span>
+            </div>
+            <div class="kds-stat">
+              <span class="kds-stat-num" id="kds-count-cooking">1</span>
+              <span class="kds-stat-label">In Kitchen</span>
+            </div>
+            <div class="kds-stat">
+              <span class="kds-stat-num" id="kds-count-ready">0</span>
+              <span class="kds-stat-label">Ready for Pickup</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- KDS Controls -->
+        <div class="kds-filter-bar">
+          <div class="kds-filter-tabs">
+            <button class="kds-tab active" data-kds-filter="all">All Active Tickets</button>
+            <button class="kds-tab" data-kds-filter="placed">🟡 New Orders</button>
+            <button class="kds-tab" data-kds-filter="preparing">🟠 Cooking</button>
+            <button class="kds-tab" data-kds-filter="ready">🟢 Ready for Pickup</button>
+          </div>
+          <div class="kds-btn-group">
+            <button class="kds-sim-btn" id="kds-simulate-order-btn">
+              <span>+ Simulate Incoming Order</span>
+            </button>
+            <button class="kds-exit-btn" id="kds-exit-terminal-btn">
+              <span>🚪 Exit Staff Terminal</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Kitchen Kanban Board -->
+        <div class="kds-board" id="kds-tickets-container">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+
+      <!-- ================= 5. STAFF ANALYTICS PAGE ================= -->
+      <section id="page-analytics" class="page">
+        <div class="page-hero maroon-hero">
+          <div class="hero-pattern"></div>
+          <h2>Cafeteria Operations Analytics</h2>
+          <p>Real-time dining insights, feedback &amp; inventory demand</p>
+        </div>
+
+        <div id="page-analytics-body" style="padding:16px;">
+          <div class="analytics-grid">
+            <div class="metric-card">
+              <span class="metric-icon">📦</span>
+              <div class="metric-body">
+                <span class="metric-num" id="m-orders">48</span>
+                <span class="metric-label">Meals Served Today</span>
+              </div>
+              <span class="metric-trend up">+15%</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-icon">⭐</span>
+              <div class="metric-body">
+                <span class="metric-num" id="m-rating">4.3</span>
+                <span class="metric-label">Avg Student Rating</span>
+              </div>
+              <span class="metric-trend up">+0.4</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-icon">⏱️</span>
+              <div class="metric-body">
+                <span class="metric-num" id="m-prep-time">6.4m</span>
+                <span class="metric-label">Avg Pickup Speed</span>
+              </div>
+              <span class="metric-trend up">Optimal</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-icon">⚠️</span>
+              <div class="metric-body">
+                <span class="metric-num warn" id="m-low">1</span>
+                <span class="metric-label">Items Under Review</span>
+              </div>
+              <span class="metric-trend down">Actionable</span>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <h3 class="chart-title">📈 Predicted vs Actual Hourly Rush</h3>
+            <p class="chart-sub">Student cafeteria traffic volume (Ruaraka Campus)</p>
+            <div class="bar-chart" id="bar-chart"></div>
+            <div class="chart-legend">
+              <span class="legend-item actual">● Actual Served</span>
+              <span class="legend-item predicted">◌ Predicted Traffic</span>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <h3 class="chart-title">⚠️ Items Needing Quality Improvement</h3>
+            <p class="chart-sub">Items rated under 3.5 stars by comrades</p>
+            <div id="low-rated-list" class="low-rated-list"></div>
+          </div>
+
+          <div class="chart-card">
+            <h3 class="chart-title">🔥 Campus Top Sellers</h3>
+            <div id="top-sellers-list" class="top-sellers"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 6. PROFILE & WALLET PAGE ================= -->
+      <section id="page-profile" class="page">
+        <!-- Digital KCA University Student SmartCard -->
+        <div class="smartcard-container">
+          <div class="kca-smartcard">
+            <div class="smartcard-top">
+              <div class="smartcard-brand">
+                <img src="assets/logo.jpg" alt="KCA" class="smartcard-logo" />
+                <div>
+                  <span class="smartcard-uni">KCA UNIVERSITY</span>
+                  <span class="smartcard-type">OFFICIAL STUDENT MEALCARD</span>
+                </div>
+              </div>
+              <div class="smartcard-chip"></div>
+            </div>
+
+            <div class="smartcard-middle">
+              <div class="smartcard-bal-label">AVAILABLE MEAL BALANCE</div>
+              <div class="smartcard-bal-val" id="profile-wallet-bal">KSh 850.00</div>
+            </div>
+
+            <div class="smartcard-bottom">
+              <div>
+                <span class="smartcard-sub">STUDENT REG NO</span>
+                <span class="smartcard-holder" id="profile-reg-no">2502692</span>
+              </div>
+              <div style="text-align:right;">
+                <span class="smartcard-sub">OFFICIAL EMAIL</span>
+                <span class="smartcard-name" id="profile-student-email">2502692@students.kcau.ac.ke</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wallet Actions -->
+        <div class="profile-section">
+          <h3>KCA Meal Wallet Operations</h3>
+          <div class="wallet-action-row">
+            <button class="topup-action-btn" id="open-topup-btn">
+              <span>+ Top Up via Lipa na M-Pesa</span>
+            </button>
+          </div>
+          <div class="wallet-transactions-box" id="wallet-tx-box">
+            <h4>Recent MealCard Transactions</h4>
+            <div class="tx-list" id="tx-list">
+              <div class="tx-item">
+                <span class="tx-icon green">↓</span>
+                <div>
+                  <strong>M-Pesa Top Up</strong>
+                  <span>Yesterday, 10:00 AM · Ref: QH72KL918X</span>
+                </div>
+                <span class="tx-amount plus">+KSh 1,000</span>
+              </div>
+              <div class="tx-item">
+                <span class="tx-icon maroon">↑</span>
+                <div>
+                  <strong>Beef Stew + Ugali</strong>
+                  <span>Yesterday, 1:15 PM · Cafeteria Counter B</span>
+                </div>
+                <span class="tx-amount minus">-KSh 150</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-section">
+          <h3>Dietary &amp; Health Preferences</h3>
+          <div class="pref-item">
+            <span>Dietary Preference: <strong>Flexitarian / Halal</strong></span>
+            <button class="pref-edit-btn" onclick="alert('Preferences saved for student portal profile!')">Edit</button>
+          </div>
+          <div class="pref-item">
+            <span>Nutritional Goal: <strong>High Protein (>30g per meal)</strong></span>
+            <button class="pref-edit-btn" onclick="alert('Nutritional goals active in recommendations!')">Edit</button>
+          </div>
+        </div>
+
+        <div class="profile-section">
+          <h3>Dining Settings &amp; Audio Notifications</h3>
+          <div class="settings-list">
+            <div class="setting-row">
+              <span>Order Ready Audio Chime 🔔</span>
+              <label class="toggle"><input type="checkbox" id="audio-toggle" checked /><span class="slider"></span></label>
+            </div>
+            <div class="setting-row">
+              <span>Peak Hour Rush Alerts</span>
+              <label class="toggle"><input type="checkbox" checked /><span class="slider"></span></label>
+            </div>
+            <div class="setting-row">
+              <span>Dark Theme</span>
+              <label class="toggle"><input type="checkbox" id="dark-toggle" /><span class="slider"></span></label>
+            </div>
+          </div>
+        </div>
+
+        <button class="logout-btn" id="logout-btn">Sign Out from Session</button>
+      </section>
+
+    </main>
+
+    <!-- ===== BOTTOM NAVIGATION (STUDENT VIEW) ===== -->
+    <nav class="bottom-nav" id="bottom-nav">
+      <button class="nav-item active" data-page="home" aria-label="Home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
+        <span>Home</span>
+      </button>
+      <button class="nav-item" data-page="menu" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+        </svg>
+        <span>Menu</span>
+      </button>
+      <button class="nav-item nav-order-btn" data-page="cart" aria-label="Cart" id="cart-nav-btn">
+        <div class="nav-order-inner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1" />
+            <circle cx="20" cy="21" r="1" />
+            <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 001.95-1.56l1.65-8.44H6" />
+          </svg>
+        </div>
+        <span>Tray</span>
+        <span class="cart-badge hidden" id="cart-badge">0</span>
+      </button>
+      <button class="nav-item" data-page="orders" aria-label="My Orders">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 11l3 3L22 4" />
+          <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+        </svg>
+        <span>Orders</span>
+      </button>
+      <button class="nav-item" data-page="profile" aria-label="Profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span>Profile</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- ===== NOTIFICATIONS & QUEUE CENTER DRAWER ===== -->
+  <div class="notif-drawer-overlay hidden" id="notif-drawer-overlay">
+    <div class="notif-drawer" id="notif-drawer">
+      <div class="notif-drawer-header">
+        <div class="notif-drawer-title">
+          <span>🔔 Cafeteria Notifications</span>
+          <span class="badge-count" id="drawer-notif-count">3 New</span>
+        </div>
+        <button class="modal-close" id="notif-drawer-close">✕</button>
+      </div>
+
+      <div class="notif-drawer-body">
+        <!-- Live Queue Status Summary in Drawer -->
+        <div class="drawer-queue-summary">
+          <div class="dqs-icon">⏱️</div>
+          <div>
+            <strong>Cafeteria Counter Status</strong>
+            <p id="drawer-queue-text">Average prep speed: <strong>4-6 mins</strong> · Counter B Express</p>
+          </div>
+        </div>
+
+        <div class="notif-list" id="notif-list">
+          <div class="notif-card active-order-notif" id="notif-active-order-item">
+            <div class="notif-icon green">🍛</div>
+            <div class="notif-content">
+              <strong>Order in Progress: Ticket #KCA-047</strong>
+              <p>Beef Stew + Ugali is currently cooking in the kitchen. Pickup pass will activate when ready.</p>
+              <span class="notif-time">2 mins ago</span>
+            </div>
+          </div>
+          <div class="notif-card rush-alert-notif">
+            <div class="notif-icon gold">📈</div>
+            <div class="notif-content">
+              <strong>Peak Lunch Rush Advisory</strong>
+              <p>Cafeteria crowds peak between 12:15 PM and 1:30 PM. Pre-order now to skip the counter queue!</p>
+              <span class="notif-time">12 mins ago</span>
+            </div>
+          </div>
+          <div class="notif-card promo-notif">
+            <div class="notif-icon maroon">💰</div>
+            <div class="notif-content">
+              <strong>Comrade Budget Meal of the Day</strong>
+              <p>Chapati + Yellow Beans combo is currently KSh 60 only (480 kcal · 18g Protein).</p>
+              <span class="notif-time">1 hour ago</span>
+            </div>
+          </div>
+          <div class="notif-card system-notif">
+            <div class="notif-icon blue">💳</div>
+            <div class="notif-content">
+              <strong>KCA Student MealCard Active</strong>
+              <p>Logged in as 2502692@students.kcau.ac.ke with instant 1-tap checkout enabled.</p>
+              <span class="notif-time">Today</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="clear-notif-btn" id="clear-notif-btn">Mark All as Read</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CART MODAL ===== -->
+  <div class="modal-overlay hidden" id="cart-modal">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <div>
+          <h3>Your Campus Dining Tray</h3>
+          <span class="sub-muted">Freshly prepared at KCA Cafeteria</span>
+        </div>
+        <button class="modal-close" id="cart-close">✕</button>
+      </div>
+
+      <div id="cart-items" class="cart-items-list"></div>
+
+      <div class="cart-empty hidden" id="cart-empty">
+        <span>🛒</span>
+        <p>Your meal tray is currently empty.<br>Browse the menu or use the Budget Optimizer!</p>
+        <button class="go-menu-btn" data-page="menu">Explore Menu</button>
+      </div>
+
+      <div class="cart-summary" id="cart-summary">
+        <!-- Live Nutritional Summary of Tray -->
+        <div class="tray-nutrition-bar">
+          <span class="nutri-pill">🔥 <strong id="tray-calories">0</strong> kcal</span>
+          <span class="nutri-pill">💪 <strong id="tray-protein">0</strong>g Protein</span>
+          <span class="nutri-badge">Balanced Comrade Meal</span>
+        </div>
+
+        <div class="summary-row"><span>Meal Subtotal</span><span id="cart-subtotal">KSh 0</span></div>
+        <div class="summary-row"><span>Cafeteria packaging &amp; service fee</span><span>KSh 5</span></div>
+        <div class="summary-row total-row"><span>Total Payable</span><span id="cart-total">KSh 5</span></div>
+
+        <!-- Payment Method Choice -->
+        <div class="pay-method-selector">
+          <label class="pay-method-label">Select Payment Method:</label>
+          <div class="pay-radio-group">
+            <label class="pay-radio-card active" id="method-wallet-card">
+              <input type="radio" name="pay-method" value="kca_wallet" checked />
+              <div class="pay-radio-body">
+                <strong>💳 KCA Student MealCard</strong>
+                <span class="wallet-opt-bal">Balance: <span id="cart-wallet-bal">KSh 850</span> (Instant)</span>
+              </div>
+            </label>
+            <label class="pay-radio-card" id="method-mpesa-card">
+              <input type="radio" name="pay-method" value="mpesa" />
+              <div class="pay-radio-body">
+                <strong>🟢 Lipa na M-Pesa</strong>
+                <span>Safaricom STK Push to Phone</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="pickup-slot">
+          <label for="pickup-time">📅 Target Pickup Time</label>
+          <select id="pickup-time">
+            <option value="ASAP (~8 min)">ASAP (~6-8 min)</option>
+            <option value="12:15 PM (Lunch Rush)">12:15 PM (Pre-order for lunch)</option>
+            <option value="1:00 PM">1:00 PM</option>
+            <option value="1:30 PM">1:30 PM</option>
+            <option value="4:00 PM (Evening Class)">4:00 PM (Evening Break)</option>
+          </select>
+        </div>
+
+        <div class="special-notes-box">
+          <input type="text" id="order-special-notes" placeholder="Special instructions (e.g. extra soup, no chilli, separate pack)" />
+        </div>
+
+        <button class="pay-btn" id="pay-btn">
+          <span id="pay-btn-text">Confirm Order with KCA MealCard</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== REALISTIC SAFARICOM M-PESA STK PUSH MODAL ===== -->
+  <div class="modal-overlay hidden" id="stk-modal">
+    <div class="stk-phone-frame">
+      <div class="safaricom-prompt-card">
+        <div class="stk-saf-header">
+          <div class="stk-saf-logo">M-PESA</div>
+          <span class="stk-sim-pill">SIM 1</span>
+        </div>
+        <div class="stk-body">
+          <p class="stk-text-main">
+            Do you want to pay <strong>KSh <span id="stk-amount-val">125</span></strong> to <strong>KCA CAFETERIA</strong> Account <span id="stk-reg-val">2502692</span>?
+          </p>
+          <div class="stk-pin-field">
+            <label>Enter M-Pesa PIN:</label>
+            <div class="stk-pin-dots">
+              <span class="pin-dot" id="pdot-1"></span>
+              <span class="pin-dot" id="pdot-2"></span>
+              <span class="pin-dot" id="pdot-3"></span>
+              <span class="pin-dot" id="pdot-4"></span>
+            </div>
+            <input type="password" id="stk-hidden-pin" maxlength="4" autofocus />
+          </div>
+
+          <!-- Quick Virtual Keypad -->
+          <div class="stk-keypad">
+            <button class="kbtn" data-k="1">1</button>
+            <button class="kbtn" data-k="2">2</button>
+            <button class="kbtn" data-k="3">3</button>
+            <button class="kbtn" data-k="4">4</button>
+            <button class="kbtn" data-k="5">5</button>
+            <button class="kbtn" data-k="6">6</button>
+            <button class="kbtn" data-k="7">7</button>
+            <button class="kbtn" data-k="8">8</button>
+            <button class="kbtn" data-k="9">9</button>
+            <button class="kbtn-cancel" id="stk-cancel-btn">Cancel</button>
+            <button class="kbtn" data-k="0">0</button>
+            <button class="kbtn-del" id="stk-del-btn">⌫</button>
+          </div>
+
+          <div class="stk-actions">
+            <button class="stk-submit-btn" id="stk-submit-btn">
+              <span>Send PIN &amp; Pay</span>
+            </button>
+          </div>
+
+          <p class="stk-sec-note">🔒 Secured by Safaricom Daraja API Gateway</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== WALLET TOP-UP MODAL ===== -->
+  <div class="modal-overlay hidden" id="topup-modal">
+    <div class="modal-sheet topup-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h3>Top Up KCA MealCard</h3>
+        <button class="modal-close" id="topup-close">✕</button>
+      </div>
+      <div class="topup-body">
+        <p>Deposit lunch funds directly into your student account using M-Pesa:</p>
+        <div class="topup-amount-chips">
+          <button class="topup-chip" data-amt="200">+ KSh 200</button>
+          <button class="topup-chip active" data-amt="500">+ KSh 500</button>
+          <button class="topup-chip" data-amt="1000">+ KSh 1,000</button>
+          <button class="topup-chip" data-amt="2000">+ KSh 2,000</button>
+        </div>
+        <div class="login-field">
+          <label for="topup-custom-amt">Amount (KSh)</label>
+          <input type="number" id="topup-custom-amt" value="500" min="10" />
+        </div>
+        <div class="login-field">
+          <label for="topup-phone">M-Pesa Registered Mobile</label>
+          <input type="tel" id="topup-phone" placeholder="07XX XXX XXX" value="0712 345 678" />
+        </div>
+        <button class="pay-confirm-btn" id="confirm-topup-btn">Send M-Pesa Top Up Request</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DYNAMIC QR CODE PICKUP PASS MODAL ===== -->
+  <div class="modal-overlay hidden" id="qr-modal">
+    <div class="modal-sheet qr-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h3>Official Pickup Pass</h3>
+        <button class="modal-close" id="qr-close">✕</button>
+      </div>
+      <p class="qr-instruction">Present this QR code to the cafeteria staff at <strong>Counter B (Express)</strong> to claim your meal.</p>
+      
+      <div class="qr-box">
+        <canvas id="qr-canvas" width="220" height="220"></canvas>
+      </div>
+
+      <div class="qr-order-info">
+        <div class="qr-ticket-pill" id="qr-ticket-pill">Ticket #KCA-047</div>
+        <h4 id="qr-item-name">Beef Stew + Ugali</h4>
+        <div class="qr-meta-row">
+          <span>Student Reg: <strong id="qr-reg-display">2502692</strong></span>
+          <span>Verified: <strong id="qr-verified-text">M-Pesa Paid</strong></span>
+        </div>
+        <span class="qr-status ready-status" id="qr-status-pill">✓ READY FOR COLLECTION</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FEEDBACK MODAL ===== -->
+  <div class="modal-overlay hidden" id="feedback-modal">
+    <div class="modal-sheet feedback-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h3>Rate Your Campus Meal</h3>
+        <button class="modal-close" id="feedback-close">✕</button>
+      </div>
+      <p class="feedback-item-name" id="feedback-item-name">Beef Stew + Ugali</p>
+      
+      <div class="star-rating" id="star-rating">
+        <button class="star" data-val="1">★</button>
+        <button class="star" data-val="2">★</button>
+        <button class="star" data-val="3">★</button>
+        <button class="star" data-val="4">★</button>
+        <button class="star" data-val="5">★</button>
+      </div>
+
+      <div class="emoji-reactions">
+        <button class="emoji-btn" data-val="1" title="Poor">😠</button>
+        <button class="emoji-btn" data-val="2" title="Cold / Salty">😕</button>
+        <button class="emoji-btn" data-val="3" title="Average">😐</button>
+        <button class="emoji-btn" data-val="4" title="Tasty">😊</button>
+        <button class="emoji-btn" data-val="5" title="Excellent!">🤩</button>
+      </div>
+
+      <textarea id="feedback-comment" class="feedback-textarea" placeholder="How was the portion size, temperature, or flavour? Your review directly impacts the cafeteria chef ratings!"></textarea>
+      <button class="feedback-submit-btn" id="feedback-submit">Submit Review &amp; Earn 5 Points</button>
+    </div>
+  </div>
+
+  <!-- ===== ITEM DETAIL MODAL ===== -->
+  <div class="modal-overlay hidden" id="item-modal">
+    <div class="modal-sheet item-sheet">
+      <div class="modal-handle"></div>
+      <button class="modal-close item-close" id="item-close">✕</button>
+      <div class="item-detail-img" id="item-detail-img"></div>
+      <div class="item-detail-body">
+        <div class="item-detail-header">
+          <h3 id="item-detail-name"></h3>
+          <span class="item-detail-price" id="item-detail-price"></span>
+        </div>
+        <div class="item-detail-meta">
+          <span class="rating-chip" id="item-detail-rating"></span>
+          <span class="orders-chip" id="item-detail-orders"></span>
+          <span class="avail-chip" id="item-detail-avail"></span>
+        </div>
+        <div class="item-nutrition-chips" id="item-detail-nutri">
+          <!-- Populated dynamically -->
+        </div>
+        <p class="item-detail-desc" id="item-detail-desc"></p>
+        <div class="item-tags" id="item-detail-tags"></div>
+        <div class="allergen-info" id="item-detail-allergens"></div>
+        <div class="qty-row">
+          <button class="qty-btn" id="qty-minus">−</button>
+          <span class="qty-val" id="qty-val">1</span>
+          <button class="qty-btn" id="qty-plus">+</button>
+        </div>
+        <button class="add-to-cart-btn" id="add-to-cart-btn">
+          Add to Tray — <span id="add-to-cart-price">KSh 0</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOAST CONTAINER ===== -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
