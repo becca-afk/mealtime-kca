@@ -301,6 +301,8 @@
             <span class="ao-title" id="ao-status-title">🍛 Order in Preparation</span>
             <span class="ao-badge" id="ao-badge">In Kitchen</span>
           </div>
+          <!-- Live Queue Position -->
+          <div class="ao-queue-position" id="ao-queue-position">⏳ Queue position: <strong>#2</strong> (1 order ahead)</div>
           <div class="ao-progress">
             <div class="ao-step done" id="step-placed"><span>✓</span> Placed</div>
             <div class="ao-line" id="line-1"></div>
@@ -751,6 +753,15 @@
               </div>
             </label>
           </div>
+          <!-- M-Pesa Phone Number (shows when M-Pesa selected) -->
+          <div class="mpesa-phone-field" id="mpesa-phone-field">
+            <label for="cart-mpesa-phone">📱 M-Pesa Phone Number</label>
+            <div class="mpesa-phone-input-wrap">
+              <span class="phone-prefix">+254</span>
+              <input type="tel" id="cart-mpesa-phone" placeholder="712 345 678" maxlength="12" />
+            </div>
+            <span class="phone-hint">The STK push will be sent to this number</span>
+          </div>
         </div>
 
         <div class="pickup-slot">
@@ -786,8 +797,9 @@
         </div>
         <div class="stk-body">
           <p class="stk-text-main">
-            Do you want to pay <strong>KSh <span id="stk-amount-val">125</span></strong> to <strong>KCA CAFETERIA</strong> Account <span id="stk-reg-val">2502692</span>?
+            Do you want to pay <strong>KSh <span id="stk-amount-val">125</span></strong> to <strong>KCA CAFETERIA</strong>?
           </p>
+          <p class="stk-phone-line">Payment from: <strong id="stk-phone-display">0712345678</strong> &bull; Ref: <span id="stk-reg-val">2502692</span></p>
           <div class="stk-pin-field">
             <label>Enter M-Pesa PIN:</label>
             <div class="stk-pin-dots">
@@ -935,6 +947,12 @@
         <p class="item-detail-desc" id="item-detail-desc"></p>
         <div class="item-tags" id="item-detail-tags"></div>
         <div class="allergen-info" id="item-detail-allergens"></div>
+
+        <!-- PUBLIC REVIEWS SECTION -->
+        <div class="item-public-reviews" id="item-public-reviews">
+          <!-- Populated dynamically -->
+        </div>
+
         <div class="qty-row">
           <button class="qty-btn" id="qty-minus">−</button>
           <span class="qty-val" id="qty-val">1</span>

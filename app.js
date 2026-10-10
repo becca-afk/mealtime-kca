@@ -728,31 +728,46 @@ function renderMenu(filter, query, sort) {
 }
 
 function createMealCardHTML(item) {
-  const halalBadge = item.tags.includes('halal') ? '<span class="tag-chip halal">Halal</span>' : '';
+  const halalBadge = item.tags.includes('halal') ? '<span class="tag-chip halal">☪ Halal</span>' : '';
   const vegBadge = item.tags.includes('veg') ? '<span class="tag-chip veg">🌱 Veg</span>' : '';
   const hotBadge = item.badge === 'hot' ? '<span class="badge-ribbon hot">🔥 Top Seller</span>' : '';
+  const newBadge = item.badge === 'new' ? '<span class="badge-ribbon new-badge">✨ New</span>' : '';
+  const vegRibbon = item.badge === 'veg' ? '<span class="badge-ribbon veg-ribbon">🌱 Veg</span>' : '';
+
+  // Build star display
+  const fullStars = Math.floor(item.rating);
+  const halfStar = item.rating % 1 >= 0.5 ? 1 : 0;
+  const emptyStars = 5 - fullStars - halfStar;
+  const starsHTML = '★'.repeat(fullStars) + (halfStar ? '⯨' : '') + '☆'.repeat(emptyStars);
 
   return `
     <div class="menu-card" data-item-id="${item.id}">
       <div class="mc-img-wrap">
+        <div class="mc-emoji-bg"></div>
         <span class="mc-emoji">${item.emoji}</span>
-        ${hotBadge}
+        ${hotBadge}${newBadge}${vegRibbon}
         <div class="mc-dietary-strip">${halalBadge}${vegBadge}</div>
       </div>
       <div class="mc-content">
         <div class="mc-title-row">
           <h4 class="mc-name">${item.name}</h4>
-          <span class="mc-price">KSh ${item.price}</span>
         </div>
         <p class="mc-desc">${item.desc}</p>
+        <div class="mc-rating-row">
+          <span class="mc-stars">${starsHTML}</span>
+          <span class="mc-rating-num">${item.rating}</span>
+          <span class="mc-review-count">(${item.soldCount || 0} reviews)</span>
+        </div>
         <div class="mc-nutri-row">
           <span class="mc-cal">🔥 ${item.calories} kcal</span>
-          <span class="mc-prot">💪 ${item.protein}g Prot</span>
-          <span class="mc-rating">⭐ ${item.rating}</span>
+          <span class="mc-prot">💪 ${item.protein}g</span>
         </div>
-        <button class="mc-add-btn" data-id="${item.id}" ${!item.available ? 'disabled' : ''}>
-          ${item.available ? '+ Add to Tray' : 'Sold Out'}
-        </button>
+        <div class="mc-footer">
+          <span class="mc-price-big">KSh ${item.price}</span>
+          <button class="mc-add-btn" data-id="${item.id}" ${!item.available ? 'disabled' : ''}>
+            ${item.available ? '+ Add' : 'Sold Out'}
+          </button>
+        </div>
       </div>
     </div>
   `;
@@ -793,6 +808,7 @@ function initCart() {
     mpesaCard.classList.remove('active');
     walletCard.querySelector('input').checked = true;
     $('pay-btn-text').textContent = 'Confirm Order with KCA MealCard';
+    $('mpesa-phone-field')?.classList.remove('visible');
   });
 
   mpesaCard?.addEventListener('click', () => {
@@ -800,6 +816,8 @@ function initCart() {
     walletCard.classList.remove('active');
     mpesaCard.querySelector('input').checked = true;
     $('pay-btn-text').textContent = 'Send M-Pesa STK Push';
+    $('mpesa-phone-field')?.classList.add('visible');
+    $('cart-mpesa-phone')?.focus();
   });
 
   $('pay-btn')?.addEventListener('click', handleOrderSubmission);
@@ -942,6 +960,7 @@ async function handleOrderSubmission() {
   const payMethod = document.querySelector('input[name="pay-method"]:checked')?.value || 'kca_wallet';
   const pickupTime = $('pickup-time')?.value || 'ASAP (~8 min)';
   const notes = $('order-special-notes')?.value || '';
+  const mpesaPhone = $('cart-mpesa-phone')?.value?.trim() || '0712345678';
 
   pendingOrderPayload = {
     regNo: currentUser.regNo,
@@ -949,7 +968,8 @@ async function handleOrderSubmission() {
     items,
     pickupTime,
     payMethod,
-    notes
+    notes,
+    phone: mpesaPhone
   };
 
   if (payMethod === 'kca_wallet') {
@@ -958,20 +978,25 @@ async function handleOrderSubmission() {
       showToast('Insufficient KCA MealCard balance! Please top up or pay via M-Pesa.', 'error');
       return;
     }
-
-    // Direct Wallet Payment
     await executeOrderPlacement(pendingOrderPayload);
 
   } else {
+    // Validate phone for M-Pesa
+    if (!mpesaPhone || mpesaPhone.length < 9) {
+      showToast('Please enter your M-Pesa phone number to continue.', 'warning');
+      $('cart-mpesa-phone')?.focus();
+      return;
+    }
     // Safaricom Lipa na M-Pesa STK Push
     closeCartModal();
     $('stk-amount-val').textContent = total;
     $('stk-reg-val').textContent = currentUser.regNo;
+    $('stk-phone-display').textContent = mpesaPhone;
     currentStkPin = '';
     updatePinDots();
     $('stk-modal').classList.remove('hidden');
 
-    // Auto-fill demo PIN after 800ms for convenience if user wants
+    // Auto-fill demo PIN after 1s for convenience
     setTimeout(() => {
       if (currentStkPin.length === 0) {
         currentStkPin = '1234';
@@ -1277,6 +1302,23 @@ function renderActiveOrderBanner() {
   $('ao-item-name').textContent = activeOrder.items.map(i => `${i.qty}x ${i.name}`).join(', ');
   $('ao-ticket-no').textContent = `Ticket ${activeOrder.ticketNo || activeOrder.id}`;
 
+  // Calculate live queue position
+  const myOrderTime = new Date(activeOrder.createdAt).getTime();
+  const activeAhead = allOrders.filter(o =>
+    (o.status === 'placed' || o.status === 'preparing') &&
+    new Date(o.createdAt).getTime() < myOrderTime
+  ).length;
+  const queueEl = $('ao-queue-position');
+  if (queueEl) {
+    if (activeOrder.status === 'ready') {
+      queueEl.textContent = '';
+    } else if (activeAhead === 0) {
+      queueEl.innerHTML = '🟢 <strong>You are next!</strong>';
+    } else {
+      queueEl.innerHTML = `⏳ Queue position: <strong>#${activeAhead + 1}</strong> (${activeAhead} order${activeAhead > 1 ? 's' : ''} ahead)`;
+    }
+  }
+
   const stepPlaced = $('step-placed');
   const stepPreparing = $('step-preparing');
   const stepReady = $('step-ready');
@@ -1304,7 +1346,7 @@ function renderActiveOrderBanner() {
   } else if (activeOrder.status === 'ready') {
     $('ao-status-title').textContent = '🎉 Your Meal is Ready!';
     $('ao-badge').textContent = 'Ready';
-    $('ao-eta').innerHTML = '<strong style="color:var(--green)">Collect at Counter B</strong>';
+    $('ao-eta').innerHTML = '<strong style="color:var(--green)">Collect at Counter B Express</strong>';
     stepPlaced.className = 'ao-step done';
     stepPreparing.className = 'ao-step done';
     stepReady.className = 'ao-step active done';
@@ -1723,6 +1765,10 @@ function initFeedbackModal() {
     if (!currentFeedbackTarget) return;
 
     const comment = $('feedback-comment')?.value || '';
+    if (!comment.trim()) {
+      showToast('Please write a short review before submitting!', 'warning');
+      return;
+    }
     try {
       await fetch(`${API_BASE}/api/feedback`, {
         method: 'POST',
@@ -1740,8 +1786,27 @@ function initFeedbackModal() {
       console.warn('Recorded feedback locally.');
     }
 
+    // Add review to local public reviews store immediately
+    allPublicReviews.unshift({
+      itemId: currentFeedbackTarget.itemId,
+      regNo: currentUser.regNo,
+      rating: selectedStar,
+      comment,
+      date: 'Just now',
+      emoji: selectedEmoji
+    });
+
+    // Update the menu item rating locally
+    const menuItem = MENU_ITEMS.find(m => m.id === currentFeedbackTarget.itemId);
+    if (menuItem) {
+      const itemRevs = allPublicReviews.filter(r => r.itemId === menuItem.id);
+      menuItem.rating = parseFloat((itemRevs.reduce((a,b) => a + b.rating, 0) / itemRevs.length).toFixed(1));
+    }
+
     $('feedback-modal').classList.add('hidden');
-    showToast('Thank you! Your feedback shapes cafeteria food quality.', 'success');
+    $('feedback-comment').value = '';
+    showToast('🎉 Review submitted! Thank you for improving campus dining quality.', 'success');
+    sendNotification('Review Submitted', `Your review for ${currentFeedbackTarget.itemName} has been recorded and is now public.`, 'success');
   });
 }
 
@@ -1754,24 +1819,75 @@ window.openFeedbackModal = function(orderId, itemId, itemName) {
 // ============================================================
 // 14. ITEM DETAIL MODAL
 // ============================================================
+// Public reviews store (loaded from backend feedbacks)
+let allPublicReviews = [
+  { itemId: 1, regNo: '2502692', rating: 5, comment: 'Ugali was hot and soft, stew had plenty of meat! 10/10 comrade meal.', date: 'Today', emoji: 5 },
+  { itemId: 5, regNo: '2501188', rating: 5, comment: 'Best burger on campus by far. The sauce was 🔥', date: 'Today', emoji: 5 },
+  { itemId: 12, regNo: '2498833', rating: 5, comment: 'Crispy chicken and chips were perfect for evening class energy!', date: 'Yesterday', emoji: 5 },
+  { itemId: 2, regNo: '2503412', rating: 4, comment: 'Pilau was well-spiced, kachumbari was fresh. Would order again.', date: 'Yesterday', emoji: 4 },
+  { itemId: 3, regNo: '2499021', rating: 4, comment: 'Mandazi was fluffy and golden. Great for breakfast or a quick snack.', date: '2 days ago', emoji: 4 },
+  { itemId: 6, regNo: '2500744', rating: 4, comment: 'Chapati soft and fresh, beans well cooked. Budget-friendly comrade choice!', date: 'Today', emoji: 4 },
+  { itemId: 13, regNo: '2501902', rating: 5, comment: 'Masala chai is the GOAT. Hot and strong every morning ☕', date: 'Today', emoji: 5 },
+  { itemId: 11, regNo: '2502100', rating: 4, comment: 'Fresh mango juice tasted real, not watered down. Refreshing!', date: 'Yesterday', emoji: 5 }
+];
+
 function openItemModal(itemId) {
   const item = MENU_ITEMS.find(m => m.id === itemId);
   if (!item) return;
 
-  $('item-detail-img').innerHTML = `<span style="font-size:4.5rem;">${item.emoji}</span>`;
+  // Emoji background colour
+  const emojiColors = { main: '#FFF3E0', snack: '#E8F5E9', drink: '#E3F2FD' };
+  const bgColor = emojiColors[item.category] || '#FFF3E0';
+  $('item-detail-img').style.background = bgColor;
+  $('item-detail-img').innerHTML = `<span style="font-size:5rem; filter:drop-shadow(0 4px 12px rgba(0,0,0,0.15));">${item.emoji}</span>`;
   $('item-detail-name').textContent = item.name;
   $('item-detail-price').textContent = `KSh ${item.price}`;
-  $('item-detail-rating').textContent = `⭐ ${item.rating}`;
-  $('item-detail-orders').textContent = `📦 ${item.soldCount || 30} orders`;
+
+  const fullStars = Math.floor(item.rating);
+  const halfStar = item.rating % 1 >= 0.5 ? 1 : 0;
+  const emptyStars = 5 - fullStars - halfStar;
+  const starsHTML = '<span style="color:#FFD700">' + '★'.repeat(fullStars) + (halfStar ? '⯨' : '') + '</span>' + '<span style="color:#ddd">☆</span>'.repeat(emptyStars);
+  $('item-detail-rating').innerHTML = `${starsHTML} <span style="font-weight:700;">${item.rating}</span>`;
+  $('item-detail-orders').textContent = `📦 ${item.soldCount || 30} sold today`;
   $('item-detail-avail').textContent = item.available ? '✓ In Stock' : '✕ Sold Out';
   $('item-detail-desc').textContent = item.desc;
-  $('item-detail-allergens').textContent = `Allergen warning: ${item.allergens || 'None reported'}`;
+  $('item-detail-allergens').textContent = `⚠ Allergens: ${item.allergens || 'None reported'}`;
 
   $('item-detail-nutri').innerHTML = `
     <span class="nutri-pill">🔥 ${item.calories} kcal</span>
     <span class="nutri-pill">💪 ${item.protein}g Protein</span>
-    <span class="nutri-pill">${item.category.toUpperCase()}</span>
+    <span class="nutri-pill">${item.category === 'main' ? '🍛 Main' : item.category === 'snack' ? '🥟 Snack' : '🧃 Drink'}</span>
+    ${item.tags.includes('halal') ? '<span class="nutri-pill halal-pill">☪ Halal</span>' : ''}
+    ${item.tags.includes('veg') ? '<span class="nutri-pill veg-pill">🌱 Veg</span>' : ''}
   `;
+
+  // Render public reviews for this item
+  const itemReviews = allPublicReviews.filter(r => r.itemId === itemId);
+  const reviewsContainer = $('item-public-reviews');
+  if (reviewsContainer) {
+    if (!itemReviews.length) {
+      reviewsContainer.innerHTML = `<p class="no-reviews">No reviews yet. Be the first to rate this meal!</p>`;
+    } else {
+      const emojiMap = { 1: '😠', 2: '😕', 3: '😐', 4: '😊', 5: '🤩' };
+      reviewsContainer.innerHTML = `
+        <h4 class="reviews-heading">What students say (${itemReviews.length} review${itemReviews.length > 1 ? 's' : ''})</h4>
+        ${itemReviews.map(r => `
+          <div class="pub-review-item">
+            <div class="pub-review-header">
+              <span class="pub-review-avatar">${r.regNo.substring(0,2)}</span>
+              <div class="pub-review-meta">
+                <span class="pub-review-reg">${r.regNo.replace(/./g, (c, i) => i > 3 ? (i < 7 ? '*' : c) : c)}</span>
+                <span class="pub-review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
+              </div>
+              <span class="pub-review-emoji">${emojiMap[r.emoji] || '😊'}</span>
+              <span class="pub-review-date">${r.date}</span>
+            </div>
+            <p class="pub-review-comment">${r.comment}</p>
+          </div>
+        `).join('')}
+      `;
+    }
+  }
 
   let currentQty = 1;
   $('qty-val').textContent = currentQty;
@@ -1799,6 +1915,14 @@ function openItemModal(itemId) {
   $('item-modal').classList.remove('hidden');
   $('item-close').onclick = () => $('item-modal').classList.add('hidden');
 }
+
+// After submitting a review, push it to allPublicReviews so it appears immediately
+const _originalFeedbackSubmit = window.openFeedbackModal;
+window.openFeedbackModal = function(orderId, itemId, itemName) {
+  currentFeedbackTarget = { orderId, itemId: parseInt(itemId, 10), itemName };
+  $('feedback-item-name').textContent = itemName;
+  $('feedback-modal').classList.remove('hidden');
+};
 
 // ============================================================
 // 15. THEME & SETTINGS

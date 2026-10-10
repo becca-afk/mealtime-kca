@@ -3059,4 +3059,208 @@ button:active, .btn:active, .icon-btn:active, .avatar-btn:active, .menu-card:act
   }
 }
 
+/* ============================================================
+   MEALTIME V2 — UPGRADED COMPONENT STYLES
+   ============================================================ */
 
+/* ── Enhanced Menu Card Image Section ── */
+.mc-emoji-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(255,215,0,0.12) 0%, transparent 70%);
+}
+.mc-emoji {
+  font-size: 3.4rem;
+  line-height: 1;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.12));
+  position: relative;
+  z-index: 1;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.menu-card:hover .mc-emoji { transform: scale(1.12) rotate(-3deg); }
+
+/* ── New & Veg Badge Ribbons ── */
+.badge-ribbon.new-badge {
+  background: linear-gradient(135deg, #7C4DFF, #3D5AFE);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(61,90,254,0.4);
+}
+.badge-ribbon.veg-ribbon {
+  background: linear-gradient(135deg, #00BFA5, #00C853);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0,200,83,0.4);
+}
+
+/* ── Star Rating Row on Menu Cards ── */
+.mc-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 1px;
+}
+.mc-stars { color: #FFB300; font-size: 0.78rem; letter-spacing: -0.5px; }
+.mc-rating-num { font-size: 0.78rem; font-weight: 700; color: var(--text); }
+.mc-review-count { font-size: 0.68rem; color: var(--text-faint); }
+
+/* ── Price + Add button row ── */
+.mc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  gap: 8px;
+}
+.mc-price-big {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--maroon);
+  font-family: 'Outfit', sans-serif;
+}
+
+/* ── Live Queue Position Banner ── */
+.ao-queue-position {
+  background: linear-gradient(90deg, rgba(255,215,0,0.12), rgba(255,152,0,0.08));
+  border: 1px solid rgba(255,152,0,0.25);
+  border-radius: var(--r-sm);
+  padding: 7px 14px;
+  font-size: 0.78rem;
+  color: var(--text);
+  margin: 8px 0 4px;
+  text-align: center;
+}
+.ao-queue-position strong { color: var(--maroon); }
+
+/* ── M-Pesa Phone Field in Cart ── */
+.mpesa-phone-field {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, rgba(0,150,136,0.06), rgba(0,200,83,0.04));
+  border: 1.5px solid rgba(0,200,83,0.25);
+  border-radius: var(--r-md);
+  animation: slideDown 0.25s ease;
+}
+.mpesa-phone-field.visible { display: flex; }
+.mpesa-phone-field label { font-size: 0.8rem; font-weight: 600; color: var(--text); }
+.mpesa-phone-input-wrap {
+  display: flex;
+  align-items: center;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+}
+.phone-prefix {
+  padding: 10px 10px;
+  background: var(--surface-2);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--maroon);
+  border-right: 1.5px solid var(--border);
+  white-space: nowrap;
+}
+.mpesa-phone-input-wrap input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  background: transparent;
+  color: var(--text);
+}
+.phone-hint { font-size: 0.7rem; color: var(--text-faint); }
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── STK Phone Line ── */
+.stk-phone-line {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin: -4px 0 8px;
+}
+.stk-phone-line strong { color: var(--text); }
+
+/* ── Public Reviews in Item Modal ── */
+.item-public-reviews {
+  margin: 12px 0 6px;
+  border-top: 1.5px solid var(--border);
+  padding-top: 12px;
+}
+.reviews-heading {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.no-reviews {
+  font-size: 0.8rem;
+  color: var(--text-faint);
+  font-style: italic;
+  text-align: center;
+  padding: 12px 0;
+}
+.pub-review-item {
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+}
+.pub-review-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.pub-review-avatar {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, var(--maroon), var(--maroon-mid));
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.pub-review-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+}
+.pub-review-reg { font-size: 0.72rem; font-weight: 600; color: var(--text); }
+.pub-review-stars { font-size: 0.7rem; color: #FFB300; letter-spacing: 1px; }
+.pub-review-emoji { font-size: 1.1rem; }
+.pub-review-date { font-size: 0.65rem; color: var(--text-faint); margin-left: auto; }
+.pub-review-comment {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* ── Halal/Veg Nutrition Pills in Item Modal ── */
+.nutri-pill.halal-pill { background: rgba(0,150,136,0.12); color: #00897B; }
+.nutri-pill.veg-pill   { background: rgba(0,200,83,0.12);  color: #00A152; }
+
+/* ── Dark mode for new elements ── */
+.dark .mc-img-wrap {
+  background: linear-gradient(135deg, #1E1A0E 0%, #2A1F0A 100%) !important;
+}
+.dark .pub-review-item { background: var(--surface-2); border-color: var(--border); }
+.dark .mpesa-phone-field {
+  background: linear-gradient(135deg, rgba(0,150,136,0.08), rgba(0,200,83,0.05));
+  border-color: rgba(0,200,83,0.2);
+}
+.dark .ao-queue-position {
+  background: linear-gradient(90deg, rgba(255,215,0,0.08), rgba(255,152,0,0.05));
+  border-color: rgba(255,152,0,0.2);
+}
