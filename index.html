@@ -327,42 +327,183 @@
 
       <!-- ================= 2. MENU PAGE ================= -->
       <section id="page-menu" class="page">
-        <div class="page-hero maroon-hero">
-          <div class="hero-pattern"></div>
-          <h2>KCA Cafeteria Menu</h2>
-          <p>Real-time pricing, nutritional badges &amp; stock availability</p>
+        <!-- View Mode Switcher Header -->
+        <div class="menu-showcase-header">
+          <div class="view-mode-pill-wrap">
+            <button class="view-mode-pill active" id="btn-view-showcase" type="button">
+              <span>✨ Chef Showcase</span>
+            </button>
+            <button class="view-mode-pill" id="btn-view-grid" type="button">
+              <span>📋 All Dishes Grid</span>
+            </button>
+          </div>
+          <div class="showcase-search-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
+            <input type="text" id="menu-search" placeholder="Search delicious dishes…" />
+          </div>
         </div>
 
-        <div class="search-bar">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8" />
-            <path d="M21 21l-4.35-4.35" />
-          </svg>
-          <input type="text" id="menu-search" placeholder="Search meals, ugali, chapati, juice, calories…" />
+        <!-- CULINARY SHOWCASE VIEW (Pinterest / Luxury Dining UI) -->
+        <div class="culinary-showcase-container" id="culinary-showcase-view">
+          
+          <!-- Left Floating Action Rail -->
+          <aside class="showcase-rail">
+            <button class="rail-pill cart-pill" id="rail-cart-btn" type="button" title="Open Dining Tray">
+              <span class="rail-icon">🛒</span>
+              <span class="rail-badge" id="rail-cart-count">0</span>
+            </button>
+
+            <div class="rail-nav-group">
+              <button class="rail-pill cat-pill active" data-rail-cat="all" type="button" title="All Meals">
+                <span class="rail-icon">🍽️</span>
+              </button>
+              <button class="rail-pill cat-pill" data-rail-cat="main" type="button" title="Main Meals">
+                <span class="rail-icon">🍛</span>
+              </button>
+              <button class="rail-pill cat-pill" data-rail-cat="snack" type="button" title="Snacks">
+                <span class="rail-icon">🥟</span>
+              </button>
+              <button class="rail-pill cat-pill" data-rail-cat="drink" type="button" title="Drinks">
+                <span class="rail-icon">🧃</span>
+              </button>
+              <button class="rail-pill cat-pill" data-rail-cat="veg" type="button" title="Vegetarian">
+                <span class="rail-icon">🌱</span>
+              </button>
+            </div>
+
+            <button class="rail-pill user-pill" id="rail-profile-btn" data-page="profile" type="button" title="Student Profile">
+              <span class="rail-icon">👤</span>
+            </button>
+          </aside>
+
+          <!-- Side Dishes Selector Column -->
+          <div class="showcase-dish-column" id="showcase-dish-column">
+            <div class="showcase-column-title">
+              <span>Popular Picks</span>
+              <span class="item-counter" id="showcase-list-count">18 items</span>
+            </div>
+            <div class="showcase-dish-list" id="showcase-dish-list">
+              <!-- Dynamically populated dish cards -->
+            </div>
+          </div>
+
+          <!-- The Centerpiece Featured Glassmorphic Card -->
+          <div class="showcase-feature-stage">
+            <div class="showcase-feature-card" id="showcase-feature-card">
+              <!-- Floating Herbs / Leaf Micro-accents -->
+              <div class="floating-leaf leaf-top-right">🍃</div>
+              <div class="floating-leaf leaf-bottom-left">🌿</div>
+              <div class="floating-leaf leaf-far-right">🍃</div>
+              <div class="floating-leaf leaf-tiny">🌱</div>
+
+              <!-- Top Nav Row (< and ...) -->
+              <div class="feature-card-header">
+                <button class="feature-round-btn" id="feature-prev-btn" type="button" title="Previous Dish">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                </button>
+                <div class="feature-dish-badge-pill" id="feature-dish-badge-pill">
+                  <span>Chef's Choice</span>
+                </div>
+                <button class="feature-round-btn" id="feature-more-btn" type="button" title="View Reviews &amp; Details">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18">
+                    <circle cx="12" cy="12" r="1.5"></circle>
+                    <circle cx="19" cy="12" r="1.5"></circle>
+                    <circle cx="5" cy="12" r="1.5"></circle>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Big Photographic Dish Plate Hero -->
+              <div class="feature-plate-container">
+                <div class="feature-plate-shadow"></div>
+                <img id="feature-plate-img" class="feature-plate-img" src="https://images.unsplash.com/photo-1525351484163-7529414344d8?w=700&auto=format&fit=crop&q=80" alt="Featured Dish" />
+                <div class="feature-plate-ring"></div>
+              </div>
+
+              <!-- Dish Details Section -->
+              <div class="feature-info-section">
+                <div class="feature-title-row">
+                  <h2 class="feature-dish-name" id="feature-dish-name">Eggs Curry</h2>
+                  <div class="feature-time-badge" id="feature-time-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span id="feature-prep-time">25 Mins</span>
+                  </div>
+                </div>
+
+                <p class="feature-dish-desc" id="feature-dish-desc">
+                  Eggs Curry with tomato and cucumbers our chefs special healthy and fat free dish for those who want to lose weight.
+                </p>
+
+                <!-- Nutrition & Rating Meta Strip -->
+                <div class="feature-meta-strip" id="feature-meta-strip">
+                  <span class="f-meta-item" id="feature-cal">🔥 420 kcal</span>
+                  <span class="f-meta-item" id="feature-prot">💪 24g Protein</span>
+                  <span class="f-meta-item" id="feature-reviews-btn" style="cursor: pointer;" title="Click to view reviews">⭐ 4.8 (38 reviews) 💬</span>
+                </div>
+
+                <!-- Bottom Row: Total Price + Heart + Add to Cart Pill Button -->
+                <div class="feature-card-footer">
+                  <div class="feature-price-block">
+                    <span class="feature-price-label">Total Price</span>
+                    <span class="feature-price-amount" id="feature-price-amount">KSh 150</span>
+                  </div>
+
+                  <div class="feature-actions-block">
+                    <button class="feature-heart-btn" id="feature-fav-btn" type="button" title="Add to favorites">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                      </svg>
+                    </button>
+
+                    <button class="feature-add-pill" id="feature-add-cart-btn" type="button">
+                      <span class="pill-text">Add to Cart</span>
+                      <span class="pill-circle-plus">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="16" height="16">
+                          <line x1="12" y1="5" x2="12" y2="19"></line>
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="filter-strip" id="filter-strip">
-          <button class="filter-btn active" data-filter="all">All Items</button>
-          <button class="filter-btn" data-filter="main">🍛 Main Meals</button>
-          <button class="filter-btn" data-filter="snack">🥟 Snacks</button>
-          <button class="filter-btn" data-filter="drink">🧃 Drinks</button>
-          <button class="filter-btn" data-filter="veg">🌱 Vegetarian</button>
-          <button class="filter-btn" data-filter="halal">☪ Halal Certified</button>
-        </div>
+        <!-- CLASSIC GRID VIEW (Switchable) -->
+        <div class="classic-grid-view hidden" id="classic-grid-view">
+          <div class="filter-strip" id="filter-strip">
+            <button class="filter-btn active" data-filter="all">All Items</button>
+            <button class="filter-btn" data-filter="main">🍛 Main Meals</button>
+            <button class="filter-btn" data-filter="snack">🥟 Snacks</button>
+            <button class="filter-btn" data-filter="drink">🧃 Drinks</button>
+            <button class="filter-btn" data-filter="veg">🌱 Vegetarian</button>
+            <button class="filter-btn" data-filter="halal">☪ Halal Certified</button>
+          </div>
 
-        <div class="sort-row">
-          <span class="sort-label">Sort by:</span>
-          <select id="menu-sort" class="sort-select">
-            <option value="rating">Highest Rated ⭐</option>
-            <option value="price-asc">Price: Low → High 💰</option>
-            <option value="price-desc">Price: High → Low</option>
-            <option value="protein-desc">Highest Protein (g) 💪</option>
-            <option value="popular">Most Ordered 🔥</option>
-          </select>
-          <span id="menu-count" class="menu-count">18 items available</span>
-        </div>
+          <div class="sort-row">
+            <span class="sort-label">Sort by:</span>
+            <select id="menu-sort" class="sort-select">
+              <option value="rating">Highest Rated ⭐</option>
+              <option value="price-asc">Price: Low → High 💰</option>
+              <option value="price-desc">Price: High → Low</option>
+              <option value="protein-desc">Highest Protein (g) 💪</option>
+              <option value="popular">Most Ordered 🔥</option>
+            </select>
+            <span id="menu-count" class="menu-count">18 items available</span>
+          </div>
 
-        <div class="menu-grid" id="full-menu-grid"></div>
+          <div class="menu-grid" id="full-menu-grid"></div>
+        </div>
       </section>
 
       <!-- ================= 3. MY ORDERS PAGE ================= -->

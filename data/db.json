@@ -1,10 +1,57 @@
 {
   "menu": [
     {
+      "id": 101,
+      "name": "Eggs Curry",
+      "subname": "Chef special healthy",
+      "emoji": "🍳",
+      "img": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=700&auto=format&fit=crop&q=80",
+      "price": 150,
+      "prepTime": "25 Mins",
+      "calories": 420,
+      "protein": 24,
+      "rating": 4.8,
+      "orders": 48,
+      "category": "main",
+      "tags": [
+        "veg"
+      ],
+      "allergens": "Egg",
+      "desc": "Eggs Curry with tomato and cucumbers our chefs special healthy and fat free dish for those who want to lose weight.",
+      "badge": "hot",
+      "available": true,
+      "soldCount": 48
+    },
+    {
+      "id": 102,
+      "name": "Chicken Slice",
+      "subname": "Real chicken & garden salad",
+      "emoji": "🥗",
+      "img": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=700&auto=format&fit=crop&q=80",
+      "price": 180,
+      "prepTime": "20 Mins",
+      "calories": 490,
+      "protein": 38,
+      "rating": 4.7,
+      "orders": 36,
+      "category": "main",
+      "tags": [
+        "halal"
+      ],
+      "allergens": "None",
+      "desc": "Tender seasoned grilled chicken breast slices served over crisp garden salad and light olive vinaigrette.",
+      "badge": "new",
+      "available": true,
+      "soldCount": 36
+    },
+    {
       "id": 1,
       "name": "Beef Stew + Ugali",
+      "subname": "Slow-cooked hearty beef",
       "emoji": "🍛",
+      "img": "https://images.unsplash.com/photo-1544025162-d76694265947?w=700&auto=format&fit=crop&q=80",
       "price": 120,
+      "prepTime": "10 Mins",
       "calories": 650,
       "protein": 32,
       "rating": 4.6,

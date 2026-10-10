@@ -17,24 +17,24 @@ const API_BASE = window.location.protocol.startsWith('http') ? '' : 'http://loca
 
 // ===== DATA SEED (FALLBACK & INITIAL STATE) =====
 let MENU_ITEMS = [
-  { id: 1,  name: 'Beef Stew + Ugali',      emoji: '🍛', price: 120, calories: 650, protein: 32, rating: 4.6, orders: 34, category: 'main',  tags: ['halal', 'spicy'], allergens: 'None', desc: 'Slow-cooked beef stew with hot tender ugali. Hearty and rich.', badge: 'hot',  available: true,  soldCount: 34 },
-  { id: 2,  name: 'Pilau + Kachumbari',     emoji: '🍚', price: 150, calories: 580, protein: 22, rating: 4.4, orders: 28, category: 'main',  tags: ['halal'],         allergens: 'None', desc: 'Fragrant coastal spiced pilau with fresh tomato-onion salad.', badge: null,  available: true,  soldCount: 28 },
-  { id: 3,  name: 'Mandazi (3 pcs)',         emoji: '🥐', price: 30,  calories: 320, protein: 6,  rating: 4.1, orders: 55, category: 'snack', tags: ['veg'],           allergens: 'Gluten', desc: 'Golden fluffy fried mandazi. Fresh from morning batch.', badge: null,  available: true,  soldCount: 55 },
-  { id: 4,  name: 'Githeri Special',         emoji: '🫘', price: 80,  calories: 460, protein: 24, rating: 3.8, orders: 18, category: 'main',  tags: ['veg', 'halal'],   allergens: 'None', desc: 'Boiled maize and kidney beans fried with tomatoes and dhania.', badge: 'veg',  available: true,  soldCount: 18 },
-  { id: 5,  name: 'Chicken Burger',          emoji: '🍔', price: 200, calories: 620, protein: 35, rating: 4.7, orders: 41, category: 'snack', tags: ['halal'],         allergens: 'Gluten', desc: 'Crispy chicken fillet with shredded lettuce and creamy sauce in sesame bun.', badge: 'hot',  available: true,  soldCount: 41 },
-  { id: 6,  name: 'Chapati + Beans',         emoji: '🫓', price: 60,  calories: 480, protein: 18, rating: 4.3, orders: 22, category: 'main',  tags: ['veg'],           allergens: 'Gluten', desc: 'Two soft layered chapatis with seasoned yellow bean curry.', badge: null,  available: true,  soldCount: 22 },
-  { id: 7,  name: 'Maziwa Mala (500ml)',     emoji: '🥛', price: 40,  calories: 280, protein: 16, rating: 4.0, orders: 30, category: 'drink', tags: ['veg'],           allergens: 'Dairy', desc: 'Chilled fermented cultured milk. Probiotic and refreshing.', badge: null,  available: true,  soldCount: 30 },
-  { id: 8,  name: 'Soda (500ml)',            emoji: '🥤', price: 50,  calories: 210, protein: 0,  rating: 3.9, orders: 45, category: 'drink', tags: [],                allergens: 'None', desc: 'Ice-cold soda: Coca-Cola, Fanta, or Sprite.', badge: null,  available: true,  soldCount: 45 },
-  { id: 9,  name: 'Beef Samosa (2 pcs)',     emoji: '🥟', price: 40,  calories: 260, protein: 12, rating: 4.3, orders: 38, category: 'snack', tags: ['halal'],         allergens: 'Gluten', desc: 'Crunchy golden pastry triangles stuffed with spiced minced beef.', badge: 'new', available: true,  soldCount: 38 },
-  { id: 10, name: 'Sukuma Wiki + Rice',      emoji: '🍃', price: 90,  calories: 410, protein: 11, rating: 4.0, orders: 20, category: 'main',  tags: ['veg', 'halal'],   allergens: 'None', desc: 'Fresh collard greens sauteed with onions, served with steamed white rice.', badge: 'veg',  available: true,  soldCount: 20 },
-  { id: 11, name: 'Fresh Mango Juice',       emoji: '🧃', price: 60,  calories: 180, protein: 2,  rating: 4.5, orders: 25, category: 'drink', tags: ['veg'],           allergens: 'None', desc: '100% freshly pressed ripe mango juice without added preservatives.', badge: 'new',  available: true,  soldCount: 25 },
-  { id: 12, name: 'Fried Chicken + Chips',   emoji: '🍗', price: 220, calories: 780, protein: 42, rating: 4.8, orders: 50, category: 'main',  tags: ['halal'],         allergens: 'Gluten', desc: 'Deep fried crispy chicken leg served with golden potato chips.', badge: 'hot',  available: true,  soldCount: 50 },
-  { id: 13, name: 'Masala Spiced Chai',      emoji: '☕', price: 30,  calories: 120, protein: 4,  rating: 4.4, orders: 60, category: 'drink', tags: ['veg'],           allergens: 'Dairy', desc: 'Steaming hot brewed Kenyan tea infused with ginger and cardamom.', badge: null,  available: true,  soldCount: 60 },
-  { id: 14, name: 'Tilapia Fish + Ugali',    emoji: '🐟', price: 140, calories: 590, protein: 38, rating: 4.1, orders: 15, category: 'main',  tags: ['halal'],         allergens: 'Fish', desc: 'Pan-fried whole lake tilapia served with ugali and sukuma.', badge: null,  available: true,  soldCount: 15 },
-  { id: 15, name: 'Fresh Banana Bunch',      emoji: '🍌', price: 20,  calories: 110, protein: 1,  rating: 4.2, orders: 35, category: 'snack', tags: ['veg', 'halal'],   allergens: 'None', desc: 'Sweet ripe Cavendish bananas. Quick healthy brain fuel.', badge: null,  available: true,  soldCount: 35 },
-  { id: 16, name: 'Ndengu Special + Rice',    emoji: '🍲', price: 80,  calories: 450, protein: 21, rating: 4.3, orders: 29, category: 'main',  tags: ['veg', 'halal'],   allergens: 'None', desc: 'Green grams simmered in coconut tomato gravy over fluffy rice.', badge: 'veg',  available: true,  soldCount: 29 },
-  { id: 17, name: 'Yoghurt Cup (Strawberry)',emoji: '🍦', price: 50,  calories: 190, protein: 8,  rating: 4.2, orders: 22, category: 'drink', tags: ['veg'],           allergens: 'Dairy', desc: 'Smooth probiotic whole-milk strawberry yoghurt.', badge: null,  available: true,  soldCount: 22 },
-  { id: 18, name: 'Egg Sandwich Toast',      emoji: '🍳', price: 50,  calories: 310, protein: 14, rating: 4.0, orders: 18, category: 'snack', tags: ['veg'],           allergens: 'Gluten,Egg', desc: 'Double toasted buttered bread with seasoned fried eggs.', badge: null,  available: true,  soldCount: 18 }
+  { id: 101, name: 'Eggs Curry', subname: 'Chef special healthy', emoji: '🍳', img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=700&auto=format&fit=crop&q=80', price: 150, prepTime: '25 Mins', calories: 420, protein: 24, rating: 4.8, orders: 48, category: 'main', tags: ['veg'], allergens: 'Egg', desc: 'Eggs Curry with tomato and cucumbers our chefs special healthy and fat free dish for those who want to lose weight.', badge: 'hot', available: true, soldCount: 48 },
+  { id: 102, name: 'Chicken Slice', subname: 'Real chicken & garden salad', emoji: '🥗', img: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=700&auto=format&fit=crop&q=80', price: 180, prepTime: '20 Mins', calories: 490, protein: 38, rating: 4.7, orders: 36, category: 'main', tags: ['halal'], allergens: 'None', desc: 'Tender seasoned grilled chicken breast slices served over crisp garden salad and light olive vinaigrette.', badge: 'new', available: true, soldCount: 36 },
+  { id: 1,  name: 'Beef Stew + Ugali', subname: 'Slow-cooked hearty beef', emoji: '🍛', img: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=700&auto=format&fit=crop&q=80', price: 120, prepTime: '10 Mins', calories: 650, protein: 32, rating: 4.6, orders: 34, category: 'main', tags: ['halal', 'spicy'], allergens: 'None', desc: 'Slow-cooked beef stew with hot tender ugali. Hearty, rich and satisfying.', badge: 'hot', available: true, soldCount: 34 },
+  { id: 2,  name: 'Pilau + Kachumbari', subname: 'Coastal spiced beef pilau', emoji: '🍚', img: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=700&auto=format&fit=crop&q=80', price: 150, prepTime: '15 Mins', calories: 580, protein: 22, rating: 4.5, orders: 28, category: 'main', tags: ['halal'], allergens: 'None', desc: 'Fragrant coastal spiced pilau with fresh tomato-onion kachumbari salad.', badge: null, available: true, soldCount: 28 },
+  { id: 12, name: 'Fried Chicken + Chips', subname: 'Crispy fried chicken & fries', emoji: '🍗', img: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=700&auto=format&fit=crop&q=80', price: 220, prepTime: '15 Mins', calories: 780, protein: 42, rating: 4.8, orders: 50, category: 'main', tags: ['halal'], allergens: 'Gluten', desc: 'Deep fried crispy chicken leg served with freshly made golden potato chips.', badge: 'hot', available: true, soldCount: 50 },
+  { id: 5,  name: 'Chicken Burger', subname: 'Crispy fillet burger', emoji: '🍔', img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&auto=format&fit=crop&q=80', price: 200, prepTime: '12 Mins', calories: 620, protein: 35, rating: 4.7, orders: 41, category: 'snack', tags: ['halal'], allergens: 'Gluten', desc: 'Crispy chicken fillet with shredded lettuce and creamy sauce in sesame bun.', badge: 'hot', available: true, soldCount: 41 },
+  { id: 6,  name: 'Chapati + Beans', subname: 'Layered chapati & yellow beans', emoji: '🫓', img: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=700&auto=format&fit=crop&q=80', price: 60, prepTime: '5 Mins', calories: 480, protein: 18, rating: 4.3, orders: 22, category: 'main', tags: ['veg'], allergens: 'Gluten', desc: 'Two soft layered chapatis with seasoned yellow bean curry.', badge: null, available: true, soldCount: 22 },
+  { id: 9,  name: 'Beef Samosa (2 pcs)', subname: 'Crunchy golden pastry', emoji: '🥟', img: 'https://images.unsplash.com/photo-1601050690186-b48ff085ca88?w=700&auto=format&fit=crop&q=80', price: 40, prepTime: '5 Mins', calories: 260, protein: 12, rating: 4.3, orders: 38, category: 'snack', tags: ['halal'], allergens: 'Gluten', desc: 'Crunchy golden pastry triangles stuffed with spiced minced beef.', badge: 'new', available: true, soldCount: 38 },
+  { id: 3,  name: 'Mandazi (3 pcs)', subname: 'Fresh morning batch', emoji: '🥐', img: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=700&auto=format&fit=crop&q=80', price: 30, prepTime: '3 Mins', calories: 320, protein: 6, rating: 4.1, orders: 55, category: 'snack', tags: ['veg'], allergens: 'Gluten', desc: 'Golden fluffy fried mandazi. Fresh from the morning batch.', badge: null, available: true, soldCount: 55 },
+  { id: 4,  name: 'Githeri Special', subname: 'Boiled maize & beans', emoji: '🫘', img: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?w=700&auto=format&fit=crop&q=80', price: 80, prepTime: '8 Mins', calories: 460, protein: 24, rating: 3.8, orders: 18, category: 'main', tags: ['veg', 'halal'], allergens: 'None', desc: 'Boiled maize and kidney beans fried with tomatoes and fresh coriander.', badge: 'veg', available: true, soldCount: 18 },
+  { id: 14, name: 'Tilapia Fish + Ugali', subname: 'Pan-fried whole fish', emoji: '🐟', img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=700&auto=format&fit=crop&q=80', price: 140, prepTime: '15 Mins', calories: 590, protein: 38, rating: 4.1, orders: 15, category: 'main', tags: ['halal'], allergens: 'Fish', desc: 'Pan-fried whole lake tilapia served with ugali and sauteed greens.', badge: null, available: true, soldCount: 15 },
+  { id: 11, name: 'Fresh Mango Juice', subname: '100% natural pressed', emoji: '🧃', img: 'https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=700&auto=format&fit=crop&q=80', price: 60, prepTime: '3 Mins', calories: 180, protein: 2, rating: 4.5, orders: 25, category: 'drink', tags: ['veg'], allergens: 'None', desc: '100% freshly pressed ripe mango juice without added preservatives.', badge: 'new', available: true, soldCount: 25 },
+  { id: 13, name: 'Masala Spiced Chai', subname: 'Brewed ginger & cardamom', emoji: '☕', img: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=700&auto=format&fit=crop&q=80', price: 30, prepTime: '3 Mins', calories: 120, protein: 4, rating: 4.4, orders: 60, category: 'drink', tags: ['veg'], allergens: 'Dairy', desc: 'Steaming hot brewed Kenyan tea infused with ginger and cardamom.', badge: null, available: true, soldCount: 60 },
+  { id: 7,  name: 'Maziwa Mala (500ml)', subname: 'Cultured probiotic milk', emoji: '🥛', img: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=700&auto=format&fit=crop&q=80', price: 40, prepTime: '2 Mins', calories: 280, protein: 16, rating: 4.0, orders: 30, category: 'drink', tags: ['veg'], allergens: 'Dairy', desc: 'Chilled fermented cultured milk. Probiotic and refreshing.', badge: null, available: true, soldCount: 30 },
+  { id: 8,  name: 'Soda (500ml)', subname: 'Cold soft drink', emoji: '🥤', img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=700&auto=format&fit=crop&q=80', price: 50, prepTime: '2 Mins', calories: 210, protein: 0, rating: 3.9, orders: 45, category: 'drink', tags: [], allergens: 'None', desc: 'Ice-cold soda: Coca-Cola, Fanta, or Sprite.', badge: null, available: true, soldCount: 45 },
+  { id: 10, name: 'Sukuma Wiki + Rice', subname: 'Collard greens & rice', emoji: '🍃', img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=700&auto=format&fit=crop&q=80', price: 90, prepTime: '8 Mins', calories: 410, protein: 11, rating: 4.0, orders: 20, category: 'main', tags: ['veg', 'halal'], allergens: 'None', desc: 'Fresh collard greens sauteed with onions, served with steamed white rice.', badge: 'veg', available: true, soldCount: 20 },
+  { id: 16, name: 'Ndengu Special + Rice', subname: 'Green grams coconut curry', emoji: '🍲', img: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=700&auto=format&fit=crop&q=80', price: 80, prepTime: '10 Mins', calories: 450, protein: 21, rating: 4.3, orders: 29, category: 'main', tags: ['veg', 'halal'], allergens: 'None', desc: 'Green grams simmered in coconut tomato gravy over fluffy rice.', badge: 'veg', available: true, soldCount: 29 },
+  { id: 18, name: 'Egg Sandwich Toast', subname: 'Toasted fried egg sandwich', emoji: '🍳', img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=700&auto=format&fit=crop&q=80', price: 50, prepTime: '5 Mins', calories: 310, protein: 14, rating: 4.0, orders: 18, category: 'snack', tags: ['veg'], allergens: 'Gluten,Egg', desc: 'Double toasted buttered bread with seasoned fried eggs.', badge: null, available: true, soldCount: 18 }
 ];
 
 // App State
@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initNotifications();
   initBudgetOptimizer();
   initNavigation();
+  initCulinaryShowcase();
   initCart();
   initPaymentAndStk();
   initWalletTopup();
@@ -659,6 +660,7 @@ async function fetchMenuItems() {
   renderTopPicks();
   renderOrderAgain();
   renderMenu('all', '', 'rating');
+  renderCulinaryShowcase(currentShowcaseCat, currentShowcaseSearch);
 }
 
 function renderTopPicks() {
@@ -740,11 +742,14 @@ function createMealCardHTML(item) {
   const emptyStars = 5 - fullStars - halfStar;
   const starsHTML = '★'.repeat(fullStars) + (halfStar ? '⯨' : '') + '☆'.repeat(emptyStars);
 
+  const imgHTML = item.img 
+    ? `<img src="${item.img}" alt="${item.name}" class="mc-photo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" /><div class="mc-fallback-emoji" style="display:none;"><div class="mc-emoji-bg"></div><span class="mc-emoji">${item.emoji}</span></div>`
+    : `<div class="mc-emoji-bg"></div><span class="mc-emoji">${item.emoji}</span>`;
+
   return `
     <div class="menu-card" data-item-id="${item.id}">
       <div class="mc-img-wrap">
-        <div class="mc-emoji-bg"></div>
-        <span class="mc-emoji">${item.emoji}</span>
+        ${imgHTML}
         ${hotBadge}${newBadge}${vegRibbon}
         <div class="mc-dietary-strip">${halalBadge}${vegBadge}</div>
       </div>
@@ -788,6 +793,266 @@ function attachCardEvents(container) {
       openItemModal(id);
     });
   });
+}
+
+// ============================================================
+// 5B. CULINARY SHOWCASE CONTROLLER (Pinterest Luxury Dining UI)
+// ============================================================
+let currentShowcaseItem = MENU_ITEMS[0];
+let currentShowcaseCat = 'all';
+let currentShowcaseSearch = '';
+let showcaseFavorites = new Set([101, 1]); // Eggs Curry & Beef Stew favorited by default
+
+function initCulinaryShowcase() {
+  const btnShowcase = $('btn-view-showcase');
+  const btnGrid = $('btn-view-grid');
+  const showcaseView = $('culinary-showcase-view');
+  const gridView = $('classic-grid-view');
+
+  // View switchers
+  btnShowcase?.addEventListener('click', () => {
+    btnShowcase.classList.add('active');
+    btnGrid?.classList.remove('active');
+    showcaseView?.classList.remove('hidden');
+    gridView?.classList.add('hidden');
+    renderCulinaryShowcase(currentShowcaseCat, currentShowcaseSearch);
+  });
+
+  btnGrid?.addEventListener('click', () => {
+    btnGrid.classList.add('active');
+    btnShowcase?.classList.remove('active');
+    showcaseView?.classList.add('hidden');
+    gridView?.classList.remove('hidden');
+    const filter = document.querySelector('.filter-btn.active')?.getAttribute('data-filter') || 'all';
+    renderMenu(filter, currentShowcaseSearch, $('menu-sort')?.value || 'rating');
+  });
+
+  // Rail Cart button
+  $('rail-cart-btn')?.addEventListener('click', openCartModal);
+
+  // Rail Profile button
+  $('rail-profile-btn')?.addEventListener('click', () => switchPage('profile'));
+
+  // Rail Category Pills
+  const catPills = document.querySelectorAll('.rail-pill.cat-pill');
+  catPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      catPills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      currentShowcaseCat = pill.getAttribute('data-rail-cat') || 'all';
+      renderCulinaryShowcase(currentShowcaseCat, currentShowcaseSearch);
+    });
+  });
+
+  // Search input syncing
+  $('menu-search')?.addEventListener('input', e => {
+    currentShowcaseSearch = e.target.value;
+    renderCulinaryShowcase(currentShowcaseCat, currentShowcaseSearch);
+    const activeGridFilter = document.querySelector('.filter-btn.active')?.getAttribute('data-filter') || 'all';
+    renderMenu(activeGridFilter, currentShowcaseSearch, $('menu-sort')?.value || 'rating');
+  });
+
+  // Featured Card: Previous and Next buttons (< and ...)
+  $('feature-prev-btn')?.addEventListener('click', () => cycleShowcaseItem(-1));
+  $('feature-next-btn')?.addEventListener('click', () => cycleShowcaseItem(1));
+
+  // Featured Card: Details / Reviews buttons
+  $('feature-more-btn')?.addEventListener('click', () => {
+    if (currentShowcaseItem) openItemModal(currentShowcaseItem.id);
+  });
+  $('feature-reviews-btn')?.addEventListener('click', () => {
+    if (currentShowcaseItem) openItemModal(currentShowcaseItem.id);
+  });
+
+  // Featured Card: Favorite Heart toggle
+  $('feature-fav-btn')?.addEventListener('click', () => {
+    if (!currentShowcaseItem) return;
+    toggleFavorite(currentShowcaseItem.id);
+  });
+
+  // Featured Card: Signature Black Pill Add to Cart
+  $('feature-add-cart-btn')?.addEventListener('click', () => {
+    if (!currentShowcaseItem) return;
+    addToCart(currentShowcaseItem.id);
+    
+    // Quick micro-animation
+    const btn = $('feature-add-cart-btn');
+    if (btn) {
+      btn.style.transform = 'scale(0.93)';
+      setTimeout(() => { btn.style.transform = ''; }, 180);
+    }
+  });
+
+  // Initial render
+  renderCulinaryShowcase('all', '');
+}
+
+function getFilteredShowcaseList(cat = 'all', query = '') {
+  let list = [...MENU_ITEMS];
+  if (cat === 'main')  list = list.filter(m => m.category === 'main');
+  else if (cat === 'snack') list = list.filter(m => m.category === 'snack');
+  else if (cat === 'drink') list = list.filter(m => m.category === 'drink');
+  else if (cat === 'veg')   list = list.filter(m => m.tags && m.tags.includes('veg'));
+  else if (cat === 'favs')  list = list.filter(m => showcaseFavorites.has(m.id));
+
+  if (query.trim()) {
+    const q = query.toLowerCase();
+    list = list.filter(m => m.name.toLowerCase().includes(q) || (m.desc && m.desc.toLowerCase().includes(q)));
+  }
+  return list;
+}
+
+function renderCulinaryShowcase(cat = 'all', query = '') {
+  const container = $('showcase-dish-list');
+  if (!container) return;
+
+  const list = getFilteredShowcaseList(cat, query);
+  const countEl = $('showcase-list-count');
+  if (countEl) countEl.textContent = `${list.length} items`;
+
+  if (!list.length) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 30px 10px; color: var(--text-muted);">
+        <p style="font-size: 1.5rem; margin-bottom: 6px;">🍽️</p>
+        <p style="font-size: 0.85rem; font-weight: 600;">No dishes found</p>
+        <p style="font-size: 0.75rem; color: var(--text-faint);">Try searching another craving</p>
+      </div>
+    `;
+    return;
+  }
+
+  // Ensure currentShowcaseItem is valid
+  if (!currentShowcaseItem || !list.some(m => m.id === currentShowcaseItem.id)) {
+    currentShowcaseItem = list[0];
+  }
+
+  container.innerHTML = list.map(item => {
+    const isActive = currentShowcaseItem && item.id === currentShowcaseItem.id;
+    const isFav = showcaseFavorites.has(item.id);
+    return `
+      <div class="showcase-dish-card ${isActive ? 'active' : ''}" data-showcase-id="${item.id}">
+        <div class="sdc-plate-wrap">
+          <img class="sdc-img" src="${item.img || ''}" alt="${item.name}" onerror="this.src='assets/logo.jpg'" />
+        </div>
+        <div class="sdc-info">
+          <strong class="sdc-name">${item.name}</strong>
+          <span class="sdc-sub">${item.subname || (item.desc ? item.desc.substring(0, 24) + '…' : '')}</span>
+          <div class="sdc-price-row">
+            <span class="sdc-price">KSh ${item.price}</span>
+            <button class="sdc-fav ${isFav ? 'active' : ''}" data-fav-id="${item.id}" type="button" title="Favorite">
+              ${isFav ? '❤️' : '♡'}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Card click events
+  container.querySelectorAll('.showcase-dish-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('.sdc-fav')) return;
+      const id = parseInt(card.getAttribute('data-showcase-id'), 10);
+      const found = MENU_ITEMS.find(m => m.id === id);
+      if (found) selectShowcaseItem(found);
+    });
+  });
+
+  // Favorite icon clicks inside card
+  container.querySelectorAll('.sdc-fav').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const id = parseInt(btn.getAttribute('data-fav-id'), 10);
+      toggleFavorite(id);
+    });
+  });
+
+  updateShowcaseFeatureCard(currentShowcaseItem);
+}
+
+function selectShowcaseItem(item) {
+  currentShowcaseItem = item;
+
+  // Highlight in sidebar
+  document.querySelectorAll('.showcase-dish-card').forEach(card => {
+    const cardId = parseInt(card.getAttribute('data-showcase-id'), 10);
+    card.classList.toggle('active', cardId === item.id);
+  });
+
+  updateShowcaseFeatureCard(item);
+}
+
+function updateShowcaseFeatureCard(item) {
+  if (!item) return;
+
+  const plateImg = $('feature-plate-img');
+  if (plateImg) {
+    plateImg.style.opacity = '0';
+    plateImg.style.transform = 'scale(0.85) rotate(-5deg)';
+    setTimeout(() => {
+      plateImg.src = item.img || 'assets/logo.jpg';
+      plateImg.style.transition = 'all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      plateImg.style.opacity = '1';
+      plateImg.style.transform = 'scale(1) rotate(0deg)';
+    }, 100);
+  }
+
+  const nameEl = $('feature-dish-name');
+  if (nameEl) nameEl.textContent = item.name;
+
+  const timeEl = $('feature-prep-time');
+  if (timeEl) timeEl.textContent = item.prepTime || '20 Mins';
+
+  const descEl = $('feature-dish-desc');
+  if (descEl) descEl.textContent = item.desc;
+
+  const calEl = $('feature-cal');
+  if (calEl) calEl.textContent = `🔥 ${item.calories} kcal`;
+
+  const protEl = $('feature-prot');
+  if (protEl) protEl.textContent = `💪 ${item.protein}g Protein`;
+
+  const revEl = $('feature-reviews-btn');
+  if (revEl) revEl.textContent = `⭐ ${item.rating} (${item.soldCount || 30} reviews) 💬`;
+
+  const priceEl = $('feature-price-amount');
+  if (priceEl) priceEl.textContent = `KSh ${item.price}`;
+
+  const badgePill = $('feature-dish-badge-pill');
+  if (badgePill) {
+    if (item.badge === 'hot') badgePill.textContent = "Chef's Signature Pick 🔥";
+    else if (item.badge === 'new') badgePill.textContent = "✨ Fresh On Menu";
+    else if (item.tags && item.tags.includes('veg')) badgePill.textContent = "🌱 Pure Healthy";
+    else badgePill.textContent = "⭐ Comrade Choice";
+  }
+
+  const favBtn = $('feature-fav-btn');
+  if (favBtn) {
+    favBtn.classList.toggle('active', showcaseFavorites.has(item.id));
+  }
+}
+
+function cycleShowcaseItem(direction = 1) {
+  const list = getFilteredShowcaseList(currentShowcaseCat, currentShowcaseSearch);
+  if (!list.length) return;
+
+  const currentIndex = list.findIndex(m => m.id === currentShowcaseItem?.id);
+  let nextIndex = currentIndex + direction;
+  if (nextIndex < 0) nextIndex = list.length - 1;
+  if (nextIndex >= list.length) nextIndex = 0;
+
+  selectShowcaseItem(list[nextIndex]);
+}
+
+function toggleFavorite(itemId) {
+  if (showcaseFavorites.has(itemId)) {
+    showcaseFavorites.delete(itemId);
+    showToast('Removed from favorites', 'info');
+  } else {
+    showcaseFavorites.add(itemId);
+    showToast('Added to favorite cravings! ❤️', 'success');
+  }
+  renderCulinaryShowcase(currentShowcaseCat, currentShowcaseSearch);
 }
 
 // ============================================================
@@ -837,6 +1102,9 @@ function updateCartUI() {
   const summaryView = $('cart-summary');
 
   const totalCount = Object.values(cart).reduce((a,b) => a + b, 0);
+
+  const railBadge = $('rail-cart-count');
+  if (railBadge) railBadge.textContent = totalCount;
 
   if (totalCount > 0) {
     badge.textContent = totalCount;
