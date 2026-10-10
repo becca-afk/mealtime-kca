@@ -154,6 +154,12 @@
 
       <!-- Right Header Actions -->
       <div class="header-right">
+        <!-- Quick Role Switcher for Easy Testing between Student and Staff KDS -->
+        <button class="role-switch-header-btn" id="role-switch-header-btn" type="button" title="Switch between Student Portal and Kitchen Dispatch Terminal">
+          <span id="role-switch-icon">👨‍🍳</span>
+          <span id="role-switch-label">Kitchen KDS</span>
+        </button>
+
         <!-- Interactive Notification Bell Button with Badge Counter -->
         <button class="icon-btn" id="notif-btn" aria-label="Notifications" title="Notifications & Queue Center">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -323,6 +329,7 @@
           </button>
         </div>
 
+        <div class="nav-clearance-spacer"></div>
       </section>
 
       <!-- ================= 2. MENU PAGE ================= -->
@@ -504,6 +511,7 @@
 
           <div class="menu-grid" id="full-menu-grid"></div>
         </div>
+        <div class="nav-clearance-spacer"></div>
       </section>
 
       <!-- ================= 3. MY ORDERS PAGE ================= -->
@@ -521,6 +529,7 @@
 
         <div id="active-orders-list" class="orders-list"></div>
         <div id="past-orders-list" class="orders-list hidden"></div>
+        <div class="nav-clearance-spacer"></div>
       </section>
 
       <!-- ================= 4. KITCHEN DISPLAY SYSTEM (KDS) - STAFF ONLY ================= -->
@@ -569,6 +578,7 @@
         <div class="kds-board" id="kds-tickets-container">
           <!-- Populated dynamically -->
         </div>
+        <div class="nav-clearance-spacer"></div>
       </section>
 
       <!-- ================= 5. STAFF ANALYTICS PAGE ================= -->
@@ -734,9 +744,30 @@
         </div>
 
         <button class="logout-btn" id="logout-btn">Sign Out from Session</button>
+        <div class="nav-clearance-spacer"></div>
       </section>
 
     </main>
+
+    <!-- ===== FLOATING CHECKOUT / TRAY BAR (ALWAYS VISIBLE & PROMINENT WHEN TRAY HAS ITEMS) ===== -->
+    <div class="floating-checkout-bar hidden" id="floating-checkout-bar">
+      <div class="fcb-content">
+        <div class="fcb-left">
+          <div class="fcb-badge" id="fcb-count">1</div>
+          <div class="fcb-text-wrap">
+            <span class="fcb-label">Your Meal Tray</span>
+            <strong class="fcb-total" id="fcb-total">KSh 155</strong>
+          </div>
+        </div>
+        <button class="fcb-btn" id="fcb-btn" type="button">
+          <span>Checkout &amp; Pay</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
 
     <!-- ===== BOTTOM NAVIGATION (STUDENT VIEW) ===== -->
     <nav class="bottom-nav" id="bottom-nav">

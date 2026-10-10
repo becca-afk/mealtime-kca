@@ -569,6 +569,9 @@ function initNavigation() {
     });
   });
 
+  // Role switcher in header (1-tap switch between student & kitchen staff)
+  $('role-switch-header-btn')?.addEventListener('click', toggleRole);
+
   // Category Filters on Menu Page
   const filterBtns = document.querySelectorAll('.filter-btn');
   filterBtns.forEach(btn => {
@@ -640,6 +643,36 @@ function switchPage(pageId) {
     renderOrdersList();
   } else if (pageId === 'analytics') {
     renderAnalyticsCharts();
+  }
+}
+
+function toggleRole() {
+  if (currentRole === 'student') {
+    currentRole = 'staff';
+    $('header-campus-label').textContent = 'KCA Cafeteria Dispatch Terminal · Staff Session';
+    $('header-wallet-btn').style.display = 'none';
+    $('bottom-nav').style.display = 'none';
+    $('floating-checkout-bar')?.classList.add('hidden');
+    $('user-avatar-text').textContent = '👨‍🍳';
+    $('role-switch-icon').textContent = '🎓';
+    $('role-switch-label').textContent = 'Student Portal';
+    switchPage('kds');
+    renderKdsBoard();
+    showToast('👨‍🍳 Switched to Kitchen Staff Dispatch Terminal', 'info');
+  } else {
+    currentRole = 'student';
+    $('header-campus-label').textContent = 'KCA University · Ruaraka Main Campus';
+    $('header-wallet-btn').style.display = 'flex';
+    $('bottom-nav').style.display = 'flex';
+    if (Object.values(cart).reduce((a,b)=>a+b, 0) > 0) {
+      $('floating-checkout-bar')?.classList.remove('hidden');
+    }
+    const initials = (currentUser.regNo || '25').substring(0, 2);
+    $('user-avatar-text').textContent = initials;
+    $('role-switch-icon').textContent = '👨‍🍳';
+    $('role-switch-label').textContent = 'Kitchen KDS';
+    switchPage('home');
+    showToast('🎓 Switched to Student Portal', 'success');
   }
 }
 
@@ -1086,6 +1119,7 @@ function initCart() {
   });
 
   $('pay-btn')?.addEventListener('click', handleOrderSubmission);
+  $('fcb-btn')?.addEventListener('click', openCartModal);
 }
 
 function addToCart(itemId, qty = 1) {
@@ -1157,6 +1191,20 @@ function updateCartUI() {
   $('cart-total').textContent = `KSh ${grandTotal}`;
   $('tray-calories').textContent = totalKcal;
   $('tray-protein').textContent = totalProt;
+
+  // Sync Floating Checkout Bar
+  const fcb = $('floating-checkout-bar');
+  if (fcb) {
+    if (totalCount > 0 && currentRole === 'student') {
+      fcb.classList.remove('hidden');
+      const countEl = $('fcb-count');
+      if (countEl) countEl.textContent = totalCount;
+      const totalEl = $('fcb-total');
+      if (totalEl) totalEl.textContent = `KSh ${grandTotal}`;
+    } else {
+      fcb.classList.add('hidden');
+    }
+  }
 }
 
 window.changeCartQty = function(id, delta) {
@@ -1345,23 +1393,25 @@ async function executeOrderPlacement(payload) {
 
       showToast(`🎉 Order Placed Successfully! Ticket ${orderData.order.ticketNo}`, 'success');
       activeOrder = orderData.order;
+
+      // Add to allOrders immediately so Staff KDS sees it right away!
+      const existingIdx = allOrders.findIndex(o => o.id === orderData.order.id);
+      if (existingIdx >= 0) {
+        allOrders[existingIdx] = orderData.order;
+      } else {
+        allOrders.unshift(orderData.order);
+      }
+      try {
+        localStorage.setItem('mealtime_orders', JSON.stringify(allOrders));
+      } catch (e) {}
+
       renderActiveOrderBanner();
+      renderOrdersList();
+      renderKdsBoard();
       switchPage('home');
       fetchOrders();
 
-      // Trigger automatic preparation transition in 5s if testing
-      setTimeout(() => {
-        if (activeOrder && activeOrder.status === 'placed') {
-          updateOrderStatusLocal(activeOrder.id, 'preparing');
-        }
-      }, 5000);
-
-      // Trigger automatic ready status in 12s with sound chime
-      setTimeout(() => {
-        if (activeOrder && activeOrder.status === 'preparing') {
-          updateOrderStatusLocal(activeOrder.id, 'ready');
-        }
-      }, 12000);
+      // IMPORTANT: Status stays 'placed' until kitchen staff clicks 'Start Cooking' and 'Mark Ready' in KDS!
     }
   } catch (err) {
     showToast('Failed to place order. Please try again.', 'error');
@@ -1478,17 +1528,26 @@ function updateOrderStatusLocal(orderId, newStatus) {
   if (order) {
     order.status = newStatus;
   }
+  try {
+    localStorage.setItem('mealtime_orders', JSON.stringify(allOrders));
+  } catch (e) {}
 
   if (activeOrder && activeOrder.id === orderId) {
     activeOrder.status = newStatus;
     renderActiveOrderBanner();
 
-    // Play chime when order is ready!
+    // Play chime & send notification ONLY when order is marked ready by staff!
     if (newStatus === 'ready') {
       playReadyChime();
       showToast(`🔔 Ticket ${activeOrder.ticketNo} is READY FOR PICKUP at Counter B!`, 'success');
-      $('qr-status-pill').textContent = '✓ READY FOR PICKUP';
-      $('qr-status-pill').className = 'qr-status ready-status';
+      sendNotification('Order Ready for Pickup! 🍽️', `Ticket ${activeOrder.ticketNo} is READY FOR PICKUP at Counter B! Show your QR code pass to collect.`, 'success');
+      if ($('qr-status-pill')) {
+        $('qr-status-pill').textContent = '✓ READY FOR PICKUP';
+        $('qr-status-pill').className = 'qr-status ready-status';
+      }
+    } else if (newStatus === 'preparing') {
+      showToast(`👨‍🍳 Chef started cooking Ticket ${activeOrder.ticketNo}`, 'info');
+      sendNotification('Order in Kitchen 🍳', `Cafeteria staff started preparing Ticket ${activeOrder.ticketNo}.`, 'info');
     }
   }
 
