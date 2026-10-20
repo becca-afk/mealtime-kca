@@ -221,6 +221,23 @@ function recalculateCombo(budget) {
   $('combo-nutrition').textContent = `🔥 ${combo.calories} kcal · 💪 ${combo.protein}g Protein`;
 }
 
+async function fetchMenuItems() {
+  try {
+    const res = await fetch(`${API_BASE}/api/menu`);
+    const contentType = res.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+      const text = await res.text();
+      throw new Error(`Expected JSON but got ${contentType}: ${text.slice(0, 120)}`);
+    }
+    const data = await res.json();
+    if (Array.isArray(data)) {
+      MENU_ITEMS = data;
+    }
+  } catch (err) {
+    console.warn('Could not fetch menu items, using seed data');
+  }
+}
+
 async function fetchDashboard() {
   try {
     const res = await fetch(`${API_BASE}/api/dashboard`);
@@ -430,11 +447,17 @@ function renderKdsBoard() {
 
 window.updateOrderStatus = async function(orderId, newStatus) {
   try {
-    await fetch(`${API_BASE}/api/orders/${orderId}/status`, {
+    const res = await fetch(`${API_BASE}/api/orders/${orderId}/status`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: newStatus })
     });
+    const contentType = res.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+      const text = await res.text();
+      throw new Error(`Expected JSON but got ${contentType}: ${text.slice(0, 120)}`);
+    }
+    await res.json();
   } catch (err) {
     console.warn('Updating status locally:', err);
   }
@@ -498,6 +521,11 @@ function simulateIncomingOrder() {
 async function fetchCafeteriaStatus() {
   try {
     const res = await fetch(`${API_BASE}/api/status`);
+    const contentType = res.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+      const text = await res.text();
+      throw new Error(`Expected JSON but got ${contentType}: ${text.slice(0, 120)}`);
+    }
     const data = await res.json();
     if (data && data.crowdStatus) {
       $('status-text').innerHTML = `Cafeteria Open · Queue: <strong>~${data.estimatedWaitMins} min wait</strong> · ${data.activeOrdersCount} orders ahead`;
