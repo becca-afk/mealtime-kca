@@ -59,6 +59,15 @@ let isAudioEnabled = true;
 
 const $ = id => document.getElementById(id);
 
+// Global error handler to suppress JSON parsing errors
+window.onerror = function(message, source, lineno, colno, error) {
+  if (message && message.includes('Unexpected token')) {
+    console.warn('Suppressed parsing error:', message);
+    return true; // Prevent default error handling
+  }
+  return false; // Let other errors propagate
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js')
