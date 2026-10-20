@@ -151,11 +151,11 @@ Mealtime/
 | `GET` | `/api/menu` | All menu items | None |
 | `POST` | `/api/auth/login` | Student or staff login | Body credentials |
 | `GET` | `/api/orders` | All orders (filterable by regNo, status) | None |
-| `POST` | `/api/orders` | Place a new order | Body payload |
+| `POST` | `/api/orders` | Validate menu items and persist a new order/ticket | Body payload |
 | `PATCH` | `/api/orders/:id/status` | Update order status (KDS) | Staff |
 | `GET` | `/api/wallet/:regNo` | Get student wallet balance + transactions | RegNo |
-| `POST` | `/api/wallet/topup` | Top up wallet via M-Pesa | Body payload |
-| `POST` | `/api/mpesa/stkpush` | Initiate M-Pesa STK Push | Body payload |
+| `POST` | `/api/wallet/topup` | Simulated wallet top-up | Body payload |
+| `POST` | `/api/mpesa/stkpush` | Demo STK response (not wired to checkout) | Body payload |
 | `POST` | `/api/feedback` | Submit food rating and review | Body payload |
 | `GET` | `/api/analytics` | Cafeteria metrics, top sellers, low-rated items | Staff |
 
@@ -164,7 +164,7 @@ Mealtime/
 {
   "regNo": "2502692",
   "studentName": "James Mwangi",
-  "items": [{ "id": 1, "name": "Beef Stew + Ugali", "price": 120, "qty": 1 }],
+  "items": [{ "id": 1, "qty": 1 }],
   "pickupTime": "ASAP (~8 min)",
   "payMethod": "mpesa",
   "phone": "0712345678",
@@ -182,16 +182,16 @@ The frontend is organized into **16 logical modules** using functions:
 |--------|----------|-------------|
 | 1 | `initLogin()` | Role-based login gate, tab switching, API auth call |
 | 2 | `initNotifications()` | In-app notification drawer, badge counter |
-| 3 | `initBudgetOptimizer()` | Budget slider, combo calculator, presets |
+| 3 | `initBudgetOptimizer()` | Legacy budget optimizer (currently disabled on Home) |
 | 4 | `initNavigation()` | Page routing, filter buttons, search, sorting |
 | 5 | `fetchMenuItems()` | Load menu from API, render top picks and full menu |
 | 6 | `initCart()` | Cart management, quantity control, payment selection |
-| 7 | `initPaymentAndStk()` | M-Pesa PIN keypad, STK modal, payment flow |
+| 7 | `initPaymentAndStk()` | Simulated M-Pesa PIN keypad and demo payment flow |
 | 8 | `initKdsSystem()` | KDS tab filters, simulate order, exit terminal |
-| 9 | `fetchOrders()` | Load orders from API, detect status changes, chime |
+| 9 | `fetchOrders()` | Poll shared orders API every 4 seconds, detect status changes, chime |
 | 10 | `initQrModal()` | QR code canvas rendering, pickup pass display |
 | 11 | `fetchCafeteriaStatus()` | Live queue wait time, crowd status |
-| 12 | `initWalletTopup()` | Wallet top-up modal, M-Pesa top-up call |
+| 12 | `initWalletTopup()` | Demo wallet top-up modal |
 | 13 | `initFeedbackModal()` | Star rating, emoji reaction, review submission |
 | 14 | `openItemModal()` | Item detail view with public reviews |
 | 15 | `initThemeAndSettings()` | Dark mode toggle, audio chime toggle |
@@ -214,7 +214,7 @@ let allPublicReviews = []; // Public reviews for item modal
 
 | Page ID | Name | Accessible By |
 |---------|------|--------------|
-| `page-home` | Student Home (menu highlights, budget optimizer, active order) | Students |
+| `page-home` | Student dashboard (wallet balance, active order, cafeteria shortcuts) | Students |
 | `page-menu` | Full Menu Page (search, filter, sort, all items) | Students |
 | `page-orders` | My Order Tickets (active + history tabs) | Students |
 | `page-kds` | Kitchen Display System | Staff only |
@@ -223,12 +223,14 @@ let allPublicReviews = []; // Public reviews for item modal
 
 ### Modal Components
 - `#cart-modal` — Shopping tray, payment method selector, M-Pesa phone field
-- `#stk-modal` — Safaricom M-Pesa STK Push virtual keypad
+- `#stk-modal` — Simulated M-Pesa prompt and virtual keypad (no live Safaricom request)
 - `#topup-modal` — Wallet top-up form
 - `#qr-modal` — QR Code pickup pass (Canvas rendering)
 - `#feedback-modal` — Star rating + emoji + text review
 - `#item-modal` — Item detail view with public reviews
 - `#notif-drawer-overlay` — Notifications drawer
+
+Opening a modal hides the bottom navigation and floating checkout bar so they cannot cover modal actions.
 
 ---
 
@@ -237,11 +239,11 @@ let allPublicReviews = []; // Public reviews for item modal
 ```
 Student selects items → Opens Cart Modal
          ↓
-Selects "Lipa na M-Pesa" payment method
+Selects "M-Pesa (Demo Simulation)"
          ↓
 M-Pesa phone field appears → Student enters phone (e.g. 0712345678)
          ↓
-Clicks "Send M-Pesa STK Push"
+Clicks "Continue to M-Pesa Demo"
          ↓
 Frontend validates phone (min 9 digits)
          ↓
@@ -252,16 +254,14 @@ Cart closes → STK Modal opens showing:
          ↓
 Student enters 4-digit PIN on virtual keypad
          ↓
-[POST /api/mpesa/stkpush] called with phone + amount
+Client-side demo prompt auto-fills a sample PIN and shows a 2-second processing animation
          ↓
-2-second processing animation (simulates Daraja latency)
-         ↓
-Success (90%) → [POST /api/orders] creates order
+Demo success (90%) → [POST /api/orders] creates the shared order
          ↓
 Order confirmation toast + Active Order card appears
-         ↓
-Auto-transitions: placed(5s) → preparing(12s) → ready(chime!)
 ```
+
+The checkout flow does not call `/api/mpesa/stkpush` or Safaricom. A live Daraja integration and callback URL remain future work.
 
 ---
 
@@ -269,6 +269,7 @@ Auto-transitions: placed(5s) → preparing(12s) → ready(chime!)
 
 ```
 Order Placed (status: "placed")
+   ↓ KDS polls the shared orders API every 4 seconds
    ↓ Staff clicks "Start Cooking" in KDS
 Order Preparing (status: "preparing")
    ↓ Staff clicks "Mark Ready" in KDS
@@ -280,6 +281,8 @@ Order Ready (status: "ready")
 Order Complete (status: "picked_up")
    → Student prompted to leave a review
 ```
+
+Order IDs use UUIDs; the visible ticket number increments after the highest existing KCA ticket. Student and staff views read the same persisted order record, and status changes are written through `PATCH /api/orders/:id/status`.
 
 **Queue Position Calculation:**
 ```javascript

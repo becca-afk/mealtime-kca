@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+const { randomUUID } = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -108,6 +109,7 @@ function saveDB(data) {
     fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
   } catch (err) {
     console.error('Error saving DB:', err);
+    throw err;
   }
 }
 
@@ -318,14 +320,36 @@ app.get('/api/orders', (req, res) => {
 
 app.post('/api/orders', (req, res) => {
   const { regNo, studentName, items, pickupTime, payMethod, notes } = req.body;
-  if (!items || !items.length) {
+  if (!Array.isArray(items) || !items.length) {
     return res.status(400).json({ error: 'Order must contain at least 1 item' });
   }
 
   const db = loadDB();
+  const normalizedItems = [];
+  for (const requestedItem of items) {
+    if (!requestedItem || typeof requestedItem !== 'object') {
+      return res.status(400).json({ error: 'Order contains an invalid menu item or quantity' });
+    }
+    const itemId = Number(requestedItem.id);
+    const quantity = Number(requestedItem.qty);
+    const menuItem = db.menu.find(item => item.id === itemId);
+    if (!menuItem || !Number.isSafeInteger(quantity) || quantity < 1 || quantity > 99) {
+      return res.status(400).json({ error: 'Order contains an invalid menu item or quantity' });
+    }
+    if (!menuItem.available) {
+      return res.status(400).json({ error: `${menuItem.name} is currently unavailable` });
+    }
+    normalizedItems.push({
+      id: menuItem.id,
+      name: menuItem.name,
+      price: menuItem.price,
+      qty: quantity
+    });
+  }
+
   const student = db.students[regNo] || { name: studentName || `Student ${regNo || 'KCA'}` };
 
-  const subtotal = items.reduce((acc, it) => acc + (it.price * it.qty), 0);
+  const subtotal = normalizedItems.reduce((acc, it) => acc + (it.price * it.qty), 0);
   const serviceFee = 5;
   const total = subtotal + serviceFee;
 
@@ -340,13 +364,16 @@ app.post('/api/orders', (req, res) => {
       type: 'meal_payment',
       amount: total,
       date: 'Just now',
-      ref: `MEAL-${items[0].name.substring(0, 8)}`
+      ref: `MEAL-${normalizedItems[0].name.substring(0, 8)}`
     });
   }
 
-  const count = db.orders.length + 1;
-  const ticketNo = `#KCA-${String(count).padStart(3, '0')}`;
-  const orderId = `KCA-2024-${String(count).padStart(4, '0')}`;
+  const lastTicketNumber = db.orders.reduce((max, order) => {
+    const match = String(order.ticketNo || '').match(/#?KCA-(\d+)$/i);
+    return match ? Math.max(max, Number(match[1])) : max;
+  }, 0);
+  const ticketNo = `#KCA-${String(lastTicketNumber + 1).padStart(3, '0')}`;
+  const orderId = `KCA-${new Date().getFullYear()}-${randomUUID()}`;
   const mpesaRef = payMethod === 'mpesa' ? ('QK' + Math.random().toString(36).substring(2, 9).toUpperCase()) : `WAL-KCA-${Math.floor(1000 + Math.random() * 9000)}`;
 
   const newOrder = {
@@ -354,7 +381,7 @@ app.post('/api/orders', (req, res) => {
     ticketNo,
     regNo: regNo || '2502692',
     studentName: student.name,
-    items,
+    items: normalizedItems,
     subtotal,
     serviceFee,
     total,
@@ -371,7 +398,7 @@ app.post('/api/orders', (req, res) => {
   db.orders.unshift(newOrder);
 
   // Update item soldCount
-  items.forEach(it => {
+  normalizedItems.forEach(it => {
     const menuItem = db.menu.find(m => m.id === it.id);
     if (menuItem) {
       menuItem.soldCount = (menuItem.soldCount || 0) + it.qty;
@@ -402,6 +429,7 @@ app.patch('/api/orders/:id/status', (req, res) => {
   }
 
   order.status = status;
+    emitStatus(order);
   order.updatedAt = new Date().toISOString();
   saveDB(db);
 

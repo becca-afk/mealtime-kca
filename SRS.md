@@ -66,24 +66,28 @@ MealTime is a mobile-first Progressive Web App (PWA) that enables:
 ### FR-03: Cart and Order Placement
 - Add items with quantity controls; view nutritional totals
 - Select pickup time slot; add special instructions
+- Browse cafeterias from Home and open a menu filtered by meal, snack, or drink category
+- Hide fixed navigation and checkout controls while a modal is open so checkout actions remain accessible
 - Place order via KCA MealCard or M-Pesa
 
 ### FR-04: M-Pesa Payment
 - Collect student's M-Pesa phone number at checkout
-- Initiate Safaricom STK Push to that phone
-- Student enters 4-digit M-Pesa PIN on virtual keypad
+- Show a clearly labeled simulated M-Pesa prompt; no live Safaricom request is sent
+- Student enters a demo 4-digit PIN on the virtual keypad
 - 90% success rate simulation; show error and retry on failure
 
 ### FR-05: KCA MealCard (Wallet)
-- Display wallet balance (KSh) on header and profile page
+- Display wallet balance (KSh) on Home, header, and profile page
 - Deduct order total on wallet payment; reject if insufficient
 - Top up via M-Pesa (min KSh 10)
 - Display full transaction history
 
 ### FR-06: Order Tracking and Queue
-- Four order statuses: placed → preparing → ready → picked_up
+- Order lifecycle: placed → preparing → ready → picked_up; cancellation is also supported
 - Active order card shows current status, ticket number, ETA
 - Display live queue position (orders ahead of student)
+- Student and staff dashboards synchronize persisted orders and status changes through the shared API, polled every 4 seconds
+- Give each order a unique ID and sequential visible KCA ticket number
 - Audio chime when order becomes ready
 - In-app push notification on status change
 
@@ -102,7 +106,7 @@ MealTime is a mobile-first Progressive Web App (PWA) that enables:
 - Filter by status (New, Cooking, Ready)
 - Advance status: "Start Cooking" → "Mark Ready" → "Complete Handover"
 - Marking Ready triggers audio chime on student's device
-- Demo "Simulate Incoming Order" button for testing
+- Demo "Simulate Incoming Order" button creates a persisted shared ticket for testing
 
 ### FR-10: Analytics Dashboard (Staff)
 - Metrics: meals served today, avg rating, avg pickup speed, items under review
@@ -110,7 +114,11 @@ MealTime is a mobile-first Progressive Web App (PWA) that enables:
 - Top sellers list by order count
 - Low-rated items alert (< 3.5 stars)
 
-### FR-11: Budget Optimizer
+### FR-11: Student Home Dashboard
+- Focus Home on wallet balance, active order tracking, and cafeteria shortcuts
+- Do not duplicate the full menu on Home
+
+### FR-12: Budget Optimizer (Deferred)
 - Slider (KSh 30–300) or quick preset chips to set budget
 - Algorithm returns highest-rated meal combo within budget
 - One-click "Add Combo to Tray" button
@@ -139,7 +147,7 @@ MealTime is a mobile-first Progressive Web App (PWA) that enables:
 | UC-01 | Student Login | Student |
 | UC-02 | Browse & Search Menu | Student |
 | UC-03 | Add to Cart & Checkout | Student |
-| UC-04 | Pay via M-Pesa STK Push | Student |
+| UC-04 | Pay via simulated M-Pesa prompt | Student |
 | UC-05 | Pay via KCA MealCard | Student |
 | UC-06 | Track Active Order + Queue | Student |
 | UC-07 | Show QR Pickup Pass | Student |
@@ -148,7 +156,7 @@ MealTime is a mobile-first Progressive Web App (PWA) that enables:
 | UC-10 | Dispatch Order (KDS) | Staff |
 | UC-11 | View Analytics Dashboard | Staff |
 | UC-12 | Top-Up Wallet via M-Pesa | Student |
-| UC-13 | Use Budget Optimizer | Student |
+| UC-13 | Use Budget Optimizer (deferred) | Student |
 
 ---
 

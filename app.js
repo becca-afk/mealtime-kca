@@ -29,6 +29,13 @@ let MENU_ITEMS = [
   { id: 4,  name: 'Githeri Special', subname: 'Boiled maize & beans', emoji: '🫘', img: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?w=700&auto=format&fit=crop&q=80', price: 80, prepTime: '8 Mins', calories: 460, protein: 24, rating: 3.8, orders: 18, category: 'main', tags: ['veg', 'halal'], allergens: 'None', desc: 'Boiled maize and kidney beans fried with tomatoes and fresh coriander.', badge: 'veg', available: true, soldCount: 18 },
   { id: 14, name: 'Tilapia Fish + Ugali', subname: 'Pan-fried whole fish', emoji: '🐟', img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=700&auto=format&fit=crop&q=80', price: 140, prepTime: '15 Mins', calories: 590, protein: 38, rating: 4.1, orders: 15, category: 'main', tags: ['halal'], allergens: 'Fish', desc: 'Pan-fried whole lake tilapia served with ugali and sauteed greens.', badge: null, available: true, soldCount: 15 },
   { id: 11, name: 'Fresh Mango Juice', subname: '100% natural pressed', emoji: '🧃', img: 'https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=700&auto=format&fit=crop&q=80', price: 60, prepTime: '3 Mins', calories: 180, protein: 2, rating: 4.5, orders: 25, category: 'drink', tags: ['veg'], allergens: 'None', desc: '100% freshly pressed ripe mango juice without added preservatives.', badge: 'new', available: true, soldCount: 25 },
+{ id: 13, name: 'Masala Spiced Chai', subname: 'Brewed ginger & cardamom', emoji: '☕', img: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=700&auto=format&fit=crop&q=80', price: 30, prepTime: '3 Mins', calories: 120, protein: 4, rating: 4.4, orders: 60, category: 'drink', tags: ['veg'], allergens: 'Dairy', desc: 'Steaming hot brewed Kenyan tea infused with ginger and cardamom.', badge: null, available: true, soldCount: 60 },
+{ id: 7, name: 'Maziwa Mala (500ml)', subname: 'Cultured probiotic milk', emoji: '🥛', img: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=700&auto=format&fit=crop&q=80', price: 40, prepTime: '2 Mins', calories: 280, protein: 16, rating: 4.0, orders: 30, category: 'drink', tags: ['veg'], allergens: 'Dairy', desc: 'Chilled fermented cultured milk. Probiotic and refreshing.', badge: null, available: true, soldCount: 30 },
+{ id: 8, name: 'Soda (500ml)', subname: 'Cold soft drink', emoji: '🥤', img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=700&auto=format&fit=crop&q=80', price: 50, prepTime: '2 Mins', calories: 210, protein: 0, rating: 3.9, orders: 45, category: 'drink', tags: [], allergens: 'None', desc: 'Ice-cold soda: Coca-Cola, Fanta, or Sprite.', badge: null, available: true, soldCount: 45 },
+{ id: 20, name: 'Coca Cola (500ml)', subname: 'Classic cola', emoji: '🥤', img: 'https://example.com/coca-cola.jpg', price: 55, prepTime: '1 Mins', calories: 210, protein: 0, rating: 4.2, orders: 0, category: 'drink', tags: [], allergens: 'None', desc: 'Refreshing classic Coca Cola.', badge: null, available: true, soldCount: 0 },
+{ id: 21, name: 'Fanta Orange (500ml)', subname: 'Fruit soda', emoji: '🥤', img: 'https://example.com/fanta-orange.jpg', price: 55, prepTime: '1 Mins', calories: 210, protein: 0, rating: 4.1, orders: 0, category: 'drink', tags: [], allergens: 'None', desc: 'Citrus flavored Fanta.', badge: null, available: true, soldCount: 0 },
+{ id: 22, name: 'Diet Pepsi (500ml)', subname: 'Zero calorie cola', emoji: '🥤', img: 'https://example.com/diet-pepsi.jpg', price: 55, prepTime: '1 Mins', calories: 0, protein: 0, rating: 4.0, orders: 0, category: 'drink', tags: [], allergens: 'None', desc: 'Sugar-free Pepsi.', badge: null, available: true, soldCount: 0 },
+{ id: 23, name: 'Iced Cold Drink', subname: 'Mixed cold beverage', emoji: '🥤', img: 'https://example.com/iced-cold-drink.jpg', price: 60, prepTime: '1 Mins', calories: 150, protein: 0, rating: 4.0, orders: 0, category: 'drink', tags: [], allergens: 'None', desc: 'Chilled refreshing drink.', badge: null, available: true, soldCount: 0 },
   { id: 13, name: 'Masala Spiced Chai', subname: 'Brewed ginger & cardamom', emoji: '☕', img: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=700&auto=format&fit=crop&q=80', price: 30, prepTime: '3 Mins', calories: 120, protein: 4, rating: 4.4, orders: 60, category: 'drink', tags: ['veg'], allergens: 'Dairy', desc: 'Steaming hot brewed Kenyan tea infused with ginger and cardamom.', badge: null, available: true, soldCount: 60 },
   { id: 7,  name: 'Maziwa Mala (500ml)', subname: 'Cultured probiotic milk', emoji: '🥛', img: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=700&auto=format&fit=crop&q=80', price: 40, prepTime: '2 Mins', calories: 280, protein: 16, rating: 4.0, orders: 30, category: 'drink', tags: ['veg'], allergens: 'Dairy', desc: 'Chilled fermented cultured milk. Probiotic and refreshing.', badge: null, available: true, soldCount: 30 },
   { id: 8,  name: 'Soda (500ml)', subname: 'Cold soft drink', emoji: '🥤', img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=700&auto=format&fit=crop&q=80', price: 50, prepTime: '2 Mins', calories: 210, protein: 0, rating: 3.9, orders: 45, category: 'drink', tags: [], allergens: 'None', desc: 'Ice-cold soda: Coca-Cola, Fanta, or Sprite.', badge: null, available: true, soldCount: 45 },
@@ -40,7 +47,7 @@ let MENU_ITEMS = [
 // App State
 let currentUser = {
   regNo: '2502692',
-  name: 'James Mwangi',
+  name: 'Rebecca Amani',
   email: '2502692@students.kcau.ac.ke',
   department: 'School of Technology (BIT)',
   walletBalance: 850
@@ -60,8 +67,27 @@ let isAudioEnabled = true;
 // DOM Helper
 const $ = id => document.getElementById(id);
 
+function initModalFocusMode() {
+  const overlays = document.querySelectorAll('.modal-overlay');
+  const updateVisibility = () => {
+    const modalIsOpen = [...overlays].some(overlay => !overlay.classList.contains('hidden'));
+    $('bottom-nav')?.classList.toggle('modal-focus-hidden', modalIsOpen);
+    $('floating-checkout-bar')?.classList.toggle('modal-focus-hidden', modalIsOpen);
+  };
+
+  overlays.forEach(overlay => {
+    new MutationObserver(updateVisibility).observe(overlay, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+  });
+  updateVisibility();
+}
+
 // ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', async () => {
+  initModalFocusMode();
+
   // Register Service Worker for PWA support
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js')
@@ -71,7 +97,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   initLogin();
   initNotifications();
-  initBudgetOptimizer();
   initNavigation();
   initCulinaryShowcase();
   initCart();
@@ -339,6 +364,7 @@ function updateWalletDisplay(amount) {
   $('header-wallet-bal').textContent = formatted;
   $('profile-wallet-bal').textContent = formatted + '.00';
   $('cart-wallet-bal').textContent = formatted;
+  $('home-wallet-balance').textContent = formatted;
   currentUser.walletBalance = amount;
 }
 
@@ -564,10 +590,31 @@ function initNavigation() {
       if (page === 'cart') {
         openCartModal();
       } else if (page) {
+        if (!$('cart-modal').classList.contains('hidden')) {
+          closeCartModal();
+        }
         switchPage(page);
       }
     });
   });
+
+  document.querySelectorAll('.cafeteria-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const category = card.getAttribute('data-cafeteria-filter');
+      const railCategory = document.querySelector(`.cat-pill[data-rail-cat="${category}"]`);
+      railCategory?.click();
+
+      const gridCategory = document.querySelector(`.filter-btn[data-filter="${category}"]`);
+      if (gridCategory) {
+        document.querySelectorAll('.filter-btn').forEach(button => button.classList.remove('active'));
+        gridCategory.classList.add('active');
+        renderMenu(category, $('menu-search')?.value || '', $('menu-sort')?.value || 'rating');
+      }
+      switchPage('menu');
+    });
+  });
+
+  $('home-wallet-topup')?.addEventListener('click', () => $('open-topup-btn')?.click());
 
   // Role switcher in header (1-tap switch between student & kitchen staff)
   $('role-switch-header-btn')?.addEventListener('click', toggleRole);
@@ -1113,7 +1160,7 @@ function initCart() {
     mpesaCard.classList.add('active');
     walletCard.classList.remove('active');
     mpesaCard.querySelector('input').checked = true;
-    $('pay-btn-text').textContent = 'Send M-Pesa STK Push';
+    $('pay-btn-text').textContent = 'Continue to M-Pesa Demo';
     $('mpesa-phone-field')?.classList.add('visible');
     $('cart-mpesa-phone')?.focus();
   });
@@ -1342,8 +1389,8 @@ async function finalizeMpesaPayment() {
 
   if (isSuccess) {
     $('stk-modal').classList.add('hidden');
-    showToast('PIN verified! M-Pesa transaction successful. ✅', 'success');
-    sendNotification('M-Pesa Payment', `Transaction of KSh ${pendingOrderPayload.items.reduce((a,b) => a + (b.price * b.qty), 0) + 5} successful.`, 'success');
+    showToast('M-Pesa demo payment simulation successful. ✅', 'success');
+    sendNotification('M-Pesa Demo Payment', `Simulated payment of KSh ${pendingOrderPayload.items.reduce((a,b) => a + (b.price * b.qty), 0) + 5} successful.`, 'success');
     
     submitBtn.disabled = false;
     submitBtn.innerHTML = originalText;
@@ -1360,26 +1407,14 @@ async function finalizeMpesaPayment() {
 
 async function executeOrderPlacement(payload) {
   try {
-    let orderData;
-    try {
-      const res = await fetch(`${API_BASE}/api/orders`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      orderData = await res.json();
-    } catch (e) {
-      // Local mock fallback if backend is offline
-      const mockOrder = {
-        id: `KCA-2024-${Math.floor(1000 + Math.random()*9000)}`,
-        ticketNo: `#KCA-${Math.floor(100 + Math.random()*900)}`,
-        regNo: payload.regNo,
-        items: payload.items,
-        total: payload.items.reduce((a,b) => a + (b.price * b.qty), 0) + 5,
-        status: 'placed',
-        createdAt: new Date().toISOString()
-      };
-      orderData = { success: true, order: mockOrder };
+    const res = await fetch(`${API_BASE}/api/orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const orderData = await res.json();
+    if (!res.ok || !orderData.success || !orderData.order) {
+      throw new Error(orderData.error || 'The order could not be saved by the cafeteria server.');
     }
 
     if (orderData.success) {
@@ -1387,7 +1422,7 @@ async function executeOrderPlacement(payload) {
       cart = {};
       updateCartUI();
 
-      if (payload.payMethod === 'kca_wallet' && orderData.walletBalance !== null) {
+      if (payload.payMethod === 'kca_wallet' && orderData.walletBalance != null) {
         updateWalletDisplay(orderData.walletBalance);
       }
 
@@ -1409,12 +1444,13 @@ async function executeOrderPlacement(payload) {
       renderOrdersList();
       renderKdsBoard();
       switchPage('home');
-      fetchOrders();
+      await fetchOrders();
 
       // IMPORTANT: Status stays 'placed' until kitchen staff clicks 'Start Cooking' and 'Mark Ready' in KDS!
     }
   } catch (err) {
-    showToast('Failed to place order. Please try again.', 'error');
+    console.error('Order placement failed:', err);
+    showToast(err.message || 'Failed to place order. Please try again.', 'error');
   }
 }
 
@@ -1511,16 +1547,21 @@ function renderKdsBoard() {
 
 window.updateOrderStatus = async function(orderId, newStatus) {
   try {
-    await fetch(`${API_BASE}/api/orders/${orderId}/status`, {
+    const res = await fetch(`${API_BASE}/api/orders/${encodeURIComponent(orderId)}/status`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: newStatus })
     });
+    const result = await res.json();
+    if (!res.ok || !result.success) {
+      throw new Error(result.error || 'The order status could not be updated.');
+    }
+    updateOrderStatusLocal(orderId, newStatus);
+    await fetchOrders();
   } catch (err) {
-    console.warn('Updating status locally:', err);
+    console.error('Order status update failed:', err);
+    showToast(err.message || 'Could not update order status. Please try again.', 'error');
   }
-
-  updateOrderStatusLocal(orderId, newStatus);
 };
 
 function updateOrderStatusLocal(orderId, newStatus) {
@@ -1555,26 +1596,32 @@ function updateOrderStatusLocal(orderId, newStatus) {
   renderOrdersList();
 }
 
-function simulateIncomingOrder() {
+async function simulateIncomingOrder() {
   const randomItems = [MENU_ITEMS[0], MENU_ITEMS[4], MENU_ITEMS[5]];
   const picked = randomItems[Math.floor(Math.random() * randomItems.length)];
-  
-  const mock = {
-    id: `KCA-2024-${Math.floor(1000 + Math.random()*9000)}`,
-    ticketNo: `#KCA-${Math.floor(100 + Math.random()*900)}`,
-    regNo: `250${Math.floor(1000 + Math.random()*8999)}`,
-    studentName: 'Campus Student',
-    items: [{ id: picked.id, name: picked.name, price: picked.price, qty: 1 }],
-    total: picked.price + 5,
-    payMethod: 'mpesa',
-    status: 'placed',
-    createdAt: new Date().toISOString(),
-    notes: 'Campus demo order'
-  };
 
-  allOrders.unshift(mock);
-  renderKdsBoard();
-  showToast(`👨‍🍳 New ticket arrived: ${mock.ticketNo}!`, 'info');
+  try {
+    const res = await fetch(`${API_BASE}/api/orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        regNo: currentUser.regNo,
+        studentName: currentUser.name,
+        items: [{ id: picked.id, qty: 1 }],
+        payMethod: 'mpesa',
+        notes: 'Campus demo order'
+      })
+    });
+    const result = await res.json();
+    if (!res.ok || !result.success || !result.order) {
+      throw new Error(result.error || 'The demo ticket could not be saved.');
+    }
+    await fetchOrders();
+    showToast(`👨‍🍳 New shared ticket arrived: ${result.order.ticketNo}!`, 'info');
+  } catch (err) {
+    console.error('Demo order creation failed:', err);
+    showToast(err.message || 'Could not create a shared demo ticket.', 'error');
+  }
 }
 
 // ============================================================
@@ -1583,27 +1630,32 @@ function simulateIncomingOrder() {
 async function fetchOrders() {
   try {
     const res = await fetch(`${API_BASE}/api/orders`);
+    if (!res.ok) {
+      throw new Error(`Order request failed with status ${res.status}`);
+    }
     const data = await res.json();
     if (Array.isArray(data)) {
       allOrders = data;
       const myActive = data.find(o => o.regNo === currentUser.regNo && (o.status === 'placed' || o.status === 'preparing' || o.status === 'ready'));
-      if (myActive) {
+      const myLatest = data.find(o => o.regNo === currentUser.regNo);
+      const myOrder = myActive || myLatest;
+      if (myOrder) {
         const oldStatus = activeOrder ? activeOrder.status : null;
-        activeOrder = myActive;
+        activeOrder = myOrder;
         
-        if (oldStatus && oldStatus !== myActive.status) {
+        if (oldStatus && oldStatus !== myOrder.status) {
           const statusMessages = {
             'preparing': 'Your order is now being prepared! 🍳',
             'ready': 'Order Ready! Please collect at Counter A 🍕',
             'picked_up': 'Enjoy your meal! 😋'
           };
-          const msg = statusMessages[myActive.status];
+          const msg = statusMessages[myOrder.status];
           if (msg) {
-            sendNotification('Order Update', msg, myActive.status === 'ready' ? 'success' : 'info');
+            sendNotification('Order Update', msg, myOrder.status === 'ready' ? 'success' : 'info');
           }
         }
 
-        if (myActive.status === 'ready' && (!oldStatus || oldStatus !== 'ready')) {
+        if (myOrder.status === 'ready' && (!oldStatus || oldStatus !== 'ready')) {
           playReadyChime();
         }
       }
@@ -1612,7 +1664,7 @@ async function fetchOrders() {
       renderKdsBoard();
     }
   } catch (err) {
-    // console.warn('Could not fetch orders:', err);
+    console.warn('Could not synchronize orders with the cafeteria server:', err);
   }
 }
 
@@ -1620,12 +1672,14 @@ function renderActiveOrderBanner() {
   const card = $('active-order-card');
   if (!card) return;
 
-  if (!activeOrder || activeOrder.status === 'picked_up') {
+  if (!activeOrder || activeOrder.status === 'picked_up' || activeOrder.status === 'cancelled') {
     card.classList.add('hidden');
+    $('home-order-empty')?.classList.remove('hidden');
     return;
   }
 
   card.classList.remove('hidden');
+  $('home-order-empty')?.classList.add('hidden');
   $('ao-item-name').textContent = activeOrder.items.map(i => `${i.qty}x ${i.name}`).join(', ');
   $('ao-ticket-no').textContent = `Ticket ${activeOrder.ticketNo || activeOrder.id}`;
 
