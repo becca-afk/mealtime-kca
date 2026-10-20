@@ -20,7 +20,7 @@
       "desc": "Eggs Curry with tomato and cucumbers, chef special healthy dish for energy and nutrition.",
       "badge": "hot",
       "available": true,
-      "soldCount": 48
+      "soldCount": 49
     },
     {
       "id": 102,
@@ -355,7 +355,7 @@
       "desc": "The iconic campus snack: grilled beef smokie wrapped in a warm soft chapati with fresh kachumbari and spicy sauce.",
       "badge": "hot",
       "available": true,
-      "soldCount": 72
+      "soldCount": 74
     },
     {
       "id": 8,
@@ -569,10 +569,111 @@
       "desc": "Pure crisp Kenyan natural mineral water, ice-cold and hydrating.",
       "badge": null,
       "available": true,
-      "soldCount": 85
+      "soldCount": 86
     }
   ],
   "orders": [
+    {
+      "id": "KCA-2026-388de953-7c41-4127-96b1-0cd17a5e72e3",
+      "ticketNo": "#KCA-053",
+      "regNo": "2502692",
+      "studentName": "James Mwangi",
+      "items": [
+        {
+          "id": 19,
+          "name": "Campus Smocha",
+          "price": 60,
+          "qty": 1
+        }
+      ],
+      "subtotal": 60,
+      "serviceFee": 5,
+      "total": 65,
+      "pickupTime": "ASAP (~8 min)",
+      "payMethod": "mpesa",
+      "mpesaRef": "QKYYI5E6E",
+      "status": "ready",
+      "createdAt": "2026-10-20T20:51:05.288Z",
+      "pickupCode": "QR-KCA-2026-388de953-7c41-4127-96b1-0cd17a5e72e3-SECURE",
+      "notes": "",
+      "reviewed": false,
+      "updatedAt": "2026-10-20T20:54:01.290Z"
+    },
+    {
+      "id": "KCA-2026-21e0d902-7ec6-433f-807f-67ab4c9b5315",
+      "ticketNo": "#KCA-052",
+      "regNo": "2502692",
+      "studentName": "James Mwangi",
+      "items": [
+        {
+          "id": 101,
+          "name": "Eggs Curry",
+          "price": 150,
+          "qty": 1
+        }
+      ],
+      "subtotal": 150,
+      "serviceFee": 5,
+      "total": 155,
+      "pickupTime": "ASAP (~8 min)",
+      "payMethod": "mpesa",
+      "mpesaRef": "QKT8RKHAK",
+      "status": "placed",
+      "createdAt": "2026-10-20T20:49:14.553Z",
+      "pickupCode": "QR-KCA-2026-21e0d902-7ec6-433f-807f-67ab4c9b5315-SECURE",
+      "notes": "",
+      "reviewed": false
+    },
+    {
+      "id": "KCA-2026-75674dbc-1226-477c-900a-63a288379716",
+      "ticketNo": "#KCA-051",
+      "regNo": "2502692",
+      "studentName": "James Mwangi",
+      "items": [
+        {
+          "id": 24,
+          "name": "Chilled Mineral Water (500ml)",
+          "price": 30,
+          "qty": 1
+        }
+      ],
+      "subtotal": 30,
+      "serviceFee": 5,
+      "total": 35,
+      "pickupTime": "ASAP (~8 min)",
+      "payMethod": "kca_wallet",
+      "mpesaRef": "WAL-KCA-4081",
+      "status": "placed",
+      "createdAt": "2026-10-20T10:38:22.859Z",
+      "pickupCode": "QR-KCA-2026-75674dbc-1226-477c-900a-63a288379716-SECURE",
+      "notes": "",
+      "reviewed": false
+    },
+    {
+      "id": "KCA-2026-43f03966-65b2-4ea4-bad4-de55e8837723",
+      "ticketNo": "#KCA-050",
+      "regNo": "2502692",
+      "studentName": "James Mwangi",
+      "items": [
+        {
+          "id": 19,
+          "name": "Campus Smocha",
+          "price": 60,
+          "qty": 1
+        }
+      ],
+      "subtotal": 60,
+      "serviceFee": 5,
+      "total": 65,
+      "pickupTime": "ASAP (~6-8 min)",
+      "payMethod": "kca_wallet",
+      "mpesaRef": "WAL-KCA-6432",
+      "status": "placed",
+      "createdAt": "2026-10-20T10:28:32.686Z",
+      "pickupCode": "QR-KCA-2026-43f03966-65b2-4ea4-bad4-de55e8837723-SECURE",
+      "notes": "",
+      "reviewed": false
+    },
     {
       "id": "KCA-2026-9c7dbb83-d19c-4c4d-82a8-25d98ed31f71",
       "ticketNo": "#KCA-049",
@@ -686,8 +787,30 @@
       "email": "2502692@students.kcau.ac.ke",
       "name": "James Mwangi",
       "department": "School of Technology (BIT)",
-      "walletBalance": 420,
+      "walletBalance": 1320,
       "transactions": [
+        {
+          "id": "TX-1792492702859",
+          "type": "meal_payment",
+          "amount": 35,
+          "date": "Just now",
+          "ref": "MEAL-Chilled "
+        },
+        {
+          "id": "TX-1792492625866",
+          "type": "topup",
+          "amount": 1000,
+          "phone": "0712 345 678",
+          "date": "Just now",
+          "ref": "MP-55D5N7C"
+        },
+        {
+          "id": "TX-1792492112686",
+          "type": "meal_payment",
+          "amount": 65,
+          "date": "Just now",
+          "ref": "MEAL-Campus S"
+        },
         {
           "id": "TX-1792490042605",
           "type": "meal_payment",
