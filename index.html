@@ -21,7 +21,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap"
-    rel="stylesheet" />
+  <link rel="icon" type="image/jpeg" href="assets/owl-chef.jpg" />
+  <link rel="apple-touch-icon" href="assets/owl-chef.jpg" />
   <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -32,7 +33,7 @@
     <div class="login-bg"></div>
     <div class="login-content">
       <div class="login-logo-wrap">
-        <img src="file:///C:/Users/USER/.gemini/antigravity-ide/brain/d7142dea-b18b-46ff-a11a-6f1592570714/owl_chef_icon_1792480859767.jpg" alt="MealTime" class="login-logo" />
+        <img src="assets/owl-chef.jpg" alt="MealTime" class="login-logo" />
         <div class="login-logo-ring"></div>
       </div>
       <h1 class="login-title">MealTime</h1>
@@ -51,7 +52,7 @@
         </div>
 
         <div class="login-card-header">
-          <span class="login-shield" id="login-shield-icon">🔐</span>
+          <img src="assets/owl-chef.jpg" alt="Owl Chef" style="width:38px; height:38px; border-radius:10px; object-fit:cover; border:1.5px solid var(--gold); flex-shrink:0;" />
           <div>
             <strong id="login-card-role-title">Student &amp; Lecturer Access</strong>
             <span id="login-card-role-sub">Sign in with your official university credentials</span>
@@ -139,9 +140,12 @@
   <div id="splash-screen">
     <div class="splash-inner">
       <div class="kca-logo-animated">
-        <span class="kca-letter" data-letter="K">K</span>
-        <span class="kca-letter" data-letter="C">C</span>
-        <span class="kca-letter" data-letter="A">A</span>
+        <img src="assets/owl-chef.jpg" alt="MealTime Owl Chef" style="width:72px; height:72px; border-radius:20px; border:2px solid var(--gold); object-fit:cover; margin-bottom:12px; box-shadow:0 8px 24px rgba(0,0,0,0.35);" />
+        <div style="display:flex; justify-content:center; gap:4px;">
+          <span class="kca-letter" data-letter="K">K</span>
+          <span class="kca-letter" data-letter="C">C</span>
+          <span class="kca-letter" data-letter="A">A</span>
+        </div>
       </div>
       <h1 class="splash-welcome">Welcome to MealTime</h1>
       <p class="splash-tagline" id="splash-tagline">Connecting to KCA Cafeteria Live Backend…</p>
@@ -157,7 +161,7 @@
     <!-- ===== HEADER ===== -->
     <header class="app-header">
       <div class="header-left">
-        <img src="file:///C:/Users/USER/.gemini/antigravity-ide/brain/d7142dea-b18b-46ff-a11a-6f1592570714/owl_chef_icon_1792480859767.jpg" alt="MealTime" class="header-logo" />
+        <img src="assets/owl-chef.jpg" alt="MealTime" class="header-logo" />
         <div>
           <span class="header-brand">MealTime</span>
           <span class="header-campus" id="header-campus-label">KCA University · Ruaraka Main Campus</span>
@@ -414,6 +418,23 @@
 
       <!-- ================= 2. MENU PAGE ================= -->
       <section id="page-menu" class="page">
+        <!-- Active Cafeteria Context Header -->
+        <div class="cafeteria-context-banner" id="cafeteria-context-banner">
+          <div class="ccb-left">
+            <span class="ccb-icon" id="ccb-icon">🏛️</span>
+            <div class="ccb-text">
+              <span class="ccb-tag">Active Cafeteria Counter</span>
+              <strong class="ccb-title" id="ccb-title">All Campus Dishes &amp; Counters</strong>
+            </div>
+          </div>
+          <div class="ccb-tabs">
+            <button class="ccb-tab active" data-cafeteria-target="all" type="button">All Dishes</button>
+            <button class="ccb-tab" data-cafeteria-target="main" type="button">🍛 Kenyan Food</button>
+            <button class="ccb-tab" data-cafeteria-target="snack" type="button">🥟 Smochas &amp; Snacks</button>
+            <button class="ccb-tab" data-cafeteria-target="drink" type="button">🧃 Drinks Shop</button>
+          </div>
+        </div>
+
         <!-- View Mode Switcher Header -->
         <div class="menu-showcase-header">
           <div class="view-mode-pill-wrap">

@@ -112,15 +112,19 @@ img { display: block; max-width: 100%; }
   inset: 0;
   z-index: 9999;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 24px 16px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .login-bg {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: linear-gradient(165deg, var(--maroon-deep) 0%, var(--maroon) 100%);
+  z-index: 1;
 }
 
 .login-content {
@@ -130,25 +134,33 @@ img { display: block; max-width: 100%; }
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 430px;
-  padding: 40px 20px;
+  max-width: 440px;
+  margin: auto;
+  padding: 20px 0;
 }
 
 @media (min-width: 768px) {
   .login-content {
-    padding: 60px 20px;
+    padding: 30px 0;
   }
 }
 
 /* Logo area */
 .login-logo-wrap {
   position: relative;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .login-logo {
-  width: 80px; height: 80px;
-  border-radius: 22px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  width: 88px;
+  height: 88px;
+  border-radius: 24px;
+  object-fit: cover;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.4);
+  border: 2.5px solid rgba(201,152,31,0.6);
+  display: block;
 }
 .login-logo-ring {
   display: none;
@@ -517,10 +529,10 @@ img { display: block; max-width: 100%; }
 }
 
 .login-content {
-  max-width: 480px;
+  max-width: 440px;
   width: 100%;
-  margin: 0 auto;
-  padding: 0 20px env(safe-area-inset-bottom, 0);
+  margin: auto;
+  padding: 20px 16px;
 }
 
 /* Responsive Container for larger screens */
@@ -4158,3 +4170,93 @@ button:active, .btn:active, .icon-btn:active, .avatar-btn:active, .menu-card:act
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(255, 215, 0, 0.35);
 }
+
+/* ============================================================
+   CAFETERIA CONTEXT BANNER (Menu Page Indicator)
+   ============================================================ */
+.cafeteria-context-banner {
+  background: linear-gradient(135deg, rgba(107, 26, 42, 0.95), rgba(74, 16, 28, 0.98));
+  border-bottom: 2px solid var(--gold);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.ccb-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ccb-icon {
+  font-size: 1.8rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255, 215, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  flex-shrink: 0;
+}
+
+.ccb-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.ccb-tag {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--gold-light);
+  font-weight: 700;
+}
+
+.ccb-title {
+  font-size: 1.05rem;
+  color: #ffffff;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.ccb-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.ccb-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.ccb-tab {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.88);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.ccb-tab:hover {
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+}
+
+.ccb-tab.active {
+  background: var(--gold);
+  color: var(--maroon-deep);
+  border-color: var(--gold);
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.35);
+}
+

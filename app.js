@@ -17,31 +17,577 @@ const API_BASE = window.location.protocol.startsWith('http') ? '' : 'http://loca
 
 // ===== DATA SEED (FALLBACK & INITIAL STATE) =====
 let MENU_ITEMS = [
-  { id: 101, name: 'Eggs Curry', subname: 'Chef special healthy', emoji: '🍳', img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=700&auto=format&fit=crop&q=80', price: 150, prepTime: '25 Mins', calories: 420, protein: 24, rating: 4.8, orders: 48, category: 'main', tags: ['veg'], allergens: 'Egg', desc: 'Eggs Curry with tomato and cucumbers our chefs special healthy and fat free dish for those who want to lose weight.', badge: 'hot', available: true, soldCount: 48 },
-  { id: 102, name: 'Chicken Slice', subname: 'Real chicken & garden salad', emoji: '🥗', img: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=700&auto=format&fit=crop&q=80', price: 180, prepTime: '20 Mins', calories: 490, protein: 38, rating: 4.7, orders: 36, category: 'main', tags: ['halal'], allergens: 'None', desc: 'Tender seasoned grilled chicken breast slices served over crisp garden salad and light olive vinaigrette.', badge: 'new', available: true, soldCount: 36 },
-  { id: 1,  name: 'Beef Stew + Ugali', subname: 'Slow-cooked hearty beef', emoji: '🍛', img: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=700&auto=format&fit=crop&q=80', price: 120, prepTime: '10 Mins', calories: 650, protein: 32, rating: 4.6, orders: 34, category: 'main', tags: ['halal', 'spicy'], allergens: 'None', desc: 'Slow-cooked beef stew with hot tender ugali. Hearty, rich and satisfying.', badge: 'hot', available: true, soldCount: 34 },
-  { id: 2,  name: 'Pilau + Kachumbari', subname: 'Coastal spiced beef pilau', emoji: '🍚', img: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=700&auto=format&fit=crop&q=80', price: 150, prepTime: '15 Mins', calories: 580, protein: 22, rating: 4.5, orders: 28, category: 'main', tags: ['halal'], allergens: 'None', desc: 'Fragrant coastal spiced pilau with fresh tomato-onion kachumbari salad.', badge: null, available: true, soldCount: 28 },
-  { id: 12, name: 'Fried Chicken + Chips', subname: 'Crispy fried chicken & fries', emoji: '🍗', img: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=700&auto=format&fit=crop&q=80', price: 220, prepTime: '15 Mins', calories: 780, protein: 42, rating: 4.8, orders: 50, category: 'main', tags: ['halal'], allergens: 'Gluten', desc: 'Deep fried crispy chicken leg served with freshly made golden potato chips.', badge: 'hot', available: true, soldCount: 50 },
-  { id: 5,  name: 'Chicken Burger', subname: 'Crispy fillet burger', emoji: '🍔', img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&auto=format&fit=crop&q=80', price: 200, prepTime: '12 Mins', calories: 620, protein: 35, rating: 4.7, orders: 41, category: 'snack', tags: ['halal'], allergens: 'Gluten', desc: 'Crispy chicken fillet with shredded lettuce and creamy sauce in sesame bun.', badge: 'hot', available: true, soldCount: 41 },
-  { id: 6,  name: 'Chapati + Beans', subname: 'Layered chapati & yellow beans', emoji: '🫓', img: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=700&auto=format&fit=crop&q=80', price: 60, prepTime: '5 Mins', calories: 480, protein: 18, rating: 4.3, orders: 22, category: 'main', tags: ['veg'], allergens: 'Gluten', desc: 'Two soft layered chapatis with seasoned yellow bean curry.', badge: null, available: true, soldCount: 22 },
-  { id: 9,  name: 'Beef Samosa (2 pcs)', subname: 'Crunchy golden pastry', emoji: '🥟', img: 'https://images.unsplash.com/photo-1601050690186-b48ff085ca88?w=700&auto=format&fit=crop&q=80', price: 40, prepTime: '5 Mins', calories: 260, protein: 12, rating: 4.3, orders: 38, category: 'snack', tags: ['halal'], allergens: 'Gluten', desc: 'Crunchy golden pastry triangles stuffed with spiced minced beef.', badge: 'new', available: true, soldCount: 38 },
-  { id: 3,  name: 'Mandazi (3 pcs)', subname: 'Fresh morning batch', emoji: '🥐', img: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=700&auto=format&fit=crop&q=80', price: 30, prepTime: '3 Mins', calories: 320, protein: 6, rating: 4.1, orders: 55, category: 'snack', tags: ['veg'], allergens: 'Gluten', desc: 'Golden fluffy fried mandazi. Fresh from the morning batch.', badge: null, available: true, soldCount: 55 },
-  { id: 4,  name: 'Githeri Special', subname: 'Boiled maize & beans', emoji: '🫘', img: 'https://images.unsplash.com/photo-1546549032-9571cd6b27df?w=700&auto=format&fit=crop&q=80', price: 80, prepTime: '8 Mins', calories: 460, protein: 24, rating: 3.8, orders: 18, category: 'main', tags: ['veg', 'halal'], allergens: 'None', desc: 'Boiled maize and kidney beans fried with tomatoes and fresh coriander.', badge: 'veg', available: true, soldCount: 18 },
-  { id: 14, name: 'Tilapia Fish + Ugali', subname: 'Pan-fried whole fish', emoji: '🐟', img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=700&auto=format&fit=crop&q=80', price: 140, prepTime: '15 Mins', calories: 590, protein: 38, rating: 4.1, orders: 15, category: 'main', tags: ['halal'], allergens: 'Fish', desc: 'Pan-fried whole lake tilapia served with ugali and sauteed greens.', badge: null, available: true, soldCount: 15 },
-  { id: 11, name: 'Fresh Mango Juice', subname: '100% natural pressed', emoji: '🧃', img: 'https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=700&auto=format&fit=crop&q=80', price: 60, prepTime: '3 Mins', calories: 180, protein: 2, rating: 4.5, orders: 25, category: 'drink', tags: ['veg'], allergens: 'None', desc: '100% freshly pressed ripe mango juice without added preservatives.', badge: 'new', available: true, soldCount: 25 },
-{ id: 13, name: 'Masala Spiced Chai', subname: 'Brewed ginger & cardamom', emoji: '☕', img: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=700&auto=format&fit=crop&q=80', price: 30, prepTime: '3 Mins', calories: 120, protein: 4, rating: 4.4, orders: 60, category: 'drink', tags: ['veg'], allergens: 'Dairy', desc: 'Steaming hot brewed Kenyan tea infused with ginger and cardamom.', badge: null, available: true, soldCount: 60 },
-{ id: 7, name: 'Maziwa Mala (500ml)', subname: 'Cultured probiotic milk', emoji: '🥛', img: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=700&auto=format&fit=crop&q=80', price: 40, prepTime: '2 Mins', calories: 280, protein: 16, rating: 4.0, orders: 30, category: 'drink', tags: ['veg'], allergens: 'Dairy', desc: 'Chilled fermented cultured milk. Probiotic and refreshing.', badge: null, available: true, soldCount: 30 },
-{ id: 8, name: 'Soda (500ml)', subname: 'Cold soft drink', emoji: '🥤', img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=700&auto=format&fit=crop&q=80', price: 50, prepTime: '2 Mins', calories: 210, protein: 0, rating: 3.9, orders: 45, category: 'drink', tags: [], allergens: 'None', desc: 'Ice-cold soda: Coca-Cola, Fanta, or Sprite.', badge: null, available: true, soldCount: 45 },
-{ id: 20, name: 'Coca Cola (500ml)', subname: 'Classic cola', emoji: '🥤', img: 'https://example.com/coca-cola.jpg', price: 55, prepTime: '1 Mins', calories: 210, protein: 0, rating: 4.2, orders: 0, category: 'drink', tags: [], allergens: 'None', desc: 'Refreshing classic Coca Cola.', badge: null, available: true, soldCount: 0 },
-{ id: 21, name: 'Fanta Orange (500ml)', subname: 'Fruit soda', emoji: '🥤', img: 'https://example.com/fanta-orange.jpg', price: 55, prepTime: '1 Mins', calories: 210, protein: 0, rating: 4.1, orders: 0, category: 'drink', tags: [], allergens: 'None', desc: 'Citrus flavored Fanta.', badge: null, available: true, soldCount: 0 },
-{ id: 22, name: 'Diet Pepsi (500ml)', subname: 'Zero calorie cola', emoji: '🥤', img: 'https://example.com/diet-pepsi.jpg', price: 55, prepTime: '1 Mins', calories: 0, protein: 0, rating: 4.0, orders: 0, category: 'drink', tags: [], allergens: 'None', desc: 'Sugar-free Pepsi.', badge: null, available: true, soldCount: 0 },
-{ id: 23, name: 'Iced Cold Drink', subname: 'Mixed cold beverage', emoji: '🥤', img: 'https://example.com/iced-cold-drink.jpg', price: 60, prepTime: '1 Mins', calories: 150, protein: 0, rating: 4.0, orders: 0, category: 'drink', tags: [], allergens: 'None', desc: 'Chilled refreshing drink.', badge: null, available: true, soldCount: 0 },
-  { id: 13, name: 'Masala Spiced Chai', subname: 'Brewed ginger & cardamom', emoji: '☕', img: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=700&auto=format&fit=crop&q=80', price: 30, prepTime: '3 Mins', calories: 120, protein: 4, rating: 4.4, orders: 60, category: 'drink', tags: ['veg'], allergens: 'Dairy', desc: 'Steaming hot brewed Kenyan tea infused with ginger and cardamom.', badge: null, available: true, soldCount: 60 },
-  { id: 7,  name: 'Maziwa Mala (500ml)', subname: 'Cultured probiotic milk', emoji: '🥛', img: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=700&auto=format&fit=crop&q=80', price: 40, prepTime: '2 Mins', calories: 280, protein: 16, rating: 4.0, orders: 30, category: 'drink', tags: ['veg'], allergens: 'Dairy', desc: 'Chilled fermented cultured milk. Probiotic and refreshing.', badge: null, available: true, soldCount: 30 },
-  { id: 8,  name: 'Soda (500ml)', subname: 'Cold soft drink', emoji: '🥤', img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=700&auto=format&fit=crop&q=80', price: 50, prepTime: '2 Mins', calories: 210, protein: 0, rating: 3.9, orders: 45, category: 'drink', tags: [], allergens: 'None', desc: 'Ice-cold soda: Coca-Cola, Fanta, or Sprite.', badge: null, available: true, soldCount: 45 },
-  { id: 10, name: 'Sukuma Wiki + Rice', subname: 'Collard greens & rice', emoji: '🍃', img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=700&auto=format&fit=crop&q=80', price: 90, prepTime: '8 Mins', calories: 410, protein: 11, rating: 4.0, orders: 20, category: 'main', tags: ['veg', 'halal'], allergens: 'None', desc: 'Fresh collard greens sauteed with onions, served with steamed white rice.', badge: 'veg', available: true, soldCount: 20 },
-  { id: 16, name: 'Ndengu Special + Rice', subname: 'Green grams coconut curry', emoji: '🍲', img: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=700&auto=format&fit=crop&q=80', price: 80, prepTime: '10 Mins', calories: 450, protein: 21, rating: 4.3, orders: 29, category: 'main', tags: ['veg', 'halal'], allergens: 'None', desc: 'Green grams simmered in coconut tomato gravy over fluffy rice.', badge: 'veg', available: true, soldCount: 29 },
-  { id: 18, name: 'Egg Sandwich Toast', subname: 'Toasted fried egg sandwich', emoji: '🍳', img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=700&auto=format&fit=crop&q=80', price: 50, prepTime: '5 Mins', calories: 310, protein: 14, rating: 4.0, orders: 18, category: 'snack', tags: ['veg'], allergens: 'Gluten,Egg', desc: 'Double toasted buttered bread with seasoned fried eggs.', badge: null, available: true, soldCount: 18 }
+  {
+    "id": 101,
+    "name": "Eggs Curry",
+    "subname": "Chef special healthy",
+    "emoji": "🍳",
+    "img": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=700&auto=format&fit=crop&q=80",
+    "price": 150,
+    "prepTime": "25 Mins",
+    "calories": 420,
+    "protein": 24,
+    "rating": 4.8,
+    "orders": 48,
+    "category": "main",
+    "tags": [
+      "veg"
+    ],
+    "allergens": "Egg",
+    "desc": "Eggs Curry with tomato and cucumbers, chef special healthy dish for energy and nutrition.",
+    "badge": "hot",
+    "available": true,
+    "soldCount": 48
+  },
+  {
+    "id": 102,
+    "name": "Chicken Slice",
+    "subname": "Real chicken & garden salad",
+    "emoji": "🥗",
+    "img": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=700&auto=format&fit=crop&q=80",
+    "price": 180,
+    "prepTime": "20 Mins",
+    "calories": 490,
+    "protein": 38,
+    "rating": 4.7,
+    "orders": 36,
+    "category": "main",
+    "tags": [
+      "halal"
+    ],
+    "allergens": "None",
+    "desc": "Tender seasoned grilled chicken breast slices served over crisp garden salad with light olive vinaigrette.",
+    "badge": "new",
+    "available": true,
+    "soldCount": 36
+  },
+  {
+    "id": 1,
+    "name": "Beef Stew + Ugali",
+    "subname": "Slow-cooked hearty beef",
+    "emoji": "🍛",
+    "img": "https://images.unsplash.com/photo-1544025162-d76694265947?w=700&auto=format&fit=crop&q=80",
+    "price": 120,
+    "prepTime": "10 Mins",
+    "calories": 650,
+    "protein": 32,
+    "rating": 4.6,
+    "orders": 34,
+    "category": "main",
+    "tags": [
+      "halal",
+      "spicy"
+    ],
+    "allergens": "None",
+    "desc": "Slow-cooked beef stew with hot tender ugali. Hearty, rich and satisfying.",
+    "badge": "hot",
+    "available": true,
+    "soldCount": 34
+  },
+  {
+    "id": 2,
+    "name": "Pilau + Kachumbari",
+    "subname": "Coastal spiced beef pilau",
+    "emoji": "🍚",
+    "img": "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=700&auto=format&fit=crop&q=80",
+    "price": 150,
+    "prepTime": "15 Mins",
+    "calories": 580,
+    "protein": 22,
+    "rating": 4.5,
+    "orders": 28,
+    "category": "main",
+    "tags": [
+      "halal"
+    ],
+    "allergens": "None",
+    "desc": "Fragrant coastal spiced pilau with fresh tomato-onion kachumbari salad.",
+    "badge": null,
+    "available": true,
+    "soldCount": 28
+  },
+  {
+    "id": 12,
+    "name": "Fried Chicken + Chips",
+    "subname": "Crispy fried chicken & fries",
+    "emoji": "🍗",
+    "img": "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=700&auto=format&fit=crop&q=80",
+    "price": 220,
+    "prepTime": "15 Mins",
+    "calories": 780,
+    "protein": 42,
+    "rating": 4.8,
+    "orders": 50,
+    "category": "main",
+    "tags": [
+      "halal"
+    ],
+    "allergens": "Gluten",
+    "desc": "Deep fried crispy chicken leg served with freshly made golden potato chips.",
+    "badge": "hot",
+    "available": true,
+    "soldCount": 50
+  },
+  {
+    "id": 4,
+    "name": "Githeri Special",
+    "subname": "Boiled maize & beans",
+    "emoji": "🫘",
+    "img": "https://images.unsplash.com/photo-1546549032-9571cd6b27df?w=700&auto=format&fit=crop&q=80",
+    "price": 80,
+    "prepTime": "8 Mins",
+    "calories": 460,
+    "protein": 24,
+    "rating": 3.8,
+    "orders": 18,
+    "category": "main",
+    "tags": [
+      "veg",
+      "halal"
+    ],
+    "allergens": "None",
+    "desc": "Boiled maize and kidney beans fried with tomatoes, onions and fresh coriander.",
+    "badge": "veg",
+    "available": true,
+    "soldCount": 18
+  },
+  {
+    "id": 6,
+    "name": "Chapati + Beans",
+    "subname": "Layered chapati & yellow beans",
+    "emoji": "🫓",
+    "img": "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=700&auto=format&fit=crop&q=80",
+    "price": 60,
+    "prepTime": "5 Mins",
+    "calories": 480,
+    "protein": 18,
+    "rating": 4.3,
+    "orders": 22,
+    "category": "main",
+    "tags": [
+      "veg"
+    ],
+    "allergens": "Gluten",
+    "desc": "Two soft layered chapatis served with seasoned yellow bean curry.",
+    "badge": null,
+    "available": true,
+    "soldCount": 22
+  },
+  {
+    "id": 10,
+    "name": "Sukuma Wiki + Rice",
+    "subname": "Collard greens & steamed rice",
+    "emoji": "🍃",
+    "img": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=700&auto=format&fit=crop&q=80",
+    "price": 90,
+    "prepTime": "8 Mins",
+    "calories": 410,
+    "protein": 11,
+    "rating": 4,
+    "orders": 20,
+    "category": "main",
+    "tags": [
+      "veg",
+      "halal"
+    ],
+    "allergens": "None",
+    "desc": "Fresh collard greens sauteed with sweet onions, served with steamed white rice.",
+    "badge": "veg",
+    "available": true,
+    "soldCount": 20
+  },
+  {
+    "id": 14,
+    "name": "Tilapia Fish + Ugali",
+    "subname": "Pan-fried whole lake fish",
+    "emoji": "🐟",
+    "img": "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=700&auto=format&fit=crop&q=80",
+    "price": 140,
+    "prepTime": "15 Mins",
+    "calories": 590,
+    "protein": 38,
+    "rating": 4.1,
+    "orders": 15,
+    "category": "main",
+    "tags": [
+      "halal"
+    ],
+    "allergens": "Fish",
+    "desc": "Pan-fried whole lake tilapia served with ugali and sauteed traditional greens.",
+    "badge": null,
+    "available": true,
+    "soldCount": 15
+  },
+  {
+    "id": 16,
+    "name": "Ndengu Special + Rice",
+    "subname": "Green grams coconut curry",
+    "emoji": "🍲",
+    "img": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=700&auto=format&fit=crop&q=80",
+    "price": 80,
+    "prepTime": "10 Mins",
+    "calories": 450,
+    "protein": 21,
+    "rating": 4.3,
+    "orders": 29,
+    "category": "main",
+    "tags": [
+      "veg",
+      "halal"
+    ],
+    "allergens": "None",
+    "desc": "Green grams simmered in coconut tomato gravy over fluffy steamed rice.",
+    "badge": "veg",
+    "available": true,
+    "soldCount": 29
+  },
+  {
+    "id": 5,
+    "name": "Chicken Burger",
+    "subname": "Crispy fillet burger",
+    "emoji": "🍔",
+    "img": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&auto=format&fit=crop&q=80",
+    "price": 200,
+    "prepTime": "12 Mins",
+    "calories": 620,
+    "protein": 35,
+    "rating": 4.7,
+    "orders": 41,
+    "category": "snack",
+    "tags": [
+      "halal"
+    ],
+    "allergens": "Gluten",
+    "desc": "Crispy chicken fillet with shredded lettuce and creamy sauce in sesame bun.",
+    "badge": "hot",
+    "available": true,
+    "soldCount": 41
+  },
+  {
+    "id": 9,
+    "name": "Beef Samosa (2 pcs)",
+    "subname": "Crunchy golden pastry",
+    "emoji": "🥟",
+    "img": "https://images.unsplash.com/photo-1601050690186-b48ff085ca88?w=700&auto=format&fit=crop&q=80",
+    "price": 40,
+    "prepTime": "5 Mins",
+    "calories": 260,
+    "protein": 12,
+    "rating": 4.3,
+    "orders": 38,
+    "category": "snack",
+    "tags": [
+      "halal"
+    ],
+    "allergens": "Gluten",
+    "desc": "Crunchy golden pastry triangles stuffed with spiced minced beef.",
+    "badge": "new",
+    "available": true,
+    "soldCount": 38
+  },
+  {
+    "id": 3,
+    "name": "Mandazi (3 pcs)",
+    "subname": "Fresh morning batch",
+    "emoji": "🥐",
+    "img": "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=700&auto=format&fit=crop&q=80",
+    "price": 30,
+    "prepTime": "3 Mins",
+    "calories": 320,
+    "protein": 6,
+    "rating": 4.1,
+    "orders": 55,
+    "category": "snack",
+    "tags": [
+      "veg"
+    ],
+    "allergens": "Gluten",
+    "desc": "Golden fluffy fried mandazi. Fresh from the morning batch.",
+    "badge": null,
+    "available": true,
+    "soldCount": 55
+  },
+  {
+    "id": 15,
+    "name": "Fresh Banana Bunch",
+    "subname": "Sweet ripe bananas",
+    "emoji": "🍌",
+    "img": "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=700&auto=format&fit=crop&q=80",
+    "price": 20,
+    "prepTime": "1 Mins",
+    "calories": 110,
+    "protein": 1,
+    "rating": 4.2,
+    "orders": 35,
+    "category": "snack",
+    "tags": [
+      "veg",
+      "halal"
+    ],
+    "allergens": "None",
+    "desc": "Sweet ripe Cavendish bananas. Quick healthy brain fuel between lectures.",
+    "badge": null,
+    "available": true,
+    "soldCount": 35
+  },
+  {
+    "id": 18,
+    "name": "Egg Sandwich Toast",
+    "subname": "Toasted fried egg sandwich",
+    "emoji": "🍳",
+    "img": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=700&auto=format&fit=crop&q=80",
+    "price": 50,
+    "prepTime": "5 Mins",
+    "calories": 310,
+    "protein": 14,
+    "rating": 4,
+    "orders": 18,
+    "category": "snack",
+    "tags": [
+      "veg"
+    ],
+    "allergens": "Gluten,Egg",
+    "desc": "Double toasted buttered bread with seasoned fried eggs and tomato slice.",
+    "badge": null,
+    "available": true,
+    "soldCount": 18
+  },
+  {
+    "id": 19,
+    "name": "Campus Smocha",
+    "subname": "Smokie wrapped in warm chapati",
+    "emoji": "🌯",
+    "img": "https://images.unsplash.com/photo-1627042633145-b780d842ba45?w=700&auto=format&fit=crop&q=80",
+    "price": 60,
+    "prepTime": "3 Mins",
+    "calories": 380,
+    "protein": 15,
+    "rating": 4.9,
+    "orders": 72,
+    "category": "snack",
+    "tags": [
+      "halal"
+    ],
+    "allergens": "Gluten",
+    "desc": "The iconic campus snack: grilled beef smokie wrapped in a warm soft chapati with fresh kachumbari and spicy sauce.",
+    "badge": "hot",
+    "available": true,
+    "soldCount": 72
+  },
+  {
+    "id": 8,
+    "name": "Coca Cola (500ml)",
+    "subname": "Ice-cold original taste",
+    "emoji": "🥤",
+    "img": "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=700&auto=format&fit=crop&q=80",
+    "price": 50,
+    "prepTime": "1 Mins",
+    "calories": 210,
+    "protein": 0,
+    "rating": 4.6,
+    "orders": 68,
+    "category": "drink",
+    "tags": [],
+    "allergens": "None",
+    "desc": "Ice-cold Coca-Cola classic in 500ml chilled bottle.",
+    "badge": "hot",
+    "available": true,
+    "soldCount": 68
+  },
+  {
+    "id": 20,
+    "name": "Fanta Orange (500ml)",
+    "subname": "Zesty sparkling citrus soda",
+    "emoji": "🍊",
+    "img": "https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?w=700&auto=format&fit=crop&q=80",
+    "price": 50,
+    "prepTime": "1 Mins",
+    "calories": 210,
+    "protein": 0,
+    "rating": 4.5,
+    "orders": 45,
+    "category": "drink",
+    "tags": [],
+    "allergens": "None",
+    "desc": "Sparkling orange flavored soft drink, ice-chilled and refreshing.",
+    "badge": null,
+    "available": true,
+    "soldCount": 45
+  },
+  {
+    "id": 21,
+    "name": "Diet Pepsi (500ml)",
+    "subname": "Zero sugar crisp cola",
+    "emoji": "🥤",
+    "img": "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=700&auto=format&fit=crop&q=80",
+    "price": 55,
+    "prepTime": "1 Mins",
+    "calories": 0,
+    "protein": 0,
+    "rating": 4.3,
+    "orders": 32,
+    "category": "drink",
+    "tags": [],
+    "allergens": "None",
+    "desc": "Crisp sugar-free cola drink with zero calories. Served ice cold.",
+    "badge": null,
+    "available": true,
+    "soldCount": 32
+  },
+  {
+    "id": 22,
+    "name": "Iced Passion Cold Drink",
+    "subname": "Ice-cold brewed tea & passion juice",
+    "emoji": "🧋",
+    "img": "https://images.unsplash.com/photo-1556881286-fc6915169721?w=700&auto=format&fit=crop&q=80",
+    "price": 60,
+    "prepTime": "2 Mins",
+    "calories": 140,
+    "protein": 1,
+    "rating": 4.7,
+    "orders": 54,
+    "category": "drink",
+    "tags": [
+      "veg"
+    ],
+    "allergens": "None",
+    "desc": "Freshly brewed cold herbal tea infused with real passion fruit juice and ice cubes.",
+    "badge": "new",
+    "available": true,
+    "soldCount": 54
+  },
+  {
+    "id": 23,
+    "name": "Iced Cold Coffee",
+    "subname": "Chilled rich espresso & milk over ice",
+    "emoji": "🧊",
+    "img": "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?w=700&auto=format&fit=crop&q=80",
+    "price": 70,
+    "prepTime": "3 Mins",
+    "calories": 160,
+    "protein": 5,
+    "rating": 4.8,
+    "orders": 40,
+    "category": "drink",
+    "tags": [
+      "veg"
+    ],
+    "allergens": "Dairy",
+    "desc": "Smooth Kenyan Arabica cold brew with fresh creamy milk served over crystal ice cubes.",
+    "badge": "hot",
+    "available": true,
+    "soldCount": 40
+  },
+  {
+    "id": 11,
+    "name": "Fresh Mango Juice",
+    "subname": "100% natural cold pressed",
+    "emoji": "🧃",
+    "img": "https://images.unsplash.com/photo-1622597467836-f3285f2131b8?w=700&auto=format&fit=crop&q=80",
+    "price": 60,
+    "prepTime": "3 Mins",
+    "calories": 180,
+    "protein": 2,
+    "rating": 4.5,
+    "orders": 25,
+    "category": "drink",
+    "tags": [
+      "veg"
+    ],
+    "allergens": "None",
+    "desc": "100% freshly pressed ripe mango juice without added sugar or preservatives.",
+    "badge": "new",
+    "available": true,
+    "soldCount": 25
+  },
+  {
+    "id": 7,
+    "name": "Maziwa Mala (500ml)",
+    "subname": "Chilled cultured probiotic milk",
+    "emoji": "🥛",
+    "img": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=700&auto=format&fit=crop&q=80",
+    "price": 40,
+    "prepTime": "2 Mins",
+    "calories": 280,
+    "protein": 16,
+    "rating": 4,
+    "orders": 30,
+    "category": "drink",
+    "tags": [
+      "veg"
+    ],
+    "allergens": "Dairy",
+    "desc": "Chilled fermented cultured milk. Probiotic and refreshing companion for ugali.",
+    "badge": null,
+    "available": true,
+    "soldCount": 30
+  },
+  {
+    "id": 13,
+    "name": "Masala Spiced Chai",
+    "subname": "Steaming hot ginger & cardamom tea",
+    "emoji": "☕",
+    "img": "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=700&auto=format&fit=crop&q=80",
+    "price": 30,
+    "prepTime": "3 Mins",
+    "calories": 120,
+    "protein": 4,
+    "rating": 4.4,
+    "orders": 60,
+    "category": "drink",
+    "tags": [
+      "veg"
+    ],
+    "allergens": "Dairy",
+    "desc": "Steaming hot brewed Kenyan tea infused with ginger, cardamom and cinnamon spices.",
+    "badge": null,
+    "available": true,
+    "soldCount": 60
+  },
+  {
+    "id": 17,
+    "name": "Yoghurt Cup (Strawberry)",
+    "subname": "Creamy probiotic strawberry yoghurt",
+    "emoji": "🍦",
+    "img": "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=700&auto=format&fit=crop&q=80",
+    "price": 50,
+    "prepTime": "1 Mins",
+    "calories": 190,
+    "protein": 8,
+    "rating": 4.2,
+    "orders": 22,
+    "category": "drink",
+    "tags": [
+      "veg"
+    ],
+    "allergens": "Dairy",
+    "desc": "Smooth probiotic whole-milk strawberry yoghurt with real fruit bits.",
+    "badge": null,
+    "available": true,
+    "soldCount": 22
+  },
+  {
+    "id": 24,
+    "name": "Chilled Mineral Water (500ml)",
+    "subname": "Pure spring bottled drinking water",
+    "emoji": "💧",
+    "img": "https://images.unsplash.com/photo-1548839140-29a749e1bc4e?w=700&auto=format&fit=crop&q=80",
+    "price": 30,
+    "prepTime": "1 Mins",
+    "calories": 0,
+    "protein": 0,
+    "rating": 4.9,
+    "orders": 85,
+    "category": "drink",
+    "tags": [
+      "veg"
+    ],
+    "allergens": "None",
+    "desc": "Pure crisp Kenyan natural mineral water, ice-cold and hydrating.",
+    "badge": null,
+    "available": true,
+    "soldCount": 85
+  }
 ];
 
 // App State
@@ -598,19 +1144,58 @@ function initNavigation() {
     });
   });
 
-  document.querySelectorAll('.cafeteria-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const category = card.getAttribute('data-cafeteria-filter');
-      const railCategory = document.querySelector(`.cat-pill[data-rail-cat="${category}"]`);
-      railCategory?.click();
+  function selectCafeteria(category, preferGrid = true) {
+    const cat = category || 'all';
+    const meta = {
+      'main': { title: '🍛 Kenyan Food Cafeteria Counter', icon: '🍛' },
+      'snack': { title: '🥟 Smochas & Snacks Cafeteria Counter', icon: '🥟' },
+      'drink': { title: '🧃 Drinks Shop & Cold Beverages', icon: '🧃' },
+      'all': { title: 'All Campus Dishes & Counters', icon: '🏛️' }
+    }[cat] || { title: 'All Campus Dishes & Counters', icon: '🏛️' };
 
-      const gridCategory = document.querySelector(`.filter-btn[data-filter="${category}"]`);
-      if (gridCategory) {
-        document.querySelectorAll('.filter-btn').forEach(button => button.classList.remove('active'));
-        gridCategory.classList.add('active');
-        renderMenu(category, $('menu-search')?.value || '', $('menu-sort')?.value || 'rating');
-      }
+    if ($('ccb-title')) $('ccb-title').textContent = meta.title;
+    if ($('ccb-icon')) $('ccb-icon').textContent = meta.icon;
+
+    document.querySelectorAll('.ccb-tab').forEach(tab => {
+      tab.classList.toggle('active', tab.getAttribute('data-cafeteria-target') === cat);
+    });
+
+    const gridCategory = document.querySelector(`.filter-btn[data-filter="${cat}"]`);
+    if (gridCategory) {
+      document.querySelectorAll('.filter-btn').forEach(button => button.classList.remove('active'));
+      gridCategory.classList.add('active');
+    }
+
+    const railCategory = document.querySelector(`.cat-pill[data-rail-cat="${cat}"]`);
+    if (railCategory) {
+      document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+      railCategory.classList.add('active');
+    }
+
+    currentShowcaseCat = cat;
+    renderCulinaryShowcase(cat, $('menu-search')?.value || '');
+    renderMenu(cat, $('menu-search')?.value || '', $('menu-sort')?.value || 'rating');
+
+    if (preferGrid) {
+      $('btn-view-grid')?.click();
+    }
+  }
+
+  window.selectCafeteria = selectCafeteria;
+
+  document.querySelectorAll('.cafeteria-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      e.preventDefault();
+      const category = card.getAttribute('data-cafeteria-filter') || 'all';
       switchPage('menu');
+      selectCafeteria(category, true);
+    });
+  });
+
+  document.querySelectorAll('.ccb-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.getAttribute('data-cafeteria-target') || 'all';
+      selectCafeteria(target, false);
     });
   });
 
@@ -1315,8 +1900,14 @@ async function handleOrderSubmission() {
 
   const items = itemEntries.map(([id, qty]) => {
     const m = MENU_ITEMS.find(i => i.id === parseInt(id, 10));
-    return { id: m.id, name: m.name, price: m.price, qty };
-  });
+    if (!m) return null;
+    return { id: m.id, name: m.name, price: m.price, qty: Number(qty) };
+  }).filter(Boolean);
+
+  if (!items.length) {
+    showToast('Your tray is empty or items unavailable!', 'warning');
+    return;
+  }
 
   const subtotal = items.reduce((a,b) => a + (b.price * b.qty), 0);
   const total = subtotal + 5;
@@ -1381,11 +1972,11 @@ async function finalizeMpesaPayment() {
   submitBtn.disabled = true;
   submitBtn.innerHTML = '<span class="spinner"></span> Processing…';
 
-  // Simulate Daraja API Latency
-  await new Promise(r => setTimeout(r, 2000));
+  // Realistic Safaricom Daraja STK Network Latency simulation
+  await new Promise(r => setTimeout(r, 1400));
 
-  // 90% success rate for sandbox simulation
-  const isSuccess = Math.random() > 0.1;
+  // Guaranteed 100% success for university defense demo presentations
+  const isSuccess = true;
 
   if (isSuccess) {
     $('stk-modal').classList.add('hidden');
