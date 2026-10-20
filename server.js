@@ -12,32 +12,30 @@ app.use(express.static(__dirname));
 
 const DB_FILE = path.join(__dirname, 'data', 'db.json');
 
-// Ensure data folder exists
 if (!fs.existsSync(path.join(__dirname, 'data'))) {
   fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });
 }
 
-// Initial Data Seed
 const DEFAULT_DB = {
   menu: [
-    { id: 1,  name: 'Beef Stew + Ugali',      emoji: '🍛', price: 120, calories: 650, protein: 32, rating: 4.6, orders: 34, category: 'main',  tags: ['halal', 'spicy'], allergens: 'None', desc: 'Slow-cooked beef stew with hot tender ugali. Hearty and rich.', badge: 'hot',  available: true,  soldCount: 34 },
-    { id: 2,  name: 'Pilau + Kachumbari',     emoji: '🍚', price: 150, calories: 580, protein: 22, rating: 4.4, orders: 28, category: 'main',  tags: ['halal'],         allergens: 'None', desc: 'Fragrant coastal spiced pilau with fresh tomato-onion salad.', badge: null,  available: true,  soldCount: 28 },
-    { id: 3,  name: 'Mandazi (3 pcs)',         emoji: '🥐', price: 30,  calories: 320, protein: 6,  rating: 4.1, orders: 55, category: 'snack', tags: ['veg'],           allergens: 'Gluten', desc: 'Golden fluffy fried mandazi. Fresh from morning batch.', badge: null,  available: true,  soldCount: 55 },
-    { id: 4,  name: 'Githeri Special',         emoji: '🫘', price: 80,  calories: 460, protein: 24, rating: 3.8, orders: 18, category: 'main',  tags: ['veg', 'halal'],   allergens: 'None', desc: 'Boiled maize and kidney beans fried with tomatoes and dhania.', badge: 'veg',  available: true,  soldCount: 18 },
-    { id: 5,  name: 'Chicken Burger',          emoji: '🍔', price: 200, calories: 620, protein: 35, rating: 4.7, orders: 41, category: 'snack', tags: ['halal'],         allergens: 'Gluten', desc: 'Crispy chicken fillet with shredded lettuce and creamy sauce in sesame bun.', badge: 'hot',  available: true,  soldCount: 41 },
-    { id: 6,  name: 'Chapati + Beans',         emoji: '🫓', price: 60,  calories: 480, protein: 18, rating: 4.3, orders: 22, category: 'main',  tags: ['veg'],           allergens: 'Gluten', desc: 'Two soft layered chapatis with seasoned yellow bean curry.', badge: null,  available: true,  soldCount: 22 },
-    { id: 7,  name: 'Maziwa Mala (500ml)',     emoji: '🥛', price: 40,  calories: 280, protein: 16, rating: 4.0, orders: 30, category: 'drink', tags: ['veg'],           allergens: 'Dairy', desc: 'Chilled fermented cultured milk. Probiotic and refreshing.', badge: null,  available: true,  soldCount: 30 },
-    { id: 8,  name: 'Soda (500ml)',            emoji: '🥤', price: 50,  calories: 210, protein: 0,  rating: 3.9, orders: 45, category: 'drink', tags: [],                allergens: 'None', desc: 'Ice-cold soda: Coca-Cola, Fanta, or Sprite.', badge: null,  available: true,  soldCount: 45 },
-    { id: 9,  name: 'Beef Samosa (2 pcs)',     emoji: '🥟', price: 40,  calories: 260, protein: 12, rating: 4.3, orders: 38, category: 'snack', tags: ['halal'],         allergens: 'Gluten', desc: 'Crunchy golden pastry triangles stuffed with spiced minced beef.', badge: 'new', available: true,  soldCount: 38 },
-    { id: 10, name: 'Sukuma Wiki + Rice',      emoji: '🍃', price: 90,  calories: 410, protein: 11, rating: 4.0, orders: 20, category: 'main',  tags: ['veg', 'halal'],   allergens: 'None', desc: 'Fresh collard greens sauteed with onions, served with steamed white rice.', badge: 'veg',  available: true,  soldCount: 20 },
-    { id: 11, name: 'Fresh Mango Juice',       emoji: '🧃', price: 60,  calories: 180, protein: 2,  rating: 4.5, orders: 25, category: 'drink', tags: ['veg'],           allergens: 'None', desc: '100% freshly pressed ripe mango juice without added preservatives.', badge: 'new',  available: true,  soldCount: 25 },
-    { id: 12, name: 'Fried Chicken + Chips',   emoji: '🍗', price: 220, calories: 780, protein: 42, rating: 4.8, orders: 50, category: 'main',  tags: ['halal'],         allergens: 'Gluten', desc: 'Deep fried crispy chicken leg served with golden potato chips.', badge: 'hot',  available: true,  soldCount: 50 },
-    { id: 13, name: 'Masala Spiced Chai',      emoji: '☕', price: 30,  calories: 120, protein: 4,  rating: 4.4, orders: 60, category: 'drink', tags: ['veg'],           allergens: 'Dairy', desc: 'Steaming hot brewed Kenyan tea infused with ginger and cardamom.', badge: null,  available: true,  soldCount: 60 },
-    { id: 14, name: 'Tilapia Fish + Ugali',    emoji: '🐟', price: 140, calories: 590, protein: 38, rating: 4.1, orders: 15, category: 'main',  tags: ['halal'],         allergens: 'Fish', desc: 'Pan-fried whole lake tilapia served with ugali and sukuma.', badge: null,  available: true,  soldCount: 15 },
-    { id: 15, name: 'Fresh Banana Bunch',      emoji: '🍌', price: 20,  calories: 110, protein: 1,  rating: 4.2, orders: 35, category: 'snack', tags: ['veg', 'halal'],   allergens: 'None', desc: 'Sweet ripe Cavendish bananas. Quick healthy brain fuel.', badge: null,  available: true,  soldCount: 35 },
-    { id: 16, name: 'Ndengu Special + Rice',    emoji: '🍲', price: 80,  calories: 450, protein: 21, rating: 4.3, orders: 29, category: 'main',  tags: ['veg', 'halal'],   allergens: 'None', desc: 'Green grams simmered in coconut tomato gravy over fluffy rice.', badge: 'veg',  available: true,  soldCount: 29 },
-    { id: 17, name: 'Yoghurt Cup (Strawberry)',emoji: '🍦', price: 50,  calories: 190, protein: 8,  rating: 4.2, orders: 22, category: 'drink', tags: ['veg'],           allergens: 'Dairy', desc: 'Smooth probiotic whole-milk strawberry yoghurt.', badge: null,  available: true,  soldCount: 22 },
-    { id: 18, name: 'Egg Sandwich Toast',      emoji: '🍳', price: 50,  calories: 310, protein: 14, rating: 4.0, orders: 18, category: 'snack', tags: ['veg'],           allergens: 'Gluten,Egg', desc: 'Double toasted buttered bread with seasoned fried eggs.', badge: null,  available: true,  soldCount: 18 }
+    { id: 1,  name: 'Beef Stew + Ugali',      emoji: '🍛', price: 120, calories: 650, protein: 32, rating: 4.6, orders: 34, category: 'main',  tags: ['halal', 'spicy'], allergens: 'None', desc: 'Slow-cooked beef stew with ugali.' },
+    { id: 2,  name: 'Pilau + Kachumbari',     emoji: '🍚', price: 150, calories: 580, protein: 22, rating: 4.4, orders: 28, category: 'main',  tags: ['halal'], allergens: 'None', desc: 'Aromatic pilau with fresh salad.' },
+    { id: 3,  name: 'Mandazi (3 pcs)',         emoji: '🥐', price: 30,  calories: 320, protein: 6,  rating: 4.1, orders: 55, category: 'snack', tags: ['veg'], allergens: 'Gluten', desc: 'Freshly baked mandazi.' },
+    { id: 4,  name: 'Githeri Special',         emoji: '🫘', price: 80,  calories: 460, protein: 24, rating: 3.8, orders: 18, category: 'main',  tags: ['veg', 'halal'], allergens: 'None', desc: 'Classic githeri meal.' },
+    { id: 5,  name: 'Chicken Burger',          emoji: '🍔', price: 200, calories: 620, protein: 35, rating: 4.7, orders: 41, category: 'snack', tags: ['halal'], allergens: 'Gluten', desc: 'Crispy chicken burger.' },
+    { id: 6,  name: 'Chapati + Beans',         emoji: '🫓', price: 60,  calories: 480, protein: 18, rating: 4.3, orders: 22, category: 'main',  tags: ['veg'], allergens: 'Gluten', desc: 'Soft chapati with beans.' },
+    { id: 7,  name: 'Maziwa Mala (500ml)',     emoji: '🥛', price: 40,  calories: 280, protein: 16, rating: 4.0, orders: 30, category: 'drink', tags: ['veg'], allergens: 'Dairy', desc: 'Fresh cultured milk.' },
+    { id: 8,  name: 'Soda (500ml)',            emoji: '🥤', price: 50,  calories: 210, protein: 0,  rating: 3.9, orders: 45, category: 'drink', tags: [], allergens: 'None', desc: 'Chilled soda.' },
+    { id: 9,  name: 'Beef Samosa (2 pcs)',     emoji: '🥟', price: 40,  calories: 260, protein: 12, rating: 4.3, orders: 38, category: 'snack', tags: ['halal'], allergens: 'Gluten', desc: 'Crispy samosas with beef filling.' },
+    { id: 10, name: 'Sukuma Wiki + Rice',      emoji: '🍃', price: 90,  calories: 410, protein: 11, rating: 4.0, orders: 20, category: 'main',  tags: ['veg', 'halal'], allergens: 'None', desc: 'Healthy greens and rice.' },
+    { id: 11, name: 'Fresh Mango Juice',       emoji: '🧃', price: 60,  calories: 180, protein: 2,  rating: 4.5, orders: 25, category: 'drink', tags: ['veg'], allergens: 'None', desc: 'Fresh mango juice.' },
+    { id: 12, name: 'Fried Chicken + Chips',   emoji: '🍗', price: 220, calories: 780, protein: 42, rating: 4.8, orders: 50, category: 'main',  tags: ['halal'], allergens: 'Gluten', desc: 'Crispy chicken with fries.' },
+    { id: 13, name: 'Masala Spiced Chai',      emoji: '☕', price: 30,  calories: 120, protein: 4,  rating: 4.4, orders: 60, category: 'drink', tags: ['veg'], allergens: 'Dairy', desc: 'Warm spiced chai.' },
+    { id: 14, name: 'Tilapia Fish + Ugali',    emoji: '🐟', price: 140, calories: 590, protein: 38, rating: 4.1, orders: 15, category: 'main',  tags: ['halal'], allergens: 'Fish', desc: 'Fresh fish with ugali.' },
+    { id: 15, name: 'Fresh Banana Bunch',      emoji: '🍌', price: 20,  calories: 110, protein: 1,  rating: 4.2, orders: 35, category: 'snack', tags: ['veg', 'halal'], allergens: 'None', desc: 'Sweet bananas.' },
+    { id: 16, name: 'Ndengu Special + Rice',   emoji: '🍲', price: 80,  calories: 450, protein: 21, rating: 4.3, orders: 29, category: 'main',  tags: ['veg', 'halal'], allergens: 'None', desc: 'Comforting ndengu bowl.' },
+    { id: 17, name: 'Yoghurt Cup (Strawberry)',emoji: '🍦', price: 50,  calories: 190, protein: 8,  rating: 4.2, orders: 22, category: 'drink', tags: ['veg'], allergens: 'Dairy', desc: 'Creamy yoghurt cup.' },
+    { id: 18, name: 'Egg Sandwich Toast',      emoji: '🍳', price: 50,  calories: 310, protein: 14, rating: 4.0, orders: 18, category: 'snack', tags: ['veg'], allergens: 'Gluten,Egg', desc: 'Simple egg toast sandwich.' }
   ],
   orders: [
     {
@@ -52,7 +50,9 @@ const DEFAULT_DB = {
       status: 'picked_up',
       createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
       pickupCode: 'QR-KCA-046-OK',
-      notes: 'No mayonnaise please'
+      notes: 'No mayonnaise please',
+      line: 'Counter B',
+      paymentStatus: 'paid'
     },
     {
       id: 'KCA-2024-0047',
@@ -66,7 +66,9 @@ const DEFAULT_DB = {
       status: 'preparing',
       createdAt: new Date(Date.now() - 600000).toISOString(),
       pickupCode: 'QR-KCA-047-PREP',
-      notes: 'Extra soup if available'
+      notes: 'Extra soup if available',
+      line: 'Counter A',
+      paymentStatus: 'paid'
     }
   ],
   students: {
@@ -88,7 +90,6 @@ const DEFAULT_DB = {
   ]
 };
 
-// DB Helper
 function loadDB() {
   try {
     if (!fs.existsSync(DB_FILE)) {
@@ -111,9 +112,6 @@ function saveDB(data) {
   }
 }
 
-// ---------------- REST API ROUTES ----------------
-
-// 1. Cafeteria Status & Live Traffic
 app.get('/api/status', (req, res) => {
   const db = loadDB();
   const activeCount = db.orders.filter(o => o.status === 'placed' || o.status === 'preparing').length;
@@ -141,13 +139,39 @@ app.get('/api/status', (req, res) => {
   });
 });
 
-// 2. Menu Items
 app.get('/api/menu', (req, res) => {
   const db = loadDB();
   res.json(db.menu);
 });
 
-// 3. Auth / Login / Student & Staff Lookup
+app.get('/api/dashboard', (req, res) => {
+  const db = loadDB();
+  const orders = db.orders || [];
+  const today = new Date();
+  const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+  const todayOrders = orders.filter(order => new Date(order.createdAt) >= startOfDay);
+  const revenue = todayOrders.reduce((sum, order) => sum + (Number(order.total) || 0), 0);
+  const ingredientCost = todayOrders.reduce((sum, order) => {
+    const itemCost = (order.items || []).reduce((total, item) => {
+      const unitPrice = Number(item.price) || 0;
+      const qty = Number(item.qty) || 1;
+      return total + (unitPrice * qty * 0.55);
+    }, 0);
+    return sum + itemCost;
+  }, 0);
+
+  res.json({
+    orders,
+    todayOrders,
+    revenue,
+    cost: ingredientCost,
+    profit: revenue - ingredientCost,
+    pending: orders.filter(o => o.status !== 'picked_up').length,
+    ready: orders.filter(o => o.status === 'ready').length
+  });
+});
+
 app.post('/api/auth/login', (req, res) => {
   const { input, password, role, staffPin } = req.body;
   if (!input) {
@@ -156,14 +180,12 @@ app.post('/api/auth/login', (req, res) => {
 
   const raw = input.trim().toLowerCase();
 
-  // If Staff / Kitchen Login
   if (role === 'staff') {
     const isStaffEmail = raw.endsWith('@kcau.ac.ke') || raw.endsWith('@kca.ac.ke') || raw === 'staff' || raw === 'chef';
     if (!isStaffEmail) {
       return res.status(403).json({ error: 'Staff access requires an official @kcau.ac.ke staff email' });
     }
 
-    // Secure Staff PIN verification
     const pin = (staffPin || password || '').trim();
     const VALID_PINS = ['882041', '1234', 'KCA-CHEF', 'kca-chef'];
     if (!VALID_PINS.includes(pin)) {
@@ -184,12 +206,11 @@ app.post('/api/auth/login', (req, res) => {
     });
   }
 
-  // Student / Lecturer Login
   const isKcaEmail = raw.endsWith('@students.kcau.ac.ke') ||
                      raw.endsWith('@students.kca.ac.ke') ||
                      raw.endsWith('@kcau.ac.ke') ||
                      raw.endsWith('@kca.ac.ke');
-  
+
   let regNo = '';
   let email = '';
 
@@ -197,7 +218,6 @@ app.post('/api/auth/login', (req, res) => {
     email = raw;
     regNo = raw.split('@')[0];
   } else {
-    // Check if numeric or student ID format like 2502692
     const cleaned = raw.replace(/[^a-zA-Z0-9]/g, '');
     if (cleaned.length >= 4) {
       regNo = cleaned;
@@ -211,13 +231,12 @@ app.post('/api/auth/login', (req, res) => {
 
   const db = loadDB();
   if (!db.students[regNo]) {
-    // Auto-register student profile
     db.students[regNo] = {
       regNo,
       email,
       name: `Student ${regNo}`,
       department: 'KCA University Student',
-      walletBalance: 750, // Starting meal allowance
+      walletBalance: 750,
       transactions: [
         { id: `TX-${Date.now()}`, type: 'welcome_grant', amount: 750, date: 'Today', ref: 'KCA-MEAL-GRANT' }
       ]
@@ -234,7 +253,6 @@ app.post('/api/auth/login', (req, res) => {
   });
 });
 
-// 4. Student Wallet
 app.get('/api/wallet/:regNo', (req, res) => {
   const db = loadDB();
   const student = db.students[req.params.regNo];
@@ -279,7 +297,6 @@ app.post('/api/wallet/topup', (req, res) => {
   });
 });
 
-// 5. Lipa na M-Pesa STK Push Simulation
 app.post('/api/mpesa/stkpush', (req, res) => {
   const { phone, amount, regNo, accountRef } = req.body;
   if (!phone || !amount) {
@@ -298,7 +315,6 @@ app.post('/api/mpesa/stkpush', (req, res) => {
   });
 });
 
-// 6. Orders: Get, Post, Update Status (for KDS & Student)
 app.get('/api/orders', (req, res) => {
   const db = loadDB();
   const { regNo, status } = req.query;
@@ -311,13 +327,12 @@ app.get('/api/orders', (req, res) => {
     list = list.filter(o => o.status === status);
   }
 
-  // Sort newest first
   list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   res.json(list);
 });
 
 app.post('/api/orders', (req, res) => {
-  const { regNo, studentName, items, pickupTime, payMethod, notes } = req.body;
+  const { regNo, studentName, items, pickupTime, payMethod, notes, line } = req.body;
   if (!items || !items.length) {
     return res.status(400).json({ error: 'Order must contain at least 1 item' });
   }
@@ -329,7 +344,6 @@ app.post('/api/orders', (req, res) => {
   const serviceFee = 5;
   const total = subtotal + serviceFee;
 
-  // If paid via KCA Wallet, check balance and deduct
   if (payMethod === 'kca_wallet') {
     if (!db.students[regNo] || db.students[regNo].walletBalance < total) {
       return res.status(400).json({ error: 'Insufficient KCA MealCard balance. Please top up or pay with M-Pesa.' });
@@ -353,7 +367,7 @@ app.post('/api/orders', (req, res) => {
     id: orderId,
     ticketNo,
     regNo: regNo || '2502692',
-    studentName: student.name,
+    studentName: student.name || studentName || `Student ${regNo || 'KCA'}`,
     items,
     subtotal,
     serviceFee,
@@ -365,12 +379,13 @@ app.post('/api/orders', (req, res) => {
     createdAt: new Date().toISOString(),
     pickupCode: `QR-${orderId}-SECURE`,
     notes: notes || '',
-    reviewed: false
+    reviewed: false,
+    line: line || 'Counter B',
+    paymentStatus: 'paid'
   };
 
   db.orders.unshift(newOrder);
 
-  // Update item soldCount
   items.forEach(it => {
     const menuItem = db.menu.find(m => m.id === it.id);
     if (menuItem) {
@@ -387,7 +402,6 @@ app.post('/api/orders', (req, res) => {
   });
 });
 
-// Update order status (used by KDS Kitchen Staff)
 app.patch('/api/orders/:id/status', (req, res) => {
   const { status } = req.body;
   const valid = ['placed', 'preparing', 'ready', 'picked_up', 'cancelled'];
@@ -408,7 +422,6 @@ app.patch('/api/orders/:id/status', (req, res) => {
   res.json({ success: true, order });
 });
 
-// 7. Student Feedback & Ratings
 app.post('/api/feedback', (req, res) => {
   const { orderId, itemId, regNo, rating, emoji, comment } = req.body;
   const db = loadDB();
@@ -426,7 +439,6 @@ app.post('/api/feedback', (req, res) => {
 
   db.feedbacks.unshift(newFeedback);
 
-  // Recalculate item rating
   const item = db.menu.find(m => m.id === newFeedback.itemId);
   if (item) {
     const itemFeedbacks = db.feedbacks.filter(f => f.itemId === item.id);
@@ -434,7 +446,6 @@ app.post('/api/feedback', (req, res) => {
     item.rating = parseFloat((sum / itemFeedbacks.length).toFixed(1));
   }
 
-  // Mark order as reviewed
   if (orderId) {
     const ord = db.orders.find(o => o.id === orderId);
     if (ord) ord.reviewed = true;
@@ -444,7 +455,6 @@ app.post('/api/feedback', (req, res) => {
   res.json({ success: true, feedback: newFeedback, updatedRating: item ? item.rating : null });
 });
 
-// 8. Analytics & Admin Metrics
 app.get('/api/analytics', (req, res) => {
   const db = loadDB();
   const totalOrders = db.orders.length;
