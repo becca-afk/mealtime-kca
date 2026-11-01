@@ -17,6 +17,7 @@ export const AccountSwitcherModal: React.FC<AccountSwitcherModalProps> = ({ isOp
     loginAdmin,
     logout,
     setCurrentPage,
+    triggerPWAInstall,
   } = useApp();
 
   if (!isOpen) return null;
@@ -186,6 +187,32 @@ export const AccountSwitcherModal: React.FC<AccountSwitcherModalProps> = ({ isOp
         </div>
 
         <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {/* Button to install or view App Store & PWA deployment guide */}
+          <button
+            type="button"
+            onClick={() => {
+              onClose();
+              triggerPWAInstall();
+            }}
+            style={{
+              width: '100%',
+              padding: '11px',
+              borderRadius: '12px',
+              background: 'var(--surface-2)',
+              border: '1.5px solid var(--border)',
+              color: 'var(--text-main)',
+              fontWeight: 700,
+              fontSize: '0.84rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              cursor: 'pointer',
+            }}
+          >
+            <span>📱 Install Mobile App / Google Play &amp; App Store Guide</span>
+          </button>
+
           {/* Button to physically demonstrate login screen to supervisor */}
           <button
             type="button"

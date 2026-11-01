@@ -11,6 +11,7 @@ export const LoginScreen: React.FC = () => {
     loginAdmin,
     setIsRegisterOpen,
     showToast,
+    triggerPWAInstall,
   } = useApp();
 
   const [activeTab, setActiveTab] = useState<Role>('student');
@@ -310,6 +311,17 @@ export const LoginScreen: React.FC = () => {
               </p>
             </>
           )}
+        </div>
+
+        <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'center' }}>
+          <button
+            type="button"
+            className="demo-chip-btn"
+            onClick={() => triggerPWAInstall()}
+            style={{ padding: '6px 14px', fontSize: '0.8rem', background: 'rgba(255,255,255,0.92)' }}
+          >
+            <span>📱 Install App on Phone / App Store Guide</span>
+          </button>
         </div>
 
         <p className="login-footer">

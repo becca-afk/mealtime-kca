@@ -14,3 +14,13 @@ if (rootEl) {
     </React.StrictMode>
   );
 }
+
+// Register Progressive Web App Service Worker for offline support & installability
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {
+      // Ignore if not supported in dev or iframe
+    });
+  });
+}
+

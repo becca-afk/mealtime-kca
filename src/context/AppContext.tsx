@@ -84,6 +84,10 @@ interface AppContextType {
   setIsNotifDrawerOpen: (open: boolean) => void;
   isRegisterOpen: boolean;
   setIsRegisterOpen: (open: boolean) => void;
+  isInstallOpen: boolean;
+  setIsInstallOpen: (open: boolean) => void;
+  canInstallPWA: boolean;
+  triggerPWAInstall: () => Promise<void>;
 
   // Actions
   placeOrder: (payMethod: 'kca_wallet' | 'mpesa', pickupTime?: string, notes?: string, mpesaPhone?: string) => Promise<boolean>;
@@ -174,6 +178,38 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [detailItem, setDetailItem] = useState<MenuItem | null>(null);
   const [isNotifDrawerOpen, setIsNotifDrawerOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [isInstallOpen, setIsInstallOpen] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [canInstallPWA, setCanInstallPWA] = useState(false);
+
+  useEffect(() => {
+    const handleBeforeInstall = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setCanInstallPWA(true);
+    };
+    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+  }, []);
+
+  const triggerPWAInstall = async () => {
+    if (deferredPrompt) {
+      try {
+        await deferredPrompt.prompt();
+        const choice = await deferredPrompt.userChoice;
+        if (choice && choice.outcome === 'accepted') {
+          showToast('MealTime installed successfully! Launching from home screen.', 'success');
+        }
+      } catch (err) {
+        console.warn('Install prompt error:', err);
+      } finally {
+        setDeferredPrompt(null);
+        setCanInstallPWA(false);
+      }
+    } else {
+      setIsInstallOpen(true);
+    }
+  };
 
   // Sync dark theme class
   useEffect(() => {
@@ -646,6 +682,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         setIsNotifDrawerOpen,
         isRegisterOpen,
         setIsRegisterOpen,
+        isInstallOpen,
+        setIsInstallOpen,
+        canInstallPWA,
+        triggerPWAInstall,
         placeOrder,
         confirmMpesaOrder,
         topupWallet,

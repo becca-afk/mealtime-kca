@@ -11,6 +11,7 @@ export const Header: React.FC = () => {
     unreadNotifsCount,
     setIsNotifDrawerOpen,
     setCurrentPage,
+    triggerPWAInstall,
     logout,
   } = useApp();
 
@@ -59,6 +60,17 @@ export const Header: React.FC = () => {
             <span>{badge.icon}</span>
             <span>{badge.label}</span>
             <span style={{ opacity: 0.6, fontSize: '0.68rem' }}>▼</span>
+          </button>
+
+          {/* Install App / Mobile PWA Button */}
+          <button
+            className="icon-btn"
+            onClick={() => triggerPWAInstall()}
+            aria-label="Install App"
+            title="Install MealTime App on Android, iOS or Desktop"
+            type="button"
+          >
+            <span style={{ fontSize: '1.05rem', lineHeight: 1 }}>📲</span>
           </button>
 
           {/* Notifications Button */}

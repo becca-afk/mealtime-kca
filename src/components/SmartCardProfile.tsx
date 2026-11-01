@@ -11,6 +11,7 @@ export const SmartCardProfile: React.FC = () => {
     setDarkTheme,
     logout,
     showToast,
+    triggerPWAInstall,
   } = useApp();
 
   const handleEditPref = (title: string) => {
@@ -149,6 +150,30 @@ export const SmartCardProfile: React.FC = () => {
             </label>
           </div>
         </div>
+      </div>
+
+      {/* Mobile App & Store Distribution Card */}
+      <div className="profile-section">
+        <h3>Mobile App &amp; Offline Installation</h3>
+        <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '12px', lineHeight: 1.5 }}>
+          MealTime is a Progressive Web App (PWA) ready for home-screen installation on iOS &amp; Android, and packageable for Google Play Store (TWA) and Apple App Store.
+        </p>
+        <button
+          className="topup-action-btn"
+          onClick={() => triggerPWAInstall()}
+          type="button"
+          style={{
+            background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+            border: 'none',
+            color: '#FFF',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+          }}
+        >
+          <span>📲 Install App on Phone / View Store Guide</span>
+        </button>
       </div>
 
       {/* Sign Out Button */}
