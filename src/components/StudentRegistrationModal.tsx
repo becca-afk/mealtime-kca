@@ -58,7 +58,7 @@ export const StudentRegistrationModal: React.FC = () => {
           <div className="login-field">
             <label>Full Name</label>
             <div className="login-input-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
@@ -75,7 +75,7 @@ export const StudentRegistrationModal: React.FC = () => {
           <div className="login-field">
             <label>Registration Number</label>
             <div className="login-input-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
                 <rect x="3" y="4" width="18" height="16" rx="2" />
                 <line x1="7" y1="8" x2="17" y2="8" />
                 <line x1="7" y1="12" x2="17" y2="12" />
@@ -99,7 +99,7 @@ export const StudentRegistrationModal: React.FC = () => {
           <div className="login-field">
             <label>Student Email Address</label>
             <div className="login-input-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                 <polyline points="22,6 12,12 2,6" />
               </svg>
@@ -116,7 +116,7 @@ export const StudentRegistrationModal: React.FC = () => {
           <div className="login-field">
             <label>Password</label>
             <div className="login-input-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                 <path d="M7 11V7a5 5 0 0110 0v4" />
               </svg>
@@ -133,7 +133,7 @@ export const StudentRegistrationModal: React.FC = () => {
           <div className="login-field">
             <label>Confirm Password</label>
             <div className="login-input-wrap">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                 <path d="M7 11V7a5 5 0 0110 0v4" />
               </svg>
