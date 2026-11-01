@@ -62,12 +62,12 @@ export const Header: React.FC = () => {
             <span style={{ opacity: 0.6, fontSize: '0.68rem' }}>▼</span>
           </button>
 
-          {/* Install App / Mobile PWA Button */}
+          {/* Download MealTime App Button */}
           <button
             className="icon-btn"
             onClick={() => triggerPWAInstall()}
-            aria-label="Install App"
-            title="Install MealTime App on Android, iOS or Desktop"
+            aria-label="Download MealTime App"
+            title="Download MealTime App"
             type="button"
           >
             <span style={{ fontSize: '1.05rem', lineHeight: 1 }}>📲</span>

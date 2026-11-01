@@ -187,7 +187,7 @@ export const AccountSwitcherModal: React.FC<AccountSwitcherModalProps> = ({ isOp
         </div>
 
         <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {/* Button to install or view App Store & PWA deployment guide */}
+          {/* Download MealTime Mobile App */}
           <button
             type="button"
             onClick={() => {
@@ -210,7 +210,7 @@ export const AccountSwitcherModal: React.FC<AccountSwitcherModalProps> = ({ isOp
               cursor: 'pointer',
             }}
           >
-            <span>📱 Install Mobile App / Google Play &amp; App Store Guide</span>
+            <span>📲 Download MealTime App</span>
           </button>
 
           {/* Button to physically demonstrate login screen to supervisor */}

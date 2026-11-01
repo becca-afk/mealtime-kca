@@ -318,9 +318,9 @@ export const LoginScreen: React.FC = () => {
             type="button"
             className="demo-chip-btn"
             onClick={() => triggerPWAInstall()}
-            style={{ padding: '6px 14px', fontSize: '0.8rem', background: 'rgba(255,255,255,0.92)' }}
+            style={{ padding: '7px 16px', fontSize: '0.82rem', background: 'rgba(255,255,255,0.92)' }}
           >
-            <span>📱 Install App on Phone / App Store Guide</span>
+            <span>📲 Download MealTime App</span>
           </button>
         </div>
 

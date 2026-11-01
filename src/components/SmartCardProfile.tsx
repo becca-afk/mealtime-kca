@@ -152,18 +152,18 @@ export const SmartCardProfile: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile App & Store Distribution Card */}
+      {/* Mobile App Download Card */}
       <div className="profile-section">
-        <h3>Mobile App &amp; Offline Installation</h3>
+        <h3>Download MealTime Mobile App</h3>
         <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '12px', lineHeight: 1.5 }}>
-          MealTime is a Progressive Web App (PWA) ready for home-screen installation on iOS &amp; Android, and packageable for Google Play Store (TWA) and Apple App Store.
+          Install MealTime directly on your device for instant pre-ordering, offline digital MealCard access, and live order alerts.
         </p>
         <button
           className="topup-action-btn"
           onClick={() => triggerPWAInstall()}
           type="button"
           style={{
-            background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+            background: 'linear-gradient(135deg, var(--maroon) 0%, var(--maroon-deep) 100%)',
             border: 'none',
             color: '#FFF',
             display: 'flex',
@@ -172,7 +172,7 @@ export const SmartCardProfile: React.FC = () => {
             gap: '8px',
           }}
         >
-          <span>📲 Install App on Phone / View Store Guide</span>
+          <span>📲 Download MealTime App</span>
         </button>
       </div>
 

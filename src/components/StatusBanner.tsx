@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 
 export const StatusBanner: React.FC = () => {
-  const { status, refreshStatus, setIsNotifDrawerOpen } = useApp();
+  const { status, refreshStatus, setIsNotifDrawerOpen, isOnline } = useApp();
   const [refreshing, setRefreshing] = useState(false);
 
   const handleRefresh = async (e: React.MouseEvent) => {
@@ -20,25 +20,45 @@ export const StatusBanner: React.FC = () => {
       title="Click to open Notifications & Cafeteria Queue Advisory"
       style={{ cursor: 'pointer' }}
     >
-      <div className="status-dot pulse"></div>
+      <div
+        className={`status-dot ${isOnline ? 'pulse' : ''}`}
+        style={{ background: isOnline ? '#10B981' : '#F59E0B' }}
+      ></div>
+
       <span id="status-text">
-        Cafeteria Open · Queue: <strong>~{status.estimatedWaitMins} min wait</strong> · {status.activeOrdersCount} active orders
+        {isOnline ? (
+          <>
+            Cafeteria Open · Queue: <strong>~{status.estimatedWaitMins} min wait</strong> · {status.activeOrdersCount} active orders
+          </>
+        ) : (
+          <>
+            ⚡ <strong>Offline Mode</strong> · Showing cached menu &amp; MealCard
+          </>
+        )}
       </span>
-      <span className="crowd-pill" id="crowd-pill">
-        {status.crowdStatus}
-      </span>
-      <button
-        className="status-refresh"
-        onClick={handleRefresh}
-        title="Refresh live cafeteria queue status"
-        type="button"
-        style={{
-          transform: refreshing ? 'rotate(360deg)' : 'none',
-          transition: 'transform 0.5s ease',
-        }}
+
+      <span
+        className="crowd-pill"
+        id="crowd-pill"
+        style={!isOnline ? { background: 'rgba(245, 158, 11, 0.15)', color: '#D97706', borderColor: 'rgba(245, 158, 11, 0.3)' } : undefined}
       >
-        ↻
-      </button>
+        {isOnline ? status.crowdStatus : 'Offline Ready'}
+      </span>
+
+      {isOnline && (
+        <button
+          className="status-refresh"
+          onClick={handleRefresh}
+          title="Refresh live cafeteria queue status"
+          type="button"
+          style={{
+            transform: refreshing ? 'rotate(360deg)' : 'none',
+            transition: 'transform 0.5s ease',
+          }}
+        >
+          ↻
+        </button>
+      )}
     </div>
   );
 };

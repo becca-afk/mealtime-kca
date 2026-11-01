@@ -88,6 +88,7 @@ interface AppContextType {
   setIsInstallOpen: (open: boolean) => void;
   canInstallPWA: boolean;
   triggerPWAInstall: () => Promise<void>;
+  isOnline: boolean;
 
   // Actions
   placeOrder: (payMethod: 'kca_wallet' | 'mpesa', pickupTime?: string, notes?: string, mpesaPhone?: string) => Promise<boolean>;
@@ -181,6 +182,25 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [isInstallOpen, setIsInstallOpen] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [canInstallPWA, setCanInstallPWA] = useState(false);
+  const [isOnline, setIsOnline] = useState<boolean>(typeof navigator !== 'undefined' ? navigator.onLine : true);
+
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOnline(true);
+      showToast('🟢 Back online! Live cafeteria queue & menu synced.', 'success');
+    };
+    const handleOffline = () => {
+      setIsOnline(false);
+      showToast('⚡ Offline Mode. Saved meals & MealCard pass remain active.', 'warning');
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   useEffect(() => {
     const handleBeforeInstall = (e: any) => {
@@ -198,7 +218,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         await deferredPrompt.prompt();
         const choice = await deferredPrompt.userChoice;
         if (choice && choice.outcome === 'accepted') {
-          showToast('MealTime installed successfully! Launching from home screen.', 'success');
+          showToast('🎉 MealTime downloaded & installed on your device!', 'success');
+          setIsInstallOpen(false);
         }
       } catch (err) {
         console.warn('Install prompt error:', err);
@@ -686,6 +707,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
         setIsInstallOpen,
         canInstallPWA,
         triggerPWAInstall,
+        isOnline,
         placeOrder,
         confirmMpesaOrder,
         topupWallet,
