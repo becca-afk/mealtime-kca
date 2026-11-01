@@ -22,7 +22,7 @@ export const StatusBanner: React.FC = () => {
     >
       <div
         className={`status-dot ${isOnline ? 'pulse' : ''}`}
-        style={{ background: isOnline ? '#10B981' : '#F59E0B' }}
+        style={{ background: isOnline ? '#10B981' : '#EF4444' }}
       ></div>
 
       <span id="status-text">
@@ -32,7 +32,7 @@ export const StatusBanner: React.FC = () => {
           </>
         ) : (
           <>
-            ⚡ <strong>Offline Mode</strong> · Showing cached menu &amp; MealCard
+            ⚠️ <strong>Server Disconnected</strong> · Active internet connection required for live dining queue
           </>
         )}
       </span>
@@ -40,9 +40,9 @@ export const StatusBanner: React.FC = () => {
       <span
         className="crowd-pill"
         id="crowd-pill"
-        style={!isOnline ? { background: 'rgba(245, 158, 11, 0.15)', color: '#D97706', borderColor: 'rgba(245, 158, 11, 0.3)' } : undefined}
+        style={!isOnline ? { background: 'rgba(239, 68, 68, 0.15)', color: '#DC2626', borderColor: 'rgba(239, 68, 68, 0.3)' } : undefined}
       >
-        {isOnline ? status.crowdStatus : 'Offline Ready'}
+        {isOnline ? status.crowdStatus : 'Offline'}
       </span>
 
       {isOnline && (

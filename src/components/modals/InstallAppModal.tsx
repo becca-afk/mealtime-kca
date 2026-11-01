@@ -109,10 +109,10 @@ export const InstallAppModal: React.FC = () => {
           </div>
           <div>
             <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#059669' }}>
-              ⚡ Offline
+              ⚡ Live Cloud
             </div>
             <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-              PWA Ready
+              Real-Time Sync
             </div>
           </div>
         </div>

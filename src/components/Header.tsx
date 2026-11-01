@@ -41,9 +41,15 @@ export const Header: React.FC = () => {
         <div className="header-left" onClick={() => setCurrentPage(role === 'staff' ? 'kds' : role === 'admin' ? 'analytics' : 'home')} style={{ cursor: 'pointer' }}>
           <img src="/assets/logo.jpg" alt="MealTime" className="header-logo" />
           <div>
-            <span className="header-brand">MealTime</span>
+            <span className="header-brand">
+              MealTime{role === 'staff' ? ' · KDS' : role === 'admin' ? ' · Admin' : ''}
+            </span>
             <span className="header-campus" id="header-campus-label">
-              KCA University · Ruaraka Main Campus
+              {role === 'staff'
+                ? 'Kitchen Order Dispatch Terminal · Counter B'
+                : role === 'admin'
+                ? 'Campus Catering Administration Hub'
+                : 'KCA University · Ruaraka Main Campus'}
             </span>
           </div>
         </div>

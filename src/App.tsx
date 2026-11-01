@@ -23,7 +23,7 @@ import { ToastContainer } from './components/modals/ToastContainer';
 import { InstallAppModal } from './components/modals/InstallAppModal';
 
 export const App: React.FC = () => {
-  const { isLoggedIn, currentPage, role } = useApp();
+  const { isLoggedIn, currentPage, role, isOnline } = useApp();
 
   return (
     <div id="root-container">
@@ -33,19 +33,55 @@ export const App: React.FC = () => {
       {/* Main App Container */}
       <div id="app" style={{ display: 'block' }}>
         <Header />
-        <StatusBanner />
 
-        <main className="app-main">
-          {currentPage === 'home' && <StudentHome />}
-          {currentPage === 'menu' && <MenuGrid />}
-          {currentPage === 'orders' && <OrdersView />}
-          {currentPage === 'kds' && <KdsBoard />}
-          {currentPage === 'analytics' && <AnalyticsDashboard />}
-          {currentPage === 'profile' && <SmartCardProfile />}
+        {/* Global Network Connectivity Warning (Strict Online-Only Requirement) */}
+        {!isOnline && (
+          <div
+            style={{
+              background: '#DC2626',
+              color: '#FFF',
+              padding: '10px 16px',
+              textAlign: 'center',
+              fontSize: '0.84rem',
+              fontWeight: 700,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              boxShadow: '0 2px 8px rgba(220, 38, 38, 0.35)',
+              position: 'sticky',
+              top: '56px',
+              zIndex: 9999,
+            }}
+          >
+            <span>⚠️</span>
+            <span>
+              <strong>Internet Connection Lost:</strong> MealTime requires an active online connection to communicate with KCA Cafeteria servers.
+            </span>
+          </div>
+        )}
+
+        {/* Status banner is ONLY for students viewing the queue wait time */}
+        {role === 'student' && <StatusBanner />}
+
+        <main className="app-main" style={role !== 'student' ? { paddingBottom: '24px' } : undefined}>
+          {role === 'staff' ? (
+            <KdsBoard />
+          ) : role === 'admin' ? (
+            <AnalyticsDashboard />
+          ) : (
+            <>
+              {currentPage === 'home' && <StudentHome />}
+              {currentPage === 'menu' && <MenuGrid />}
+              {currentPage === 'orders' && <OrdersView />}
+              {currentPage === 'profile' && <SmartCardProfile />}
+            </>
+          )}
         </main>
 
-        <FloatingTrayBar />
-        <BottomNav />
+        {/* Floating Tray and Bottom Tabs ONLY for Students */}
+        {role === 'student' && <FloatingTrayBar />}
+        {role === 'student' && <BottomNav />}
       </div>
 
       {/* Modals & Overlays */}

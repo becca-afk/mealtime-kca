@@ -62,40 +62,18 @@ export const BottomNav: React.FC = () => {
         <span>Orders</span>
       </button>
 
-      {role === 'staff' ? (
-        <button
-          className={`nav-item ${currentPage === 'kds' ? 'active' : ''}`}
-          onClick={() => setCurrentPage('kds')}
-          aria-label="Kitchen KDS"
-          type="button"
-        >
-          <span style={{ fontSize: '1.25rem', lineHeight: 1 }}>👨‍🍳</span>
-          <span>KDS</span>
-        </button>
-      ) : role === 'admin' ? (
-        <button
-          className={`nav-item ${currentPage === 'analytics' ? 'active' : ''}`}
-          onClick={() => setCurrentPage('analytics')}
-          aria-label="Analytics"
-          type="button"
-        >
-          <span style={{ fontSize: '1.25rem', lineHeight: 1 }}>📊</span>
-          <span>Reports</span>
-        </button>
-      ) : (
-        <button
-          className={`nav-item ${currentPage === 'profile' ? 'active' : ''}`}
-          onClick={() => setCurrentPage('profile')}
-          aria-label="Profile"
-          type="button"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="22" height="22">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-            <circle cx="12" cy="7" r="4" />
-          </svg>
-          <span>Profile</span>
-        </button>
-      )}
+      <button
+        className={`nav-item ${currentPage === 'profile' ? 'active' : ''}`}
+        onClick={() => setCurrentPage('profile')}
+        aria-label="Profile"
+        type="button"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="22" height="22">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <span>Profile</span>
+      </button>
     </nav>
   );
 };

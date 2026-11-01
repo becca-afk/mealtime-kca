@@ -191,7 +191,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     };
     const handleOffline = () => {
       setIsOnline(false);
-      showToast('⚡ Offline Mode. Saved meals & MealCard pass remain active.', 'warning');
+      showToast('⚠️ Network connection lost. Active internet required to communicate with KCA servers.', 'error');
     };
 
     window.addEventListener('online', handleOnline);
@@ -350,6 +350,11 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     notes = '',
     mpesaPhone = '0712345678'
   ): Promise<boolean> => {
+    if (!isOnline) {
+      showToast('⚠️ No internet connection! MealTime requires an active online network to process orders.', 'error');
+      return false;
+    }
+
     if (cartCount === 0) {
       showToast('Your meal tray is empty!', 'warning');
       return false;

@@ -12,6 +12,8 @@ export const KdsBoard: React.FC = () => {
     currentStaff,
     menu,
     toggleItemAvailability,
+    logout,
+    isOnline,
   } = useApp();
 
   const [filter, setFilter] = useState<'all' | 'placed' | 'preparing' | 'ready'>('all');
@@ -29,8 +31,7 @@ export const KdsBoard: React.FC = () => {
   const countReady = activeOrders.filter(o => o.status === 'ready').length;
 
   const handleExit = () => {
-    setRole('student');
-    setCurrentPage('home');
+    logout();
   };
 
   return (
@@ -38,7 +39,26 @@ export const KdsBoard: React.FC = () => {
       {/* KDS Header Banner */}
       <div className="kds-hero">
         <div className="kds-hero-info">
-          <div className="kds-badge">👨‍🍳 Kitchen Staff Terminal · Restricted Access (SRS NFR-04)</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '6px' }}>
+            <div className="kds-badge">👨‍🍳 Kitchen Staff Terminal · Restricted Access (SRS NFR-04)</div>
+            <div
+              style={{
+                fontSize: '0.72rem',
+                fontWeight: 700,
+                background: isOnline ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)',
+                color: isOnline ? '#34D399' : '#F87171',
+                padding: '3px 8px',
+                borderRadius: '20px',
+                border: `1px solid ${isOnline ? 'rgba(16, 185, 129, 0.4)' : 'rgba(239, 68, 68, 0.4)'}`,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+              }}
+            >
+              <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: isOnline ? '#34D399' : '#F87171' }}></span>
+              <span>{isOnline ? '🟢 Live Cloud Server Connected' : '🔴 Server Offline'}</span>
+            </div>
+          </div>
           <h2>Kitchen Display System (KDS)</h2>
           <p id="kds-staff-status-sub" style={{ fontSize: '0.84rem', color: 'var(--gold-light)' }}>
             Authenticated Staff: <strong>{currentStaff?.name || 'Chef Otieno'}</strong> ({currentStaff?.email || 'chef.otieno@kcau.ac.ke'}) · <strong>Dual Auth Verified (PIN: 882041)</strong>
@@ -113,7 +133,7 @@ export const KdsBoard: React.FC = () => {
           </button>
 
           <button className="kds-exit-btn" onClick={handleExit} type="button">
-            <span>🚪 Exit Terminal</span>
+            <span>🚪 Sign Out Terminal</span>
           </button>
         </div>
       </div>

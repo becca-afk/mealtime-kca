@@ -156,7 +156,7 @@ export const SmartCardProfile: React.FC = () => {
       <div className="profile-section">
         <h3>Download MealTime Mobile App</h3>
         <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '12px', lineHeight: 1.5 }}>
-          Install MealTime directly on your device for instant pre-ordering, offline digital MealCard access, and live order alerts.
+          Install MealTime directly on your device for instant pre-ordering, digital MealCard access, and live order alerts.
         </p>
         <button
           className="topup-action-btn"
