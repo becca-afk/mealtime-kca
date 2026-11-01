@@ -42,7 +42,7 @@ export const AnalyticsDashboard: React.FC = () => {
         </div>
         <h2>Cafeteria Operations Analytics &amp; Admin Hub</h2>
         <p>
-          Logged in as Administrator: <strong>David Oloo (Supervisor &amp; Administrator)</strong> · admin.catering@kcau.ac.ke
+          Logged in as Administrator: <strong>John Doe (Supervisor &amp; Administrator)</strong> · admin.catering@kcau.ac.ke
         </p>
       </div>
 
@@ -358,7 +358,7 @@ export const AnalyticsDashboard: React.FC = () => {
               }}
             >
               <div>
-                <strong>David Oloo (Supervisor)</strong>
+                <strong>John Doe (Supervisor)</strong>
                 <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
                   ID: KCA-ADMIN-01 · admin.catering@kcau.ac.ke
                 </div>
@@ -407,7 +407,7 @@ export const AnalyticsDashboard: React.FC = () => {
               <div><strong>Most Popular Item:</strong> {SAMPLE_DAILY_REPORT.mostPopularItem} ({SAMPLE_DAILY_REPORT.popularItemOrders} orders)</div>
               <div><strong>Average Preparation Time:</strong> {SAMPLE_DAILY_REPORT.averagePrepTime}</div>
               <div>---------------------------------------------</div>
-              <div><strong>Generated For:</strong> David Oloo (Supervisor) &amp; Administrator</div>
+              <div><strong>Generated For:</strong> John Doe (Supervisor) &amp; Administrator</div>
               <div><strong>Status:</strong> Verified &amp; Reconciled with Safaricom Daraja</div>
             </div>
 

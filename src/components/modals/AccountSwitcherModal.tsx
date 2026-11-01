@@ -49,7 +49,7 @@ export const AccountSwitcherModal: React.FC<AccountSwitcherModalProps> = ({ isOp
   const handleSelectAdmin = () => {
     loginAdmin({
       id: 'KCA-ADMIN-01',
-      name: 'David Oloo (Supervisor / Admin)',
+      name: 'John Doe (Supervisor / Admin)',
       email: 'admin.catering@kcau.ac.ke',
       role: 'System Administrator',
     });
@@ -95,7 +95,7 @@ export const AccountSwitcherModal: React.FC<AccountSwitcherModalProps> = ({ isOp
                 ? `🎓 Student: ${currentUser?.name || 'Rebecca Nabusambya'} (${currentUser?.regNo || '2502692'})`
                 : role === 'staff'
                 ? `👨‍🍳 Kitchen Staff: ${currentStaff?.name || 'Chef Otieno'}`
-                : `🛡️ Administrator: ${currentAdmin?.name || 'David Oloo'}`}
+                : `🛡️ Administrator: ${currentAdmin?.name || 'John Doe'}`}
             </strong>
           </div>
 
@@ -175,7 +175,7 @@ export const AccountSwitcherModal: React.FC<AccountSwitcherModalProps> = ({ isOp
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span style={{ fontSize: '1.5rem' }}>🛡️</span>
               <div>
-                <strong style={{ fontSize: '0.9rem' }}>David Oloo (Supervisor / Admin)</strong>
+                <strong style={{ fontSize: '0.9rem' }}>John Doe (Supervisor / Admin)</strong>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                   admin.catering@kcau.ac.ke · System Administrator
                 </div>

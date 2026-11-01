@@ -51,7 +51,7 @@ export const LoginScreen: React.FC = () => {
         }
         loginAdmin({
           id: 'KCA-ADMIN-01',
-          name: 'David Oloo (Supervisor / Admin)',
+          name: 'John Doe (Supervisor / Admin)',
           email: emailInput,
           role: 'System Administrator',
         });
@@ -313,7 +313,7 @@ export const LoginScreen: React.FC = () => {
         </div>
 
         <p className="login-footer">
-          MealTime PWA · Programming Project STU 701 · Supervisor: David Oloo
+          MealTime PWA · Programming Project STU 701 · Supervisor: John Doe
         </p>
       </div>
     </div>
