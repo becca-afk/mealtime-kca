@@ -3,6 +3,26 @@ import { DEFAULT_MENU, DEFAULT_ORDERS, DEFAULT_STUDENT, DEFAULT_STATUS, DEFAULT_
 
 const API_BASE = '';
 
+function getStorage<T>(key: string, fallback: T): T {
+  if (typeof window === 'undefined') return fallback;
+  try {
+    const raw = localStorage.getItem(key);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {
+    // ignore
+  }
+  return fallback;
+}
+
+function setStorage<T>(key: string, val: T): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(key, JSON.stringify(val));
+  } catch (e) {
+    // ignore
+  }
+}
+
 async function safeFetch<T>(url: string, options?: RequestInit, fallback?: T): Promise<T> {
   try {
     const res = await fetch(url, options);
@@ -24,16 +44,44 @@ async function safeFetch<T>(url: string, options?: RequestInit, fallback?: T): P
 
 export const api = {
   async getStatus(): Promise<CafeteriaStatus> {
-    return safeFetch<CafeteriaStatus>(`${API_BASE}/api/status`, undefined, DEFAULT_STATUS);
+    const orders = getStorage<Order[]>('kca_orders_cache', DEFAULT_ORDERS);
+    const activeCount = orders.filter(o => o.status === 'placed' || o.status === 'preparing').length;
+    const now = new Date();
+    const hour = now.getHours();
+
+    let crowdStatus = 'Low Traffic 🟢';
+    let waitMin = Math.max(3, activeCount * 2);
+
+    if (hour >= 12 && hour <= 14) {
+      crowdStatus = 'Peak Lunch Rush 🔥';
+      waitMin = Math.max(12, activeCount * 3);
+    } else if ((hour >= 7 && hour <= 9) || (hour >= 17 && hour <= 18)) {
+      crowdStatus = 'Moderate Rush 🟡';
+      waitMin = Math.max(7, activeCount * 2.5);
+    }
+
+    const localStatus: CafeteriaStatus = {
+      open: true,
+      campus: 'KCA University Main Campus (Ruaraka)',
+      crowdStatus,
+      activeOrdersCount: activeCount,
+      estimatedWaitMins: Math.round(waitMin),
+      serverTime: now.toLocaleTimeString(),
+    };
+
+    return safeFetch<CafeteriaStatus>(`${API_BASE}/api/status`, undefined, localStatus);
   },
 
   async getMenu(): Promise<MenuItem[]> {
-    return safeFetch<MenuItem[]>(`${API_BASE}/api/menu`, undefined, DEFAULT_MENU);
+    const cachedMenu = getStorage<MenuItem[]>('kca_menu_cache', DEFAULT_MENU);
+    return safeFetch<MenuItem[]>(`${API_BASE}/api/menu`, undefined, cachedMenu);
   },
 
   async getOrders(regNo?: string): Promise<Order[]> {
+    const cachedOrders = getStorage<Order[]>('kca_orders_cache', DEFAULT_ORDERS);
+    const filtered = regNo ? cachedOrders.filter(o => o.regNo === regNo) : cachedOrders;
     const url = regNo ? `${API_BASE}/api/orders?regNo=${encodeURIComponent(regNo)}` : `${API_BASE}/api/orders`;
-    return safeFetch<Order[]>(url, undefined, DEFAULT_ORDERS);
+    return safeFetch<Order[]>(url, undefined, filtered);
   },
 
   async createOrder(payload: {
@@ -51,13 +99,18 @@ export const api = {
         body: JSON.stringify(payload),
       });
       if (res.ok) {
-        return await res.json();
+        const data = await res.json();
+        // Sync local cache
+        const orders = getStorage<Order[]>('kca_orders_cache', DEFAULT_ORDERS);
+        orders.unshift(data.order);
+        setStorage('kca_orders_cache', orders);
+        return data;
       }
     } catch (e) {
       // fallback
     }
 
-    // Local fallback creation
+    // Local fallback creation for GitHub Pages / offline
     const subtotal = payload.items.reduce((s, it) => s + it.price * it.qty, 0);
     const serviceFee = 5;
     const total = subtotal + serviceFee;
@@ -81,7 +134,28 @@ export const api = {
       paymentStatus: 'paid',
       pickupTime: payload.pickupTime || 'ASAP (~8 min)',
     };
-    return { success: true, order: mockOrder, walletBalance: null };
+
+    const orders = getStorage<Order[]>('kca_orders_cache', DEFAULT_ORDERS);
+    orders.unshift(mockOrder);
+    setStorage('kca_orders_cache', orders);
+
+    let currentBalance: number | null = null;
+    if (payload.payMethod === 'kca_wallet') {
+      const student = getStorage<StudentUser>('kca_student_user', DEFAULT_STUDENT);
+      student.walletBalance = Math.max(0, student.walletBalance - total);
+      if (!student.transactions) student.transactions = [];
+      student.transactions.unshift({
+        id: `TX-${Date.now()}`,
+        type: 'meal_payment',
+        amount: total,
+        date: 'Just now',
+        ref: `MEAL-${payload.items[0]?.name?.substring(0, 8) || 'DISH'}`,
+      });
+      setStorage('kca_student_user', student);
+      currentBalance = student.walletBalance;
+    }
+
+    return { success: true, order: mockOrder, walletBalance: currentBalance };
   },
 
   async updateOrderStatus(orderId: string, status: Order['status']): Promise<{ success: boolean; order?: Order }> {
@@ -92,10 +166,27 @@ export const api = {
         body: JSON.stringify({ status }),
       });
       if (res.ok) {
-        return await res.json();
+        const data = await res.json();
+        // Update local cache
+        const orders = getStorage<Order[]>('kca_orders_cache', DEFAULT_ORDERS);
+        const idx = orders.findIndex(o => o.id === orderId);
+        if (idx !== -1) {
+          orders[idx].status = status;
+          setStorage('kca_orders_cache', orders);
+        }
+        return data;
       }
     } catch (e) {
       // fallback
+    }
+
+    // Local fallback for GitHub Pages
+    const orders = getStorage<Order[]>('kca_orders_cache', DEFAULT_ORDERS);
+    const ord = orders.find(o => o.id === orderId);
+    if (ord) {
+      ord.status = status;
+      setStorage('kca_orders_cache', orders);
+      return { success: true, order: ord };
     }
     return { success: true };
   },
@@ -118,7 +209,7 @@ export const api = {
       }
       return data;
     } catch (err) {
-      // Offline fallback
+      // Offline fallback for GitHub Pages
       if (payload.role === 'staff') {
         const pin = (payload.staffPin || payload.password || '').trim();
         const validPins = ['882041', '1234', 'KCA-CHEF', 'kca-chef'];
@@ -138,17 +229,18 @@ export const api = {
         };
       } else {
         const regNo = payload.input.includes('@') ? payload.input.split('@')[0] : payload.input.replace(/[^a-zA-Z0-9]/g, '');
+        const savedStudent = getStorage<StudentUser>('kca_student_user', DEFAULT_STUDENT);
+        const student: StudentUser = {
+          ...savedStudent,
+          regNo: regNo || '2502692',
+          email: payload.input.includes('@') ? payload.input : `${regNo || '2502692'}@students.kcau.ac.ke`,
+          name: regNo === '2502692' ? 'Rebecca Nabusambya' : (savedStudent.name || `Student ${regNo}`),
+        };
+        setStorage('kca_student_user', student);
         return {
           success: true,
           role: 'student',
-          student: {
-            regNo: regNo || '2502692',
-            email: payload.input.includes('@') ? payload.input : `${regNo}@students.kcau.ac.ke`,
-            name: regNo === '2502692' ? 'James Mwangi' : `Student ${regNo}`,
-            department: 'School of Technology (BIT)',
-            walletBalance: 850,
-            transactions: DEFAULT_STUDENT.transactions,
-          },
+          student,
         };
       }
     }
@@ -168,7 +260,19 @@ export const api = {
       // fallback
     }
     const ref = 'MP-' + Math.random().toString(36).substring(2, 9).toUpperCase();
-    return { success: true, newBalance: 850 + amount, ref };
+    const student = getStorage<StudentUser>('kca_student_user', DEFAULT_STUDENT);
+    student.walletBalance += amount;
+    if (!student.transactions) student.transactions = [];
+    student.transactions.unshift({
+      id: `TX-${Date.now()}`,
+      type: 'topup',
+      amount,
+      phone: phone || '0712345678',
+      date: 'Just now',
+      ref,
+    });
+    setStorage('kca_student_user', student);
+    return { success: true, newBalance: student.walletBalance, ref };
   },
 
   async sendStkPush(phone: string, amount: number, regNo: string): Promise<{ success: boolean; customerMessage: string }> {
@@ -221,28 +325,58 @@ export const api = {
       comment: payload.comment,
       date: 'Just now',
     };
+    const feedbacks = getStorage<Feedback[]>('kca_feedbacks_cache', DEFAULT_FEEDBACKS);
+    feedbacks.unshift(fb);
+    setStorage('kca_feedbacks_cache', feedbacks);
+
     return { success: true, feedback: fb, updatedRating: 4.8 };
   },
 
   async getDashboard(): Promise<DashboardData> {
-    return safeFetch<DashboardData>(`${API_BASE}/api/dashboard`, undefined, {
-      orders: DEFAULT_ORDERS,
-      todayOrders: DEFAULT_ORDERS,
-      revenue: 330,
-      cost: 165,
-      profit: 165,
-      pending: 1,
-      ready: 0,
-    });
+    const orders = getStorage<Order[]>('kca_orders_cache', DEFAULT_ORDERS);
+    const today = new Date();
+    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const todayOrders = orders.filter((order: any) => new Date(order.createdAt) >= startOfDay);
+    const revenue = todayOrders.reduce((sum: number, order: any) => sum + (Number(order.total) || 0), 0);
+    const ingredientCost = todayOrders.reduce((sum: number, order: any) => {
+      const itemCost = (order.items || []).reduce((total: number, item: any) => {
+        const unitPrice = Number(item.price) || 0;
+        const qty = Number(item.qty) || 1;
+        return total + (unitPrice * qty * 0.55);
+      }, 0);
+      return sum + itemCost;
+    }, 0);
+
+    const localDash: DashboardData = {
+      orders,
+      todayOrders,
+      revenue,
+      cost: Math.round(ingredientCost),
+      profit: Math.round(revenue - ingredientCost),
+      pending: orders.filter((o: any) => o.status !== 'picked_up').length,
+      ready: orders.filter((o: any) => o.status === 'ready').length,
+    };
+
+    return safeFetch<DashboardData>(`${API_BASE}/api/dashboard`, undefined, localDash);
   },
 
   async getAnalytics(): Promise<AnalyticsData> {
-    return safeFetch<AnalyticsData>(`${API_BASE}/api/analytics`, undefined, {
-      ordersToday: DEFAULT_ORDERS.length,
-      avgRating: 4.4,
+    const orders = getStorage<Order[]>('kca_orders_cache', DEFAULT_ORDERS);
+    const feedbacks = getStorage<Feedback[]>('kca_feedbacks_cache', DEFAULT_FEEDBACKS);
+    const menu = getStorage<MenuItem[]>('kca_menu_cache', DEFAULT_MENU);
+
+    const avgRating = feedbacks.length
+      ? (feedbacks.reduce((a, b) => a + b.rating, 0) / feedbacks.length).toFixed(1)
+      : '4.8';
+
+    const localAnalytics: AnalyticsData = {
+      ordersToday: orders.length,
+      avgRating: parseFloat(avgRating),
       lowRatedCount: 0,
       lowRatedItems: [],
-      topSellers: DEFAULT_MENU.slice(0, 4),
-    });
+      topSellers: menu.slice(0, 4),
+    };
+
+    return safeFetch<AnalyticsData>(`${API_BASE}/api/analytics`, undefined, localAnalytics);
   },
 };
