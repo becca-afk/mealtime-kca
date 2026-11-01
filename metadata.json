@@ -1,0 +1,8 @@
+{
+  "name": "MealTime KCA",
+  "description": "Official KCA University campus dining app: pre-order meals, skip queues, pay via M-Pesa or Student Wallet, smart Comrade Budget Optimizer, and Kitchen Display System.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
