@@ -7,19 +7,29 @@ function getStorage<T>(key: string, fallback: T): T {
   if (typeof window === 'undefined') return fallback;
   try {
     const raw = localStorage.getItem(key);
-    if (raw) return JSON.parse(raw);
-  } catch (e) {
-    // ignore
+    if (!raw) return fallback;
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(fallback)) {
+      return Array.isArray(parsed) ? (parsed as T) : fallback;
+    }
+    if (fallback !== null && typeof fallback === 'object') {
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        return { ...(fallback as object), ...parsed } as T;
+      }
+      return fallback;
+    }
+    return parsed !== undefined && parsed !== null ? (parsed as T) : fallback;
+  } catch {
+    return fallback;
   }
-  return fallback;
 }
 
 function setStorage<T>(key: string, val: T): void {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(key, JSON.stringify(val));
-  } catch (e) {
-    // ignore
+  } catch {
+    // ignore storage quota or iframe restrictions
   }
 }
 

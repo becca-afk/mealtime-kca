@@ -70,10 +70,15 @@ export const App: React.FC = () => {
               <AnalyticsDashboard />
             ) : (
               <>
-                {currentPage === 'home' && <StudentHome />}
-                {currentPage === 'menu' && <MenuGrid />}
-                {currentPage === 'orders' && <OrdersView />}
-                {currentPage === 'profile' && <SmartCardProfile />}
+                {currentPage === 'menu' ? (
+                  <MenuGrid />
+                ) : currentPage === 'orders' ? (
+                  <OrdersView />
+                ) : currentPage === 'profile' ? (
+                  <SmartCardProfile />
+                ) : (
+                  <StudentHome />
+                )}
               </>
             )}
           </main>

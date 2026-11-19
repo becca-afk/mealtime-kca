@@ -130,6 +130,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   const setRole = useCallback((nextRole: Role) => {
     setRoleState(nextRole);
+    setCurrentPage(nextRole === 'staff' ? 'kds' : nextRole === 'admin' ? 'analytics' : 'home');
     safeSessionSet(SESSION_STORAGE_KEY, nextRole);
   }, []);
 
