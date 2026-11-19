@@ -11964,15 +11964,26 @@ function getStorage(key, fallback) {
 	if (typeof window === "undefined") return fallback;
 	try {
 		const raw = localStorage.getItem(key);
-		if (raw) return JSON.parse(raw);
-	} catch (e) {}
-	return fallback;
+		if (!raw) return fallback;
+		const parsed = JSON.parse(raw);
+		if (Array.isArray(fallback)) return Array.isArray(parsed) ? parsed : fallback;
+		if (fallback !== null && typeof fallback === "object") {
+			if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) return {
+				...fallback,
+				...parsed
+			};
+			return fallback;
+		}
+		return parsed !== void 0 && parsed !== null ? parsed : fallback;
+	} catch {
+		return fallback;
+	}
 }
 function setStorage(key, val) {
 	if (typeof window === "undefined") return;
 	try {
 		localStorage.setItem(key, JSON.stringify(val));
-	} catch (e) {}
+	} catch {}
 }
 async function safeFetch(url, options, fallback) {
 	try {
@@ -12479,6 +12490,7 @@ var AppProvider = ({ children }) => {
 	const [currentPage, setCurrentPage] = (0, import_react.useState)(initialSession.currentPage);
 	const setRole = (0, import_react.useCallback)((nextRole) => {
 		setRoleState(nextRole);
+		setCurrentPage(nextRole === "staff" ? "kds" : nextRole === "admin" ? "analytics" : "home");
 		safeSessionSet(SESSION_STORAGE_KEY, nextRole);
 	}, []);
 	const [menu, setMenu] = (0, import_react.useState)(DEFAULT_MENU);
@@ -19345,12 +19357,7 @@ var App = () => {
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
 						className: "app-main",
 						style: role !== "student" ? { paddingBottom: "24px" } : void 0,
-						children: role === "staff" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(KdsBoard, {}) : role === "admin" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnalyticsDashboard, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-							currentPage === "home" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StudentHome, {}),
-							currentPage === "menu" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MenuGrid, {}),
-							currentPage === "orders" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(OrdersView, {}),
-							currentPage === "profile" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SmartCardProfile, {})
-						] })
+						children: role === "staff" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(KdsBoard, {}) : role === "admin" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnalyticsDashboard, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: currentPage === "menu" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MenuGrid, {}) : currentPage === "orders" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(OrdersView, {}) : currentPage === "profile" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SmartCardProfile, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(StudentHome, {}) })
 					}),
 					role === "student" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FloatingTrayBar, {}),
 					role === "student" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BottomNav, {}),
@@ -19369,8 +19376,106 @@ var App = () => {
 	});
 };
 // src/main.tsx
+var AppErrorBoundary = class extends import_react.Component {
+	state = {
+		hasError: false,
+		message: ""
+	};
+	static getDerivedStateFromError(err) {
+		return {
+			hasError: true,
+			message: err instanceof Error ? err.message : "Unexpected display error"
+		};
+	}
+	handleReset = () => {
+		try {
+			sessionStorage.removeItem("mealtime_session");
+			localStorage.removeItem("kca_orders_cache");
+			localStorage.removeItem("kca_menu_cache");
+			localStorage.removeItem("kca_feedbacks_cache");
+			localStorage.removeItem("kca_student_user");
+		} catch {}
+		window.location.reload();
+	};
+	render() {
+		if (this.state.hasError) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			style: {
+				minHeight: "100vh",
+				background: "linear-gradient(165deg, #5c0017 0%, #800020 100%)",
+				color: "#fff",
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "center",
+				padding: "24px",
+				fontFamily: "Inter, system-ui, sans-serif"
+			},
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				style: {
+					maxWidth: "420px",
+					width: "100%",
+					background: "#fff",
+					color: "#1e293b",
+					borderRadius: "20px",
+					padding: "28px 24px",
+					textAlign: "center",
+					boxShadow: "0 20px 50px rgba(0,0,0,0.35)"
+				},
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						style: {
+							fontSize: "2.2rem",
+							marginBottom: "10px"
+						},
+						children: "🍽️"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+						style: {
+							fontSize: "1.25rem",
+							fontWeight: 800,
+							color: "#800020",
+							marginBottom: "8px"
+						},
+						children: "MealTime Needs a Fresh Reload"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+						style: {
+							fontSize: "0.88rem",
+							color: "#475569",
+							marginBottom: "18px",
+							lineHeight: 1.5
+						},
+						children: [
+							"Saved browser cache conflicted with this update (",
+							this.state.message,
+							"). Resetting local session will restore the Login screen."
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						onClick: this.handleReset,
+						style: {
+							width: "100%",
+							padding: "12px 16px",
+							borderRadius: "12px",
+							background: "#800020",
+							color: "#fff",
+							fontWeight: 700,
+							fontSize: "0.95rem",
+							cursor: "pointer"
+						},
+						children: "Reset Session & Reload"
+					})
+				]
+			})
+		});
+		return this.props.children;
+	}
+};
 var rootEl = document.getElementById("root");
-if (rootEl) import_client.createRoot(rootEl).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(App, {}) }) }));
+if (rootEl) {
+	window.__MEALTIME_MOUNTED__ = true;
+	import_client.createRoot(rootEl).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppErrorBoundary, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppProvider, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(App, {}) }) }) }));
+}
 if (typeof window !== "undefined") window.addEventListener("load", () => {
 	if ("serviceWorker" in navigator) navigator.serviceWorker.getRegistrations().then((registrations) => {
 		registrations.forEach((registration) => {
