@@ -1,5 +1,6 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
+import { DEFAULT_STUDENT } from '../../data/defaultData';
 
 interface AccountSwitcherModalProps {
   isOpen: boolean;
@@ -22,49 +23,50 @@ export const AccountSwitcherModal: React.FC<AccountSwitcherModalProps> = ({ isOp
   if (!isOpen) return null;
 
   const handleSelectStudent = () => {
-    loginStudent({
-      regNo: '2502692',
-      email: '2502692@students.kcau.ac.ke',
-      name: 'Rebecca Nabusambya',
-      department: 'Diploma in Information Technology (STU 701)',
-      walletBalance: 850,
-      transactions: [],
-    });
+    loginStudent(
+      currentUser || {
+        ...DEFAULT_STUDENT,
+      }
+    );
     setCurrentPage('home');
     onClose();
   };
 
   const handleSelectStaff = () => {
-    loginStaff({
-      id: 'KCA-STAFF-08',
-      name: 'Chef Otieno',
-      role: 'Kitchen Terminal Dispatcher',
-      email: 'chef.otieno@kcau.ac.ke',
-      department: 'KCA Catering & Cafeteria Services',
-    });
+    loginStaff(
+      currentStaff || {
+        id: 'KCA-STAFF-08',
+        name: 'Chef Otieno',
+        role: 'Kitchen Terminal Dispatcher',
+        email: 'chef.otieno@kcau.ac.ke',
+        department: 'KCA Catering & Cafeteria Services',
+      }
+    );
     setCurrentPage('kds');
     onClose();
   };
 
   const handleSelectAdmin = () => {
-    loginAdmin({
-      id: 'KCA-ADMIN-01',
-      name: 'John Doe (Supervisor / Admin)',
-      email: 'admin.catering@kcau.ac.ke',
-      role: 'System Administrator',
-    });
+    loginAdmin(
+      currentAdmin || {
+        id: 'KCA-ADMIN-01',
+        name: 'David Oloo (Supervisor / Admin)',
+        email: 'admin.catering@kcau.ac.ke',
+        role: 'System Administrator',
+      }
+    );
     setCurrentPage('analytics');
     onClose();
   };
 
   const handleLogout = () => {
-    logout();
     onClose();
+    logout();
   };
 
   return (
-    <div className="modal-overlay" style={{ zIndex: 10000 }}>
-      <div className="modal-sheet" style={{ maxWidth: '420px', padding: '20px' }}>
+    <div className="modal-overlay" style={{ zIndex: 10000 }} onClick={onClose}>
+      <div className="modal-sheet" style={{ maxWidth: '420px', padding: '20px' }} onClick={e => e.stopPropagation()}>
         <div className="modal-handle"></div>
         <div className="modal-header">
           <div>
@@ -95,7 +97,7 @@ export const AccountSwitcherModal: React.FC<AccountSwitcherModalProps> = ({ isOp
                 ? `🎓 Student: ${currentUser?.name || 'Rebecca Nabusambya'} (${currentUser?.regNo || '2502692'})`
                 : role === 'staff'
                 ? `👨‍🍳 Kitchen Staff: ${currentStaff?.name || 'Chef Otieno'}`
-                : `🛡️ Administrator: ${currentAdmin?.name || 'John Doe'}`}
+                : `🛡️ Administrator: ${currentAdmin?.name || 'David Oloo'}`}
             </strong>
           </div>
 
@@ -104,9 +106,12 @@ export const AccountSwitcherModal: React.FC<AccountSwitcherModalProps> = ({ isOp
           </p>
 
           {/* Student Persona */}
-          <div
+          <button
+            type="button"
             onClick={handleSelectStudent}
             style={{
+              width: '100%',
+              textAlign: 'left',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -121,19 +126,22 @@ export const AccountSwitcherModal: React.FC<AccountSwitcherModalProps> = ({ isOp
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span style={{ fontSize: '1.5rem' }}>🎓</span>
               <div>
-                <strong style={{ fontSize: '0.9rem' }}>Rebecca Nabusambya</strong>
+                <strong style={{ fontSize: '0.9rem', color: 'var(--text)' }}>Rebecca Nabusambya</strong>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                   Student Reg: 2502692 · KCA Student Portal
                 </div>
               </div>
             </div>
             {role === 'student' && <span style={{ color: 'var(--maroon)', fontWeight: 800, fontSize: '0.8rem' }}>ACTIVE</span>}
-          </div>
+          </button>
 
           {/* Kitchen Staff Persona */}
-          <div
+          <button
+            type="button"
             onClick={handleSelectStaff}
             style={{
+              width: '100%',
+              textAlign: 'left',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -148,19 +156,22 @@ export const AccountSwitcherModal: React.FC<AccountSwitcherModalProps> = ({ isOp
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span style={{ fontSize: '1.5rem' }}>👨‍🍳</span>
               <div>
-                <strong style={{ fontSize: '0.9rem' }}>Chef Otieno (Kitchen KDS)</strong>
+                <strong style={{ fontSize: '0.9rem', color: 'var(--text)' }}>Chef Otieno (Kitchen KDS)</strong>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                   chef.otieno@kcau.ac.ke · 6-Digit PIN: 882041
                 </div>
               </div>
             </div>
             {role === 'staff' && <span style={{ color: '#D97706', fontWeight: 800, fontSize: '0.8rem' }}>ACTIVE</span>}
-          </div>
+          </button>
 
           {/* Administrator Persona */}
-          <div
+          <button
+            type="button"
             onClick={handleSelectAdmin}
             style={{
+              width: '100%',
+              textAlign: 'left',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -175,14 +186,14 @@ export const AccountSwitcherModal: React.FC<AccountSwitcherModalProps> = ({ isOp
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span style={{ fontSize: '1.5rem' }}>🛡️</span>
               <div>
-                <strong style={{ fontSize: '0.9rem' }}>John Doe (Supervisor / Admin)</strong>
+                <strong style={{ fontSize: '0.9rem', color: 'var(--text)' }}>David Oloo (Supervisor / Admin)</strong>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                   admin.catering@kcau.ac.ke · System Administrator
                 </div>
               </div>
             </div>
             {role === 'admin' && <span style={{ color: '#2563EB', fontWeight: 800, fontSize: '0.8rem' }}>ACTIVE</span>}
-          </div>
+          </button>
         </div>
 
         <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>

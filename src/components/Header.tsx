@@ -24,7 +24,7 @@ export const Header: React.FC = () => {
     if (role === 'staff') {
       return { icon: '👨‍🍳', label: 'Kitchen KDS', name: currentStaff?.name || 'Chef Otieno' };
     }
-    return { icon: '🛡️', label: 'Admin Hub', name: currentAdmin?.name || 'John Doe' };
+    return { icon: '🛡️', label: 'Admin Hub', name: currentAdmin?.name || 'David Oloo' };
   };
 
   const badge = getRoleBadge();
@@ -32,7 +32,7 @@ export const Header: React.FC = () => {
   const userInitials = () => {
     if (role === 'student') return 'RN';
     if (role === 'staff') return 'CO';
-    return 'JD';
+    return 'DO';
   };
 
   return (

@@ -24,8 +24,8 @@ export const WalletTopupModal: React.FC = () => {
   };
 
   return (
-    <div className="modal-overlay" id="topup-modal">
-      <div className="modal-sheet topup-sheet">
+    <div className="modal-overlay" id="topup-modal" onClick={() => setIsTopupOpen(false)}>
+      <div className="modal-sheet topup-sheet" onClick={e => e.stopPropagation()}>
         <div className="modal-handle"></div>
         <div className="modal-header">
           <div>

@@ -441,6 +441,19 @@ app.get('/api/analytics', (req, res) => {
   });
 });
 
+// 10. Downloadable Final Project Report & User Manual (.docx)
+app.get(['/api/download/report-manual', '/MealTime_Final_Report_and_User_Manual.docx'], (req, res) => {
+  const docPath = path.join(__dirname, 'MealTime_Final_Report_and_User_Manual.docx');
+  if (!fs.existsSync(docPath)) {
+    return res.status(404).json({ error: 'Final Report & User Manual (.docx) not found' });
+  }
+  res.setHeader(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  );
+  res.download(docPath, 'MealTime_Final_Report_and_User_Manual.docx');
+});
+
 async function startServer() {
   const isDev = process.env.NODE_ENV !== 'production';
 

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
-import { MenuItem } from '../types';
+import { calculateBudgetCombo } from '../utils/mealtimeLogic';
 
 export const ComradeBudgetOptimizer: React.FC = () => {
   const { menu, addToCart, setIsCartOpen, showToast } = useApp();
@@ -14,50 +14,7 @@ export const ComradeBudgetOptimizer: React.FC = () => {
   ];
 
   // Algorithmic optimization per SRS Section 4.11
-  const combo = useMemo(() => {
-    const available = menu.filter(m => m.available && m.price <= budget);
-
-    if (available.length === 0) {
-      return { items: [] as MenuItem[], total: 0, calories: 0, protein: 0 };
-    }
-
-    if (budget <= 50) {
-      const topSingle = [...available].sort((a, b) => b.rating - a.rating)[0];
-      return topSingle
-        ? { items: [topSingle], total: topSingle.price, calories: topSingle.calories, protein: topSingle.protein }
-        : { items: [], total: 0, calories: 0, protein: 0 };
-    }
-
-    let bestPair: [MenuItem, MenuItem] | null = null;
-    let highestRating = -1;
-
-    for (let i = 0; i < available.length; i++) {
-      for (let j = i + 1; j < available.length; j++) {
-        const sum = available[i].price + available[j].price;
-        if (sum <= budget) {
-          const avgScore = (available[i].rating + available[j].rating) / 2;
-          if (avgScore > highestRating) {
-            highestRating = avgScore;
-            bestPair = [available[i], available[j]];
-          }
-        }
-      }
-    }
-
-    if (bestPair) {
-      const total = bestPair[0].price + bestPair[1].price;
-      const calories = bestPair[0].calories + bestPair[1].calories;
-      const protein = bestPair[0].protein + bestPair[1].protein;
-      return { items: bestPair, total, calories, protein };
-    }
-
-    const bestSingle = [...available].sort((a, b) => b.rating - a.rating)[0];
-    if (bestSingle) {
-      return { items: [bestSingle], total: bestSingle.price, calories: bestSingle.calories, protein: bestSingle.protein };
-    }
-
-    return { items: [], total: 0, calories: 0, protein: 0 };
-  }, [menu, budget]);
+  const combo = useMemo(() => calculateBudgetCombo(menu, budget), [menu, budget]);
 
   const handleAddCombo = () => {
     if (combo.items.length === 0) {
@@ -65,7 +22,7 @@ export const ComradeBudgetOptimizer: React.FC = () => {
       return;
     }
     combo.items.forEach(item => {
-      addToCart(item.id, 1);
+      addToCart(item.id, 1, true);
     });
     showToast(`Added combo: ${combo.items.map(i => i.name).join(' + ')}!`, 'success');
     setIsCartOpen(true);

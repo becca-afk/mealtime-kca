@@ -9,8 +9,8 @@ export const QrPassModal: React.FC = () => {
   const isReady = qrOrder.status === 'ready';
 
   return (
-    <div className="modal-overlay" id="qr-modal">
-      <div className="modal-sheet qr-sheet" style={{ maxWidth: '400px' }}>
+    <div className="modal-overlay" id="qr-modal" onClick={() => setIsQrOpen(false)}>
+      <div className="modal-sheet qr-sheet" style={{ maxWidth: '400px' }} onClick={e => e.stopPropagation()}>
         <div className="modal-handle"></div>
         <div className="modal-header">
           <div>

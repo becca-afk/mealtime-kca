@@ -132,7 +132,7 @@
       "price": 200,
       "calories": 620,
       "protein": 35,
-      "rating": 4.7,
+      "rating": 5,
       "orders": 41,
       "category": "snack",
       "tags": [
@@ -255,7 +255,7 @@
       "desc": "100% freshly pressed ripe mango juice without added preservatives.",
       "badge": "new",
       "available": true,
-      "soldCount": 25
+      "soldCount": 27
     },
     {
       "id": 12,
@@ -293,7 +293,7 @@
       "desc": "Steaming hot brewed Kenyan tea infused with ginger and cardamom.",
       "badge": null,
       "available": true,
-      "soldCount": 60
+      "soldCount": 62
     },
     {
       "id": 14,
@@ -398,7 +398,7 @@
       "id": "KCA-2024-0046",
       "ticketNo": "#KCA-046",
       "regNo": "2502692",
-      "studentName": "Student 2502692",
+      "studentName": "Rebecca Nabusambya",
       "items": [
         {
           "id": 5,
@@ -413,13 +413,14 @@
       "status": "picked_up",
       "createdAt": "2026-09-29T04:18:06.568Z",
       "pickupCode": "QR-KCA-046-OK",
-      "notes": "No mayonnaise please"
+      "notes": "No mayonnaise please",
+      "reviewed": true
     },
     {
       "id": "KCA-2024-0047",
       "ticketNo": "#KCA-047",
       "regNo": "2502692",
-      "studentName": "Student 2502692",
+      "studentName": "Rebecca Nabusambya",
       "items": [
         {
           "id": 1,
@@ -442,8 +443,8 @@
     "2502692": {
       "regNo": "2502692",
       "email": "2502692@students.kcau.ac.ke",
-      "name": "James Mwangi",
-      "department": "School of Technology (BIT)",
+      "name": "Rebecca Nabusambya",
+      "department": "Diploma in Information Technology (STU 701)",
       "walletBalance": 850,
       "transactions": [
         {

@@ -3,7 +3,17 @@ import { useApp } from '../context/AppContext';
 import { SAMPLE_DAILY_REPORT } from '../data/defaultData';
 
 export const AnalyticsDashboard: React.FC = () => {
-  const { orders, menu, feedbacks, showToast } = useApp();
+  const {
+    orders,
+    menu,
+    feedbacks,
+    showToast,
+    currentUser,
+    currentStaff,
+    loginStudent,
+    loginStaff,
+    logout,
+  } = useApp();
   const [showExportModal, setShowExportModal] = useState(false);
 
   const totalMeals = orders.length;
@@ -42,8 +52,76 @@ export const AnalyticsDashboard: React.FC = () => {
         </div>
         <h2>Cafeteria Operations Analytics &amp; Admin Hub</h2>
         <p>
-          Logged in as Administrator: <strong>John Doe (Supervisor &amp; Administrator)</strong> · admin.catering@kcau.ac.ke
+          Logged in as Administrator: <strong>David Oloo (Supervisor &amp; Administrator)</strong> · admin.catering@kcau.ac.ke
         </p>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '12px', position: 'relative', zIndex: 2 }}>
+          <button
+            type="button"
+            onClick={() =>
+              loginStudent(
+                currentUser || {
+                  regNo: '2502692',
+                  email: '2502692@students.kcau.ac.ke',
+                  name: 'Rebecca Nabusambya',
+                  department: 'Diploma in Information Technology (STU 701)',
+                  walletBalance: 850,
+                  transactions: [],
+                }
+              )
+            }
+            style={{
+              padding: '7px 14px',
+              borderRadius: '999px',
+              background: 'rgba(255,255,255,0.16)',
+              border: '1px solid rgba(255,255,255,0.35)',
+              color: '#FFF',
+              fontSize: '0.78rem',
+              fontWeight: 700,
+            }}
+          >
+            🎓 Switch to Student View
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              loginStaff(
+                currentStaff || {
+                  id: 'KCA-STAFF-08',
+                  name: 'Chef Otieno',
+                  role: 'Kitchen Terminal Dispatcher',
+                  email: 'chef.otieno@kcau.ac.ke',
+                  department: 'KCA Catering & Cafeteria Services',
+                }
+              )
+            }
+            style={{
+              padding: '7px 14px',
+              borderRadius: '999px',
+              background: 'rgba(255,255,255,0.16)',
+              border: '1px solid rgba(255,255,255,0.35)',
+              color: '#FFF',
+              fontSize: '0.78rem',
+              fontWeight: 700,
+            }}
+          >
+            👨‍🍳 Switch to Kitchen KDS
+          </button>
+          <button
+            type="button"
+            onClick={logout}
+            style={{
+              padding: '7px 14px',
+              borderRadius: '999px',
+              background: 'rgba(239, 68, 68, 0.9)',
+              border: '1px solid rgba(255,255,255,0.3)',
+              color: '#FFF',
+              fontSize: '0.78rem',
+              fontWeight: 700,
+            }}
+          >
+            🚪 Sign Out
+          </button>
+        </div>
       </div>
 
       <div id="page-analytics-body" style={{ padding: '16px' }}>
@@ -358,7 +436,7 @@ export const AnalyticsDashboard: React.FC = () => {
               }}
             >
               <div>
-                <strong>John Doe (Supervisor)</strong>
+                <strong>David Oloo (Supervisor)</strong>
                 <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
                   ID: KCA-ADMIN-01 · admin.catering@kcau.ac.ke
                 </div>
@@ -407,7 +485,7 @@ export const AnalyticsDashboard: React.FC = () => {
               <div><strong>Most Popular Item:</strong> {SAMPLE_DAILY_REPORT.mostPopularItem} ({SAMPLE_DAILY_REPORT.popularItemOrders} orders)</div>
               <div><strong>Average Preparation Time:</strong> {SAMPLE_DAILY_REPORT.averagePrepTime}</div>
               <div>---------------------------------------------</div>
-              <div><strong>Generated For:</strong> John Doe (Supervisor) &amp; Administrator</div>
+              <div><strong>Generated For:</strong> David Oloo (Supervisor) &amp; Administrator</div>
               <div><strong>Status:</strong> Verified &amp; Reconciled with Safaricom Daraja</div>
             </div>
 

@@ -389,7 +389,7 @@ export const DEFAULT_STAFF: StaffUser = {
 
 export const DEFAULT_ADMIN: AdminUser = {
   id: 'KCA-ADMIN-01',
-  name: 'John Doe (Supervisor / Admin)',
+  name: 'David Oloo (Supervisor / Admin)',
   email: 'admin.catering@kcau.ac.ke',
   role: 'System Administrator',
 };

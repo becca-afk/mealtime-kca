@@ -50,9 +50,14 @@ export const LoginScreen: React.FC = () => {
           setLoading(false);
           return;
         }
+        if (!password.trim()) {
+          setError('Please enter the administrator password.');
+          setLoading(false);
+          return;
+        }
         loginAdmin({
           id: 'KCA-ADMIN-01',
-          name: 'John Doe (Supervisor / Admin)',
+          name: 'David Oloo (Supervisor / Admin)',
           email: emailInput,
           role: 'System Administrator',
         });
@@ -314,7 +319,7 @@ export const LoginScreen: React.FC = () => {
         </div>
 
         <p className="login-footer">
-          MealTime PWA · Programming Project STU 701 · Supervisor: John Doe
+          MealTime Web App · Programming Project STU 701 · Supervisor: David Oloo
         </p>
       </div>
     </div>

@@ -15,12 +15,29 @@ if (rootEl) {
   );
 }
 
-// Register Progressive Web App Service Worker for offline support & installability
-if ('serviceWorker' in navigator) {
+// Online-only policy: unregister any legacy service worker and purge old CacheStorage entries
+if (typeof window !== 'undefined') {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(() => {
-      // Ignore if not supported in dev or iframe
-    });
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .getRegistrations()
+        .then((registrations) => {
+          registrations.forEach((registration) => {
+            registration.unregister().catch(() => {});
+          });
+        })
+        .catch(() => {});
+    }
+    if ('caches' in window) {
+      caches
+        .keys()
+        .then((names) => {
+          names.forEach((name) => {
+            caches.delete(name).catch(() => {});
+          });
+        })
+        .catch(() => {});
+    }
   });
 }
 

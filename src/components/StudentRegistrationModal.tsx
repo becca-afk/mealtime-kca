@@ -41,8 +41,8 @@ export const StudentRegistrationModal: React.FC = () => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-sheet" style={{ maxWidth: '440px' }}>
+    <div className="modal-overlay" onClick={() => setIsRegisterOpen(false)}>
+      <div className="modal-sheet" style={{ maxWidth: '440px' }} onClick={e => e.stopPropagation()}>
         <div className="modal-handle"></div>
         <div className="modal-header">
           <div>

@@ -32,8 +32,15 @@ export const ItemDetailModal: React.FC = () => {
   };
 
   return (
-    <div className="modal-overlay" id="item-modal">
-      <div className="modal-sheet item-sheet" style={{ maxWidth: '480px' }}>
+    <div
+      className="modal-overlay"
+      id="item-modal"
+      onClick={() => {
+        setIsItemDetailOpen(false);
+        setQty(1);
+      }}
+    >
+      <div className="modal-sheet item-sheet" style={{ maxWidth: '480px' }} onClick={e => e.stopPropagation()}>
         <div className="modal-handle"></div>
         <button
           className="modal-close item-close"

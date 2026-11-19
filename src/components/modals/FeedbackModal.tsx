@@ -24,7 +24,7 @@ export const FeedbackModal: React.FC = () => {
     if (!comment.trim()) return;
 
     setLoading(true);
-    await submitReview(
+    const ok = await submitReview(
       feedbackTarget.orderId,
       feedbackTarget.item.id,
       rating,
@@ -32,11 +32,16 @@ export const FeedbackModal: React.FC = () => {
       comment
     );
     setLoading(false);
+    if (ok) {
+      setComment('');
+      setRating(5);
+      setEmoji(5);
+    }
   };
 
   return (
-    <div className="modal-overlay" id="feedback-modal">
-      <div className="modal-sheet feedback-sheet">
+    <div className="modal-overlay" id="feedback-modal" onClick={() => setIsFeedbackOpen(false)}>
+      <div className="modal-sheet feedback-sheet" onClick={e => e.stopPropagation()}>
         <div className="modal-handle"></div>
         <div className="modal-header">
           <div>

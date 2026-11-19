@@ -3,6 +3,16 @@ import { MenuItem, Order, StudentUser, StaffUser, AdminUser, Role, CafeteriaStat
 import { DEFAULT_MENU, DEFAULT_ORDERS, DEFAULT_STUDENT, DEFAULT_STAFF, DEFAULT_ADMIN, DEFAULT_STATUS, DEFAULT_FEEDBACKS } from '../data/defaultData';
 import { api } from '../services/api';
 import { playOrderReadyChime } from '../utils/audio';
+import {
+  SESSION_STORAGE_KEY,
+  safeSessionGet,
+  safeSessionSet,
+  safeSessionRemove,
+  getInitialSessionState,
+  calculateOrderTotals,
+  canPayWithWallet,
+  validateReviewComment,
+} from '../utils/mealtimeLogic';
 
 export interface ToastMessage {
   id: string;
@@ -39,7 +49,7 @@ interface AppContextType {
   menu: MenuItem[];
   toggleItemAvailability: (itemId: number) => void;
   cart: { [id: number]: number };
-  addToCart: (itemId: number, qty?: number) => void;
+  addToCart: (itemId: number, qty?: number, silent?: boolean) => void;
   removeFromCart: (itemId: number) => void;
   clearCart: () => void;
   cartCount: number;
@@ -106,12 +116,22 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [role, setRole] = useState<Role>('student');
+  const initialSession = getInitialSessionState(
+    safeSessionGet(SESSION_STORAGE_KEY),
+    typeof window !== 'undefined' ? window.location.search : ''
+  );
+
+  const [role, setRoleState] = useState<Role>(initialSession.role);
   const [currentUser, setCurrentUser] = useState<StudentUser | null>(DEFAULT_STUDENT);
   const [currentStaff, setCurrentStaff] = useState<StaffUser | null>(DEFAULT_STAFF);
   const [currentAdmin, setCurrentAdmin] = useState<AdminUser | null>(DEFAULT_ADMIN);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
-  const [currentPage, setCurrentPage] = useState<string>('home');
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(initialSession.isLoggedIn);
+  const [currentPage, setCurrentPage] = useState<string>(initialSession.currentPage);
+
+  const setRole = useCallback((nextRole: Role) => {
+    setRoleState(nextRole);
+    safeSessionSet(SESSION_STORAGE_KEY, nextRole);
+  }, []);
 
   const [menu, setMenu] = useState<MenuItem[]>(DEFAULT_MENU);
   const [cart, setCart] = useState<{ [id: number]: number }>({});
@@ -195,6 +215,24 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     };
   }, []);
 
+  // Hydrate live cafeteria menu, orders, and queue status from API on mount
+  useEffect(() => {
+    let active = true;
+    Promise.all([api.getMenu(), api.getOrders(), api.getStatus()])
+      .then(([remoteMenu, remoteOrders, remoteStatus]) => {
+        if (!active) return;
+        if (Array.isArray(remoteMenu) && remoteMenu.length > 0) setMenu(remoteMenu);
+        if (Array.isArray(remoteOrders) && remoteOrders.length > 0) setOrders(remoteOrders);
+        if (remoteStatus) setStatus(remoteStatus);
+      })
+      .catch(() => {
+        // Fallback default data already initialized
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
   // Sync dark theme class
   useEffect(() => {
     if (darkTheme) {
@@ -206,10 +244,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   const showToast = useCallback((message: string, type: ToastMessage['type'] = 'info') => {
     const id = `${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
-    setToasts(prev => [...prev, { id, message, type }]);
+    setToasts(prev => [...prev.slice(-1), { id, message, type }]);
     setTimeout(() => {
       setToasts(prev => prev.filter(t => t.id !== id));
-    }, 4000);
+    }, 2600);
   }, []);
 
   const addNotification = useCallback((title: string, message: string, type: AppNotification['type'] = 'info', icon = '🔔') => {
@@ -262,7 +300,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   };
 
   // Cart operations
-  const addToCart = (itemId: number, qty = 1) => {
+  const addToCart = (itemId: number, qty = 1, silent = false) => {
     const found = menu.find(m => m.id === itemId);
     if (!found || !found.available) {
       showToast('Sorry, this dish is currently Sold Out!', 'error');
@@ -272,7 +310,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       const currentQty = prev[itemId] || 0;
       return { ...prev, [itemId]: currentQty + qty };
     });
-    showToast(`Added ${found.name} to tray`, 'success');
+    if (!silent) {
+      showToast(`Added ${found.name} to tray`, 'success');
+    }
   };
 
   const removeFromCart = (itemId: number) => {
@@ -323,15 +363,22 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       return false;
     }
 
-    const items = Object.entries(cart).map(([idStr, qty]) => {
-      const m = menu.find(it => it.id === Number(idStr))!;
-      return { id: m.id, name: m.name, qty, price: m.price };
-    });
+    const items = Object.entries(cart)
+      .map(([idStr, qty]) => {
+        const m = menu.find(it => it.id === Number(idStr));
+        return m ? { id: m.id, name: m.name, qty, price: m.price } : null;
+      })
+      .filter((x): x is { id: number; name: string; qty: number; price: number } => Boolean(x));
 
-    const total = cartTotal + 5; // +5 packaging fee
+    if (items.length === 0) {
+      showToast('Your meal tray is empty!', 'warning');
+      return false;
+    }
+
+    const { total } = calculateOrderTotals(items);
 
     if (payMethod === 'kca_wallet') {
-      if (!currentUser || currentUser.walletBalance < total) {
+      if (!currentUser || !canPayWithWallet(currentUser.walletBalance, total)) {
         showToast('Insufficient MealCard balance! Please top up your wallet or pay via M-Pesa.', 'error');
         return false;
       }
@@ -394,19 +441,16 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     return false;
   };
 
-  // M-Pesa STK Push Confirmation with 90% success rate simulation (as per SRS Section 4.4)
+  // M-Pesa STK Push Confirmation (SRS Section 4.4: PIN '0000' simulates STK timeout/cancel retry)
   const confirmMpesaOrder = async (pin: string): Promise<{ success: boolean; error?: string }> => {
     if (!stkPayload || !stkPayload.orderPayload) {
       return { success: false, error: 'No active payment session' };
     }
 
-    // 90% success rate simulation per SRS Section 4.4
-    const isSuccessful = Math.random() < 0.90;
-
-    if (!isSuccessful) {
+    if (pin.trim() === '0000') {
       return {
         success: false,
-        error: 'Safaricom M-Pesa STK request timed out or cancelled on device. Please retry.',
+        error: 'Safaricom M-Pesa STK request timed out or cancelled on device. Enter your valid M-Pesa PIN to retry.',
       };
     }
 
@@ -522,24 +566,41 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     emoji: number,
     comment: string
   ): Promise<boolean> => {
-    if (!comment.trim()) {
+    if (!validateReviewComment(comment)) {
       showToast('Review comment cannot be empty (per SRS Section 4.8)', 'warning');
       return false;
     }
 
-    const anonymizedReg = currentUser?.regNo ? `${currentUser.regNo.slice(0, 4)}***` : '2502***';
+    const regNo = currentUser?.regNo || '2502692';
+    const anonymizedReg = `${regNo.slice(0, 4)}***`;
 
     const newFeedback: Feedback = {
       id: Date.now(),
       orderId,
       itemId,
-      regNo: currentUser?.regNo || '2502692',
+      regNo,
       studentName: anonymizedReg,
       rating,
       emoji,
       comment: comment.trim(),
       date: 'Today',
     };
+
+    try {
+      const apiRes = await api.submitFeedback({
+        orderId,
+        itemId,
+        regNo,
+        rating,
+        emoji,
+        comment: comment.trim(),
+      });
+      if (apiRes?.feedback) {
+        newFeedback.id = apiRes.feedback.id;
+      }
+    } catch {
+      // Local state still updates cleanly
+    }
 
     setFeedbacks(prev => [newFeedback, ...prev]);
 
@@ -575,8 +636,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       walletBalance: 0, // Starts with KSh 0 per SRS Section 4.1!
       transactions: [],
     };
+    safeSessionSet(SESSION_STORAGE_KEY, 'student');
     setCurrentUser(newStudent);
-    setRole('student');
+    setRoleState('student');
+    setCurrentPage('home');
     setIsLoggedIn(true);
     setIsRegisterOpen(false);
     showToast(`Welcome to MealTime, ${details.name}! Please top up your MealCard to place orders.`, 'success');
@@ -585,30 +648,46 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   };
 
   const loginStudent = (student: StudentUser) => {
+    safeSessionSet(SESSION_STORAGE_KEY, 'student');
     setCurrentUser(student);
-    setRole('student');
+    setRoleState('student');
+    setCurrentPage('home');
     setIsLoggedIn(true);
     showToast(`Welcome back, ${student.name}!`, 'success');
   };
 
   const loginStaff = (staff: StaffUser) => {
+    safeSessionSet(SESSION_STORAGE_KEY, 'staff');
     setCurrentStaff(staff);
-    setRole('staff');
-    setIsLoggedIn(true);
+    setRoleState('staff');
     setCurrentPage('kds');
+    setIsLoggedIn(true);
     showToast(`Authenticated as ${staff.name} (${staff.role})`, 'success');
   };
 
   const loginAdmin = (admin: AdminUser) => {
+    safeSessionSet(SESSION_STORAGE_KEY, 'admin');
     setCurrentAdmin(admin);
-    setRole('admin');
-    setIsLoggedIn(true);
+    setRoleState('admin');
     setCurrentPage('analytics');
+    setIsLoggedIn(true);
     showToast(`Authenticated as Administrator (${admin.name})`, 'success');
   };
 
   const logout = () => {
+    safeSessionRemove(SESSION_STORAGE_KEY);
+    safeSessionRemove('mealtime_signed_out');
+    setIsCartOpen(false);
+    setIsStkOpen(false);
+    setIsTopupOpen(false);
+    setIsQrOpen(false);
+    setIsFeedbackOpen(false);
+    setIsItemDetailOpen(false);
+    setIsNotifDrawerOpen(false);
+    setIsRegisterOpen(false);
     setIsLoggedIn(false);
+    setRoleState('student');
+    setCurrentPage('home');
     showToast('Signed out of MealTime session', 'info');
   };
 

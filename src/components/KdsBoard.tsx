@@ -7,9 +7,11 @@ export const KdsBoard: React.FC = () => {
     orders,
     updateOrderStatus,
     simulateIncomingOrder,
-    setRole,
-    setCurrentPage,
+    currentUser,
+    currentAdmin,
     currentStaff,
+    loginStudent,
+    loginAdmin,
     menu,
     toggleItemAvailability,
     logout,
@@ -130,6 +132,44 @@ export const KdsBoard: React.FC = () => {
             style={{ background: 'var(--surface-3)', color: 'var(--text)' }}
           >
             <span>📦 {showInventory ? 'Hide' : 'Manage'} Kitchen Inventory</span>
+          </button>
+
+          <button
+            className="kds-sim-btn"
+            onClick={() =>
+              loginStudent(
+                currentUser || {
+                  regNo: '2502692',
+                  email: '2502692@students.kcau.ac.ke',
+                  name: 'Rebecca Nabusambya',
+                  department: 'Diploma in Information Technology (STU 701)',
+                  walletBalance: 850,
+                  transactions: [],
+                }
+              )
+            }
+            type="button"
+            style={{ background: 'var(--surface-3)', color: 'var(--text)' }}
+          >
+            <span>🎓 Student View</span>
+          </button>
+
+          <button
+            className="kds-sim-btn"
+            onClick={() =>
+              loginAdmin(
+                currentAdmin || {
+                  id: 'KCA-ADMIN-01',
+                  name: 'David Oloo (Supervisor / Admin)',
+                  email: 'admin.catering@kcau.ac.ke',
+                  role: 'System Administrator',
+                }
+              )
+            }
+            type="button"
+            style={{ background: 'var(--surface-3)', color: 'var(--text)' }}
+          >
+            <span>🛡️ Admin Hub</span>
           </button>
 
           <button className="kds-exit-btn" onClick={handleExit} type="button">

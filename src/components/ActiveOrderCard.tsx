@@ -71,7 +71,10 @@ export const ActiveOrderCard: React.FC = () => {
             {activeOrder.items[0]?.name}
             {activeOrder.items.length > 1 ? ` + ${activeOrder.items.length - 1} more` : ''}
           </span>
-          <span className="ao-ticket">{activeOrder.ticketNo}</span>
+          {' · '}
+          <span className="ao-ticket" style={{ fontWeight: 800, color: 'var(--maroon)' }}>
+            {activeOrder.ticketNo}
+          </span>
         </div>
         <span id="ao-eta">
           <strong>{eta}</strong>

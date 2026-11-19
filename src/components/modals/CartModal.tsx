@@ -74,8 +74,8 @@ export const CartModal: React.FC = () => {
   };
 
   return (
-    <div className="modal-overlay" id="cart-modal">
-      <div className="modal-sheet">
+    <div className="modal-overlay" id="cart-modal" onClick={() => setIsCartOpen(false)}>
+      <div className="modal-sheet" onClick={e => e.stopPropagation()}>
         <div className="modal-handle"></div>
         <div className="modal-header">
           <div>
